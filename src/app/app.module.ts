@@ -6,16 +6,16 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { environment } from '../environments/environment';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { APP_ROUTING } from './app.routing';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    APP_ROUTING,
     BrowserModule,
+    AppRoutingModule,
     FormsModule,
     MDBBootstrapModule.forRoot(),
     AngularFireModule.initializeApp(environment.fireBaseConfig)
