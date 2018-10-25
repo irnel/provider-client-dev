@@ -1,3 +1,4 @@
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { AngularFireModule } from 'angularfire2';
 
 import { NgModule } from '@angular/core';
@@ -16,6 +17,7 @@ import { APP_ROUTING } from './app.routing';
     APP_ROUTING,
     BrowserModule,
     FormsModule,
+    MDBBootstrapModule.forRoot(),
     AngularFireModule.initializeApp(environment.fireBaseConfig)
   ],
   providers: [],
