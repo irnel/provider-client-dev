@@ -1,7 +1,10 @@
+import { AngularFireModule } from 'angularfire2';
+
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { APP_ROUTING } from './app.routing';
 
@@ -12,7 +15,8 @@ import { APP_ROUTING } from './app.routing';
   imports: [
     APP_ROUTING,
     BrowserModule,
-    FormsModule
+    FormsModule,
+    AngularFireModule.initializeApp(environment.fireBaseConfig)
   ],
   providers: [],
   bootstrap: [AppComponent]
