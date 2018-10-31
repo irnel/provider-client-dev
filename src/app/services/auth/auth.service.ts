@@ -7,7 +7,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  private localStorage: Storage;
 
   constructor(private readonly http: HttpClient) { }
 
@@ -17,7 +16,7 @@ export class AuthService {
       .pipe(map(user => {
 
         if (user && user.token) {
-          this.localStorage.setItem('currentUser', JSON.stringify(user));
+          localStorage.setItem('currentUser', JSON.stringify(user));
         }
 
         return user;
@@ -25,6 +24,6 @@ export class AuthService {
   }
 
   logout() {
-    this.localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUser');
   }
 }
