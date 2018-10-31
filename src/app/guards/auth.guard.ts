@@ -7,7 +7,6 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  private localStorage: Storage;
 
   constructor(private router: Router) { }
 
@@ -16,7 +15,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-      if (this.localStorage.getItem('currentUser')) {
+      if (localStorage.getItem('currentUser')) {
         // logged in so return true
         return true;
       }
