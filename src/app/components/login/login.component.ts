@@ -2,7 +2,7 @@ import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
 
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../services';
