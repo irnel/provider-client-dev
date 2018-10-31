@@ -1,10 +1,12 @@
+import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
 
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AlertService, AuthService } from '../../services';
+import { AuthService } from '../../services';
+
 
 @Component({
   selector: 'app-login',
@@ -12,52 +14,56 @@ import { AlertService, AuthService } from '../../services';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
   loginForm: FormGroup;
   loading = false;
-  submitted = false;
   returnUrl: string;
 
   constructor(
-    // private formBuilder: FormBuilder,
-    // private route: ActivatedRoute,
-    // private router: Router,
-    // private readonly authService: AuthService,
-    // private readonly alertService: AlertService
+    private toast: ToastrService,
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private readonly authService: AuthService
   ) { }
 
   ngOnInit() {
-    // this.loginForm = this.formBuilder.group({
-    //   username: ['', Validators.required],
-    //   password: ['', Validators.required]
-    // });
+    // Put toasts in a specific div
+    this.toast.overlayContainer = this.toastContainer;
 
-    // reset login status
+    this.loginForm = this.formBuilder.group({
+      'username': [null, Validators.email],
+      'password': [null, Validators.minLength(6)]
+    });
+
+
     // this.authService.logout();
 
     // get return url from route parameters or default to '/'
     // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  onSubmit() {
-    // this.submitted = true;
+  login() {
 
-    // // stop here if form is invalid
-    // if (this.loginForm.invalid) { return; }
+    if (this.loginForm.invalid) { return; }
 
-    // this.loading = true;
-    // this.authService.login(this.form.username.value, this.form.password.value)
-    // .pipe(first())
-    // .subscribe(
-    //   data => {
-    //     this.router.navigate([this.returnUrl]);
-    //   },
-    //   error => {
-    //     this.alertService.error(error),
-    //     this.loading = false;
-    //   }
-    // );
+    this.loading = true;
+    this.authService.login(this.f.username.value, this.f.password.value)
+      .pipe(first())
+      .subscribe(
+        () => {
+          this.router.navigate([this.returnUrl]);
+        },
+        error => {
+          this.toast.error(error, '', {
+            tapToDismiss: true,
+            timeOut: 1500
+          });
+          this.loading = false;
+        }
+      );
   }
 
   // convenience getter for easy access to form fields
-  // get form() { return this.loginForm.controls; }
+  get f() { return this.loginForm.controls; }
 }

@@ -1,2 +1,56 @@
-<h2>Login</h2>
+<!-- Material form login -->
+<mdb-card>
 
+   <!--Card Header-->
+  <mdb-card-header class="info-color white-text text-center py-4">
+    <h5>
+      <strong>Sign in</strong>
+    </h5>
+  </mdb-card-header>
+
+  <!--Card content-->
+  <mdb-card-body class="px-lg-5 pt-1">
+
+    <form [formGroup]="loginForm" [ngStyle]="{'color': '757575'}">
+
+      <!-- Email -->
+      <div class="md-form" [ngStyle]="{ 'padding-bottom': '10px' }">
+        <i class="fa fa-envelope prefix"></i>
+        <input mdbInputDirective type="email" class="form-control"
+          id="formEmail" data-error="invalid email"
+          data-success="valid email" formControlName="username">
+
+        <label for="formEmail">Type your e-mail</label>
+      </div>
+
+      <!-- Password -->
+      <div class="md-form">
+        <i class="fa fa-lock prefix"></i>
+        <input mdbInputDirective type="password" class="form-control"
+          id="formPassword" data-error="password must be at less 6 character"
+          data-success="valid password" minlength="6" formControlName="password">
+
+        <label for="formPassword">Type your password</label>
+      </div>
+
+      <div class="d-flex justify-content-around" [ngStyle]="{ 'padding-top': '10px' }">
+        <div>
+          <!-- Remember me -->
+          <mdb-checkbox [default]="true">Remember me</mdb-checkbox>
+        </div>
+
+
+        <div>
+          <!-- Forgot password -->
+          <a href="">Forgot password?</a>
+        </div>
+      </div>
+
+       <!-- Sign in button -->
+       <button [disabled]="loading" class="btn btn-info btn-block my-4" type="submit" (click)="login()">Sign in</button>
+
+    </form>
+
+    <div toastContainer></div>
+  </mdb-card-body>
+</mdb-card>
