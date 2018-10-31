@@ -20,17 +20,17 @@
           id="formEmail" data-error="invalid email"
           data-success="valid email" formControlName="username">
 
-        <label for="formEmail">Type your e-mail</label>
+        <label for="formEmail">Email</label>
       </div>
 
       <!-- Password -->
       <div class="md-form">
         <i class="fa fa-lock prefix"></i>
         <input mdbInputDirective type="password" class="form-control"
-          id="formPassword" data-error="password must be at less 6 character"
+          id="formPassword" data-error="password must be at least 6 character"
           data-success="valid password" minlength="6" formControlName="password">
 
-        <label for="formPassword">Type your password</label>
+        <label for="formPassword">Password</label>
       </div>
 
       <div class="d-flex justify-content-around" [ngStyle]="{ 'padding-top': '10px' }">
@@ -39,19 +39,34 @@
           <mdb-checkbox [default]="true">Remember me</mdb-checkbox>
         </div>
 
-
         <div>
           <!-- Forgot password -->
           <a href="">Forgot password?</a>
         </div>
       </div>
 
-       <!-- Sign in button -->
-       <button [disabled]="loading" class="btn btn-info btn-block my-4" type="submit" (click)="login()">Sign in</button>
+      <!-- Sign in button -->
+      <button [disabled]="loading" class="btn btn-info btn-block my-4 waves-light" type="submit" (click)="login()">Sign in</button>
+
+      <!-- Notification Container -->
+      <div toastContainer></div>
+
+      <div class= "text-center">
+        <!-- Register -->
+        <p>Not registered?
+          <a [routerLink]="['/register']">Create an account</a>
+        </p>
+
+        <!-- Google login -->
+        <p>or sign in with:</p>
+        <!--Google +-->
+        <button mdbBtn type="button" color="info" outline="true" mdbWavesEffect>
+          <mdb-icon icon="google-plus" size="lg"></mdb-icon>
+        </button>
+
+      </div>
 
     </form>
-
-    <div toastContainer></div>
 
   </mdb-card-body>
 

@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
   loginForm: FormGroup;
   loading = false;
+  submitted = false;
   returnUrl: string;
 
   constructor(
@@ -32,18 +33,19 @@ export class LoginComponent implements OnInit {
     this.toast.overlayContainer = this.toastContainer;
 
     this.loginForm = this.formBuilder.group({
-      'username': [null, Validators.email],
-      'password': [null, Validators.minLength(6)]
+      username: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
 
     // this.authService.logout();
 
     // get return url from route parameters or default to '/'
-    // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   login() {
+    this.submitted = true;
 
     if (this.loginForm.invalid) { return; }
 
@@ -59,6 +61,7 @@ export class LoginComponent implements OnInit {
             tapToDismiss: true,
             timeOut: 1500
           });
+
           this.loading = false;
         }
       );
@@ -66,4 +69,5 @@ export class LoginComponent implements OnInit {
 
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
+
 }
