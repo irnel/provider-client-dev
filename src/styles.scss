@@ -1,1 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
+.absolute-center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.absolute-center.responsive {
+  width: 50%;
+  height: 60%;
+  min-width: 400px;
+  max-width: 600px;
+  padding: 40px;
+}
+
+input.form-control {
+  margin-bottom: 2.5rem !important;
+}
+
+input.form-contol:-webkit-autofill,
+input.form-control:-webkit-autofil:hover,
+input.form-control:-webkit-autofil:focus,
+input.form-control:-webkit-autofil:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.custom-text-color {
+  color: #757575;
+}
+
+
