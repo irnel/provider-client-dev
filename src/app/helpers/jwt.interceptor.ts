@@ -1,15 +1,17 @@
+import { SessionService } from './../services';
 import { Observable } from 'rxjs';
 
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { User } from '../models';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(private readonly sessionService: SessionService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const currentUser = this.sessionService.currentUserValue;
 
     if (currentUser && currentUser.token) {
       req = req.clone({
