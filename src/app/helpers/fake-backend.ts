@@ -23,7 +23,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           if (request.url.endsWith('/users/authenticate') && request.method === 'POST') {
               // find if any user matches login credentials
               const filteredUsers = users.filter(user => {
-                  return user.username === request.body.username && user.password === request.body.password;
+                  return user.email === request.body.email && user.password === request.body.password;
               });
 
               if (filteredUsers.length) {
@@ -31,7 +31,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                   const user = filteredUsers[0];
                   const body = {
                       id: user.id,
-                      username: user.username,
+                      email: user.email,
                       firstName: user.firstName,
                       lastName: user.lastName,
                       token: 'fake-jwt-token'
@@ -76,9 +76,9 @@ export class FakeBackendInterceptor implements HttpInterceptor {
               const newUser = request.body;
 
               // validation
-              const duplicateUser = users.filter(user => user.username === newUser.username).length;
+              const duplicateUser = users.filter(user => user.email === newUser.email).length;
               if (duplicateUser) {
-                  return throwError({ error: { message: 'Username "' + newUser.username + '" is already taken' } });
+                  return throwError({ error: { message: 'Email "' + newUser.email + '" is already taken' } });
               }
 
               // save new user
