@@ -19,10 +19,10 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
 
   constructor(
-    private toast: ToastrService,
     private router: Router,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private readonly toast: ToastrService,
     private readonly authService: AuthService
   ) {
 
