@@ -1,73 +1,75 @@
 <!-- Material form login -->
 <mdb-card>
 
-   <!--Card Header-->
-  <mdb-card-header class="info-color white-text text-center py-4">
-    <h5>
-      <strong>Sign in</strong>
-    </h5>
-  </mdb-card-header>
+    <!--Card Header-->
+   <mdb-card-header class="info-color white-text text-center py-4">
+     <h5>
+       <strong>Sign in</strong>
+     </h5>
+   </mdb-card-header>
 
-  <!--Card content-->
-  <mdb-card-body class="px-lg-5 pt-1">
+   <!--Card content-->
+   <mdb-card-body class="px-lg-5">
 
-    <form [formGroup]="loginForm" [ngStyle]="{'color': '757575'}">
+     <form [formGroup]="loginForm" class="custom-text-color">
 
-      <!-- Email -->
-      <div class="md-form" [ngStyle]="{ 'padding-bottom': '10px' }">
-        <i class="fa fa-envelope prefix"></i>
-        <input mdbInputDirective type="email" class="form-control"
-          id="formEmail" data-error="invalid email"
-          data-success="valid email" formControlName="username">
+       <!-- Email -->
+       <div class="md-form">
+         <i class="fa fa-user prefix" aria-hidden="true"></i>
+         <input mdbInputDirective type="email" class="form-control"
+           id="formEmail" data-error="invalid email"
+           data-success="valid email" formControlName="email">
 
-        <label for="formEmail">Email</label>
-      </div>
+         <label for="formEmail">Email</label>
+       </div>
 
-      <!-- Password -->
-      <div class="md-form">
-        <i class="fa fa-lock prefix"></i>
-        <input mdbInputDirective type="password" class="form-control"
-          id="formPassword" data-error="password must be at least 6 character"
-          data-success="valid password" minlength="6" formControlName="password">
+       <!-- Password -->
+       <div class="md-form">
+         <i class="fa fa-lock prefix" aria-hidden="true"></i>
+         <input mdbInputDirective type="password" class="form-control"
+           id="formPassword" data-error="password must be at least 6 character"
+           data-success="valid password" minlength="6" formControlName="password">
 
-        <label for="formPassword">Password</label>
-      </div>
+         <label for="formPassword">Password</label>
+       </div>
 
-      <div class="d-flex justify-content-around" [ngStyle]="{ 'padding-top': '10px' }">
-        <div>
-          <!-- Remember me -->
-          <mdb-checkbox [default]="true">Remember me</mdb-checkbox>
-        </div>
+       <div class="d-flex justify-content-around">
+         <div>
+           <!-- Remember me -->
+           <mdb-checkbox [default]="true">Remember me</mdb-checkbox>
+         </div>
 
-        <div>
-          <!-- Forgot password -->
-          <a href="">Forgot password?</a>
-        </div>
-      </div>
+         <div>
+           <!-- Forgot password -->
+           <a href="">Forgot password?</a>
+         </div>
+       </div>
 
-      <!-- Sign in button -->
-      <button [disabled]="loading" class="btn btn-info btn-block my-4 waves-light" type="submit" (click)="login()">Sign in</button>
+       <!-- Sign in button -->
+       <button [disabled]="loading" class="btn btn-info btn-block my-4 waves-light" type="submit" (click)="login()">Sign in</button>
 
-      <!-- Notification Container -->
-      <div toastContainer></div>
+       <!-- Notification Container -->
+       <div toastContainer></div>
 
-      <div class= "text-center">
-        <!-- Register -->
-        <p>Not registered?
-          <a [routerLink]="['/register']">Create an account</a>
-        </p>
+       <div class= "text-center">
+         <!-- Register -->
+         <p>Not registered?
+           <a routerLink="/register">Create an account</a>
+         </p>
 
-        <!-- Google login -->
-        <p>or sign in with:</p>
-        <!--Google +-->
-        <button mdbBtn type="button" color="info" outline="true" mdbWavesEffect>
-          <mdb-icon icon="google-plus" size="lg"></mdb-icon>
-        </button>
+         <!-- Google login -->
+         <p>or sign in with:</p>
+         <!--Google +-->
+         <button mdbBtn type="button" color="info" outline="true" mdbWavesEffect>
+           <mdb-icon icon="google-plus" size="lg" aria-hidden="true"></mdb-icon>
+         </button>
 
-      </div>
+       </div>
 
-    </form>
+     </form>
 
-  </mdb-card-body>
+   </mdb-card-body>
 
-</mdb-card>
+ </mdb-card>
+
+
