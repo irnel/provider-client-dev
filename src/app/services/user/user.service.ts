@@ -21,7 +21,7 @@ export class UserService {
 
   createAccount(firstName: string, lastName: string, email: string, password: string) {
     return this.http.post(
-      `/users/${KeyValues.REGISTER_URI}`,
+      `/users/register`,
       new User(firstName, email, password, lastName));
   }
 
