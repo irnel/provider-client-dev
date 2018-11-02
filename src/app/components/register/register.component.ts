@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
     ).pipe(first()).subscribe(
       () => {
         this.showSuccessMessage('your account was created successfully', 2000);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
       },
       error => {
         this.showErrorMessage(error, 2000);

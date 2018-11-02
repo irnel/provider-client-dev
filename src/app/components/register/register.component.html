@@ -1,5 +1,5 @@
 <!-- Material form Register -->
-<mdb-card>
+<mdb-card class="mt-4">
 
    <!--Card Header-->
    <mdb-card-header class="info-color white-text text-center py-4">
@@ -9,14 +9,14 @@
     </mdb-card-header>
 
     <!--Card content-->
-  <mdb-card-body class="px-lg-5">
+  <mdb-card-body class="px-lg-5 mt-0">
 
-    <form [formGroup]="registerForm" class="custom-text-color">
+    <form [formGroup]="registerForm" class="tc-custom">
 
-      <div class="form-row mb-2">
+      <div class="form-row">
         <!-- First Name -->
         <div class="col">
-          <div class="md-form">
+          <div class="md-form form-sm mt-0">
             <i class="fa fa-user prefix" aria-hidden="true"></i>
             <input mdbInputDirective type="text" class="form-control"
               id="formFirstName" data-error="First name is required"
@@ -28,7 +28,7 @@
 
         <!-- Last Name -->
         <div class="col">
-          <div class="md-form">
+          <div class="md-form form-sm mt-0">
             <input mdbInputDirective type="text" class="form-control"
               id="formLastName" data-error="Last name is required"
               [validateSuccess]="false" formControlName="lastName">
@@ -40,7 +40,7 @@
       </div>
 
       <!-- Email -->
-      <div class="md-form">
+      <div class="md-form form-sm mt-0">
           <i class="fa fa-envelope prefix" aria-hidden="true"></i>
         <input mdbInputDirective type="email" class="form-control"
           id="formEmail" data-error="invalid email"
@@ -50,7 +50,7 @@
       </div>
 
       <!-- Password -->
-      <div class="md-form">
+      <div class="md-form form-sm">
           <i class="fa fa-lock prefix" aria-hidden="true"></i>
         <input mdbInputDirective type="password" class="form-control"
           id="formPassword" data-error="password must be at least 6 character"
@@ -60,7 +60,7 @@
       </div>
 
       <!-- Confirmation Password -->
-      <div class="md-form">
+      <div class="md-form form-sm">
         <i class="fa fa-repeat prefix" aria-hidden="true"></i>
         <input mdbInputDirective type="password" class="form-control"
           id="formPasswordConfirmation" data-error="Confirmation password is required"
@@ -72,9 +72,18 @@
       <!-- Notification Container -->
       <div toastContainer></div>
 
-      <!-- Create button -->
+      <!-- Register -->
       <button [disabled]="loading" class="btn btn-info btn-block my-4 waves-light"
-        type="submit" (click)="createAccount()">Create</button>
+        type="submit" (click)="createAccount()">
+        <i class="fa fa-user-plus fa-sm left" aria-hidden="true"></i>register
+      </button>
+
+      <div class= "text-center font-small">
+        <!-- Login -->
+        <p>Already have an account?
+          <a routerLink="/auth/login" routerLinkActive="active">Sign in</a>
+        </p>
+      </div>
 
     </form>
 
