@@ -1,92 +1,105 @@
-<!-- Material form Register -->
-<mdb-card class="mt-4">
+<div class="container">
 
-   <!--Card Header-->
-   <mdb-card-header class="info-color white-text text-center py-4">
-      <h5>
-        <strong>Create Account</strong>
-      </h5>
-    </mdb-card-header>
+  <div class="row">
 
-    <!--Card content-->
-  <mdb-card-body class="px-lg-5 mt-0">
+    <div class="col-sm-6 offset-sm-3">
 
-    <form [formGroup]="registerForm" class="tc-custom">
+      <!-- Material form Register -->
+      <mdb-card class="mt-4">
 
-      <div class="form-row">
-        <!-- First Name -->
-        <div class="col">
-          <div class="md-form form-sm mt-0">
-            <i class="fa fa-user prefix" aria-hidden="true"></i>
-            <input mdbInputDirective type="text" class="form-control"
-              id="formFirstName" data-error="First name is required"
-              [validateSuccess]="false" formControlName="firstName">
+        <!--Card Header-->
+        <mdb-card-header class="primary-color white-text text-center py-4">
+          <h5>
+            <strong>Create Account</strong>
+          </h5>
+        </mdb-card-header>
 
-            <label for="formFirstName">First name</label>
-          </div>
-        </div>
+        <!--Card content-->
+        <mdb-card-body class="px-lg-5 mt-0">
 
-        <!-- Last Name -->
-        <div class="col">
-          <div class="md-form form-sm mt-0">
-            <input mdbInputDirective type="text" class="form-control"
-              id="formLastName" data-error="Last name is required"
-              [validateSuccess]="false" formControlName="lastName">
+          <form [formGroup]="registerForm" class="tc-custom">
 
-            <label for="formLastName">Last name</label>
-          </div>
-        </div>
+            <div class="form-row">
+              <!-- First Name -->
+              <div class="col">
+                <div class="md-form form-sm mt-0">
+                  <i class="fa fa-user prefix" aria-hidden="true"></i>
+                  <input mdbInputDirective type="text" class="form-control"
+                    id="formFirstName" data-error="First name is required"
+                    [validateSuccess]="false" formControlName="firstName">
 
-      </div>
+                  <label for="formFirstName">First name</label>
+                </div>
+              </div>
 
-      <!-- Email -->
-      <div class="md-form form-sm mt-0">
-          <i class="fa fa-envelope prefix" aria-hidden="true"></i>
-        <input mdbInputDirective type="email" class="form-control"
-          id="formEmail" data-error="invalid email"
-          [validateSuccess]="false" formControlName="email">
+              <!-- Last Name -->
+              <div class="col">
+                <div class="md-form form-sm mt-0">
+                  <input mdbInputDirective type="text" class="form-control"
+                    id="formLastName" data-error="Last name is required"
+                    [validateSuccess]="false" formControlName="lastName">
 
-        <label for="formEmail">Email</label>
-      </div>
+                  <label for="formLastName">Last name</label>
+                </div>
+              </div>
 
-      <!-- Password -->
-      <div class="md-form form-sm">
-          <i class="fa fa-lock prefix" aria-hidden="true"></i>
-        <input mdbInputDirective type="password" class="form-control"
-          id="formPassword" data-error="password must be at least 6 character"
-          [validateSuccess]="false" minlength="6" formControlName="password">
+            </div>
 
-        <label for="formPassword">Password</label>
-      </div>
+            <!-- Email -->
+            <div class="md-form form-sm mt-0">
+                <i class="fa fa-envelope prefix" aria-hidden="true"></i>
+              <input mdbInputDirective type="email" class="form-control"
+                id="formEmail" data-error="invalid email"
+                [validateSuccess]="false" formControlName="email">
 
-      <!-- Confirmation Password -->
-      <div class="md-form form-sm">
-        <i class="fa fa-repeat prefix" aria-hidden="true"></i>
-        <input mdbInputDirective type="password" class="form-control"
-          id="formPasswordConfirmation" data-error="Confirmation password is required"
-          [validateSuccess]="false" formControlName="passwordConfirmation">
+              <label for="formEmail">Email</label>
+            </div>
 
-        <label for="formPasswordConfirmation">Confirmation password</label>
-      </div>
+            <!-- Password -->
+            <div class="md-form form-sm">
+                <i class="fa fa-lock prefix" aria-hidden="true"></i>
+              <input mdbInputDirective type="password" class="form-control"
+                id="formPassword" data-error="password must be at least 6 character"
+                [validateSuccess]="false" minlength="6" formControlName="password">
 
-      <!-- Notification Container -->
-      <div toastContainer></div>
+              <label for="formPassword">Password</label>
+            </div>
 
-      <!-- Register -->
-      <button [disabled]="loading" class="btn btn-info btn-block my-4 waves-light"
-        type="submit" (click)="createAccount()">
-        <i class="fa fa-user-plus fa-sm left" aria-hidden="true"></i>register
-      </button>
+            <!-- Confirmation Password -->
+            <div class="md-form form-sm">
+              <i class="fa fa-repeat prefix" aria-hidden="true"></i>
+              <input mdbInputDirective type="password" class="form-control"
+                id="formPasswordConfirmation" data-error="Confirmation password is required"
+                [validateSuccess]="false" formControlName="passwordConfirmation">
 
-      <div class= "text-center font-small">
-        <!-- Login -->
-        <p>Already have an account?
-          <a routerLink="/auth/login" routerLinkActive="active">Sign in</a>
-        </p>
-      </div>
+              <label for="formPasswordConfirmation">Confirmation password</label>
+            </div>
 
-    </form>
+            <!-- Notification Container -->
+            <div toastContainer></div>
 
-  </mdb-card-body>
+            <!-- Register -->
+            <button [disabled]="loading" class="btn btn-primary btn-block my-4 waves-light"
+              type="submit" (click)="createAccount()">
+              <i class="fa fa-user-plus fa-sm left" aria-hidden="true"></i>register
+            </button>
 
-</mdb-card>
+            <div class= "text-center font-small">
+              <!-- Login -->
+              <p>Already have an account?
+                <a routerLink="/auth/login" routerLinkActive="active">Sign in</a>
+              </p>
+            </div>
+
+          </form>
+
+        </mdb-card-body>
+
+      </mdb-card>
+
+    </div>
+
+  </div>
+
+</div>
+
