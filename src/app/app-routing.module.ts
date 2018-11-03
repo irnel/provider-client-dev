@@ -5,15 +5,17 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { HomeComponent } from './components/home/home.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { HomeProviderComponent } from './components/dashboards/provider/home-provider/home-provider.component';
+
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'auth/login', component: LoginComponent },
+  { path: 'auth/register', component: RegisterComponent },
+  { path: '', component: HomeProviderComponent, canActivate: [AuthGuard] },
 
-  // otherwise redirect to home
-  { path: '**', redirectTo: '' }
+  // otherwise NOT FOUND
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
