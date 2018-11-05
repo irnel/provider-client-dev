@@ -14,13 +14,14 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-// main layout
-import { NavigationModule } from './components/dashboards/provider/main-layout/navigation/navigation.module';
+// Home Provider Module
+import { HomeProviderModule } from './components/dashboards/provider/home-provider/home-provider.module';
 
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomeProviderComponent } from './components/dashboards/provider/home-provider/home-provider.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 
 @NgModule({
@@ -29,22 +30,19 @@ import { HomeProviderComponent } from './components/dashboards/provider/home-pro
     LoginComponent,
     RegisterComponent,
     NotFoundComponent,
-    HomeProviderComponent
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    NavigationModule,
+    HomeProviderModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    ToastrModule.forRoot({
-       positionClass: 'inline',
-       maxOpened: 1
-    }),
-    ToastContainerModule,
     MDBBootstrapModule.forRoot(),
+    ToastContainerModule,
+    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 1 }),
     AngularFireModule.initializeApp(environment.fireBaseConfig)
   ],
   schemas: [
