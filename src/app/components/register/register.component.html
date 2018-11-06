@@ -75,9 +75,6 @@
               <label for="formPasswordConfirmation">Confirmation password</label>
             </div>
 
-            <!-- Notification Container -->
-            <div toastContainer></div>
-
             <!-- Register -->
             <button mdbBtn [disabled]="loading" type="submit" class="btn-block btn-round-xs"
               color="primary" outline="true" mdbWavesEffect (click)="createAccount()">
@@ -87,6 +84,9 @@
             </button>
 
             <hr class="mb-1">
+
+            <!-- Notification Container -->
+            <div toastContainer></div>
 
             <div class= "text-center font-small">
               <!-- Login -->
