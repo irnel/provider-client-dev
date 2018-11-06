@@ -10,7 +10,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -20,7 +19,6 @@ import { HomeProviderModule } from './components/dashboards/provider/home-provid
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { HomeProviderComponent } from './components/dashboards/provider/home-provider/home-provider.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 
@@ -42,8 +40,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     HttpClientModule,
     MDBBootstrapModule.forRoot(),
     ToastContainerModule,
-    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 1 }),
-    AngularFireModule.initializeApp(environment.fireBaseConfig)
+    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 1 })
   ],
   schemas: [
     NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA
