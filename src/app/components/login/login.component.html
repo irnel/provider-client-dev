@@ -44,16 +44,19 @@
 
               <div>
                 <!-- Forgot password -->
-                <a href="">Forgot password?</a>
+                <a routerLink="/auth/forgot-password" routerLinkActive="active">Forgot password?</a>
               </div>
             </div>
 
-            <div class="text-center">
-              <!-- Sign in button -->
-              <button [disabled]="loading" class="btn btn-primary btn-block my-4 waves-light"
-                type="submit" (click)="login()">Sign in<i class="fa fa-sign-in ml-2" aria-hidden="true"></i>
-              </button>
-            </div>
+
+            <!-- Sign in button -->
+            <button [disabled]="loading" class="btn btn-primary btn-block my-4 waves-light btn-round-xs"
+              type="submit" (click)="login()">
+
+              <a class="text-center">Sign in</a>
+              <i *ngIf="!loading" class="fa fa-sign-in ml-2" aria-hidden="true"></i>
+              <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-lg ml-2" aria-hidden="true"></i>
+            </button>
 
             <!-- Notification Container -->
             <div toastContainer></div>
@@ -65,9 +68,14 @@
               </p>
 
               <!-- Google +-->
-              <button mdbBtn type="button" color="primary" outline="true" mdbWavesEffect>
-                Sign in with<i class="fa fa-google ml-2" aria-hidden="true"></i>
+              <button mdbBtn type="button" class="text-lowercase btn-round-xs" color="primary" outline="true" mdbWavesEffect>
+                Sign in with
+                <img src="../../../assets/img/google_logo.png" class="img-fluid mx-auto" alt="google icon">
               </button>
+
+              <!-- <button class="btn btn-outline-primary my-4 btn-round-xs"
+                  type="submit">Sign in with <img src="../../../assets/img/google_logo.png" class="img-fluid mx-auto" alt="google icon">
+              </button> -->
 
             </div>
 
