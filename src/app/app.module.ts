@@ -21,7 +21,6 @@ import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
