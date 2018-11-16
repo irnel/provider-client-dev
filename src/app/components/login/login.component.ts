@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../services';
+import { Roles } from './../../helpers/enum-roles';
 
 @Component({
   selector: 'app-login',
@@ -26,9 +27,19 @@ export class LoginComponent implements OnInit {
     private readonly authService: AuthService
   ) {
 
-    // redirect to home if already logged in
-    if (this.authService.currentUserValue) {
-      this.router.navigate(['/']);
+    const user = this.authService.currentUserValue;
+
+    // redirect to specific dashboard if already logged in
+    if (user) {
+      user.roles.forEach(rol => {
+        if (rol === Roles.Admin) {
+          // redirect to admin dashboard
+        } else if (rol === Roles.Provider) {
+          this.router.navigate(['/prov-dashboard/workspace']);
+        } else {
+          // redirect to cashier dashboard
+        }
+      });
     }
   }
 
