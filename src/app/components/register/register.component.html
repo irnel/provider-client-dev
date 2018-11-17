@@ -75,9 +75,6 @@
               <label for="formPasswordConfirmation">Confirmation password</label>
             </div>
 
-            <!-- Notification Container -->
-            <div toastContainer></div>
-
             <!-- Register -->
             <button mdbBtn [disabled]="loading" type="submit" class="btn-block btn-round-xs"
               color="primary" outline="true" mdbWavesEffect (click)="createAccount()">
@@ -85,6 +82,11 @@
               <i class="fa fa-user-plus fa-sm left" aria-hidden="true"></i>register
               <i *ngIf="loading" class="fa fa-spinner fa-pulse fa-lg ml-2" aria-hidden="true"></i>
             </button>
+
+            <hr class="mb-1">
+
+            <!-- Notification Container -->
+            <div toastContainer></div>
 
             <div class= "text-center font-small">
               <!-- Login -->

@@ -34,6 +34,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                       email: user.email,
                       firstName: user.firstName,
                       lastName: user.lastName,
+                      roles: user.roles,
                       token: 'fake-jwt-token'
                   };
 
@@ -84,6 +85,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
               // save new user
               newUser.id = users.length + 1;
               users.push(newUser);
+
+              console.log(users);
               localStorage.setItem('users', JSON.stringify(users));
 
               // respond 200 OK

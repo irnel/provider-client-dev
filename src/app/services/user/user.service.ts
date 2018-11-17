@@ -1,8 +1,8 @@
-import { KeyValues } from './../../helpers/key-values';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { User } from '../../models';
+import { Roles } from './../../helpers/enum-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class UserService {
   createAccount(firstName: string, lastName: string, email: string, password: string) {
     return this.http.post(
       `/users/register`,
-      new User(firstName, email, password, lastName));
+      new User(firstName, lastName, email, password, [Roles.Provider]));
   }
 
   update(user: User) {
