@@ -1,4 +1,3 @@
-import { SidebarComponent } from './components/dashboards/provider/main-layout/sidebar/sidebar.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -43,8 +42,6 @@ const routes: Routes = [
 
    // Default redirect
   { path: '', redirectTo: 'provider-dashboard/workspace', pathMatch: 'full' },
-
-  { path: 'nav', component: SidebarComponent },
 
   // otherwise NOT FOUND
   { path: '**', component: NotFoundComponent }
