@@ -1,9 +1,7 @@
 import { JwtInterceptor, ErrorInterceptor, fakeBackendProvider, ContentTypeInterceptor } from './helpers';
 
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { AngularFireModule } from 'angularfire2';
 import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
-
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule,  } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
