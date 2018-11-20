@@ -14,6 +14,8 @@
  * Learn more in https://angular.io/guide/browser-support
  */
 
+import 'reflect-metadata';
+
 /***************************************************************************************************
  * BROWSER POLYFILLS
  */
