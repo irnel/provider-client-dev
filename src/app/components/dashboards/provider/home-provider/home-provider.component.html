@@ -1,12 +1,14 @@
 <!-- Main Layout -->
 <app-layout>
 
+  <app-header (sidenavToggle)="drawer.toggle()"></app-header>
+
   <mat-sidenav-container>
     <!-- Sidebar Material -->
     <mat-sidenav #drawer class="sidenav special-color-dark" fixedInViewport="true"
         [attr.role]="isHandSet$ ? 'dialog' : 'navigation'"
-        [mode]="!(isHandSet$ | async)!.matches ? 'over' : 'side'"
-        [opened]="(isHandSet$ | async)!.matches">
+        [mode]="(isHandSet$ | async)!.matches ? 'over' : 'side'"
+        [opened]="!(isHandSet$ | async)!.matches">
 
       <div class="list-group list-group-flush mt-4">
         <!-- Options Home -->
@@ -46,7 +48,6 @@
 
     <!-- Main Content -->
     <mat-sidenav-content>
-      <app-header (sidenavToggle)="drawer.toggle()"></app-header>
 
       <!-- Workspace Content -->
       <main class="mx-lg-5 mt-5">

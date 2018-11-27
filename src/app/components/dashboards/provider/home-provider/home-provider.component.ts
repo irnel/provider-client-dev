@@ -1,4 +1,3 @@
-import { map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
