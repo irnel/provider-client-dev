@@ -7,10 +7,6 @@ table {
   width: 100%;
 }
 
-td, th {
-  width: auto;
-}
-
 .mat-fab {
   font-size: 2rem;
   position: fixed;
@@ -21,4 +17,8 @@ td, th {
 img {
   max-width: 80px;
   max-height: 80px;
+}
+
+.block-options {
+  display: block;
 }

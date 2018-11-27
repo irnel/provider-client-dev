@@ -43,12 +43,22 @@ export class ProviderWorkspaceComponent implements OnInit {
   }
 }
 
+export class Provider {
+  name: string;
+  address: string;
+  description: string;
+  image: string;
+  id?: number;
+}
+
+
 const data: Provider [] = [
   {
     'id': 1,
     'name': 'Youspan',
     'address': '98 Westridge Avenue',
-    'description': 'dictumst morbi vestibulum velit id pretium iaculis diam erat fermentum justo nec condimentum neque sapien placerat',
+    'description': 'dictumst morbi vestibulum velit id pretium iaculis diam erat asasasasas' +
+    'kajsnkajsnkasnaksnakjsnakjsnaksjansjanksnakjsnakjsnkajsnfermentum justo nec condimentum neque sapien placerat',
     'image': 'https://robohash.org/nemoomnistemporibus.bmp?size=100x100&set=set1'
   },
   {
