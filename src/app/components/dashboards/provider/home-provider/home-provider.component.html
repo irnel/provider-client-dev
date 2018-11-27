@@ -1,23 +1,63 @@
-<!-- Main Navigation -->
-<app-navigation></app-navigation>
+<!-- Main Layout -->
+<app-layout>
 
-<!-- Page Content -->
-<main [ngClass]="{'py-0 px-0 my-0 mx-0': specialPage}"  class="mx-lg-5" >
+  <mat-sidenav-container>
+    <!-- Sidebar Material -->
+    <mat-sidenav #drawer class="sidenav special-color-dark" fixedInViewport="true"
+        [attr.role]="isHandSet$ ? 'dialog' : 'navigation'"
+        [mode]="!(isHandSet$ | async)!.matches ? 'over' : 'side'"
+        [opened]="(isHandSet$ | async)!.matches">
 
-  <!-- Stats -->
-  <app-stats-card></app-stats-card>
+      <div class="list-group list-group-flush mt-4">
+        <!-- Options Home -->
+        <a routerLink="home" class="list-group-item list-group-item-action special-color-dark waves-effect">
+          <i class="fa fa-home mr-2" aria-hidden="true"></i>Home
+        </a>
 
-  <!-- Stats 1 -->
-  <app-stats-card1></app-stats-card1>
+        <!-- Options Providers -->
+        <a routerLink="providers" class="list-group-item list-group-item-action special-color-dark waves-effect">
+          <i class="fa fa-building-o mr-2" aria-hidden="true"></i>Providers
+        </a>
 
-  <!-- Charts -->
-  <app-charts></app-charts>
+        <!-- Options Products -->
+        <a routerLink="products" class="list-group-item list-group-item-action special-color-dark waves-effect">
+          <i class="fa fa-shopping-bag mr-2" aria-hidden="true"></i>Products
+        </a>
 
-  <!-- Tables  -->
-  <app-basic-table></app-basic-table>
+        <!-- Options Categories -->
+        <a routerLink="categories" class="list-group-item list-group-item-action special-color-dark waves-effect">
+          <i class="fa fa-file-text-o mr-2" aria-hidden="true"></i>Categories
+        </a>
 
-</main>
+        <!-- Options Cashiers -->
+        <a routerLink="cashiers" class="list-group-item list-group-item-action special-color-dark waves-effect">
+          <i class="fa fa-user-circle mr-2" aria-hidden="true"></i>Cashier$
+        </a>
 
-<!-- Footer -->
-<app-footer></app-footer>
+        <!-- Options Orders -->
+        <a routerLink="orders" class="list-group-item list-group-item-action special-color-dark waves-effect">
+          <i class="fa fa-hand-o-right mr-2" aria-hidden="true"></i>Orders
+        </a>
 
+      </div>
+
+    </mat-sidenav>
+    <!-- Sidebar Material -->
+
+    <!-- Main Content -->
+    <mat-sidenav-content>
+      <app-header (sidenavToggle)="drawer.toggle()"></app-header>
+
+      <!-- Workspace Content -->
+      <main class="mx-lg-5 mt-5">
+        <router-outlet></router-outlet>
+      </main>
+
+      <app-footer></app-footer>
+    </mat-sidenav-content>
+    <!-- Main Content -->
+
+  </mat-sidenav-container>
+
+</app-layout>
+<!-- Main Layout -->
