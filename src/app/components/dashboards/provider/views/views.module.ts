@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MaterialModule } from './../../../material/material.module';
 
 import {
   StatsCardComponent,
@@ -28,6 +29,7 @@ import {
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
+    MaterialModule,
     MDBBootstrapModule.forRoot()
   ],
   declarations: [
