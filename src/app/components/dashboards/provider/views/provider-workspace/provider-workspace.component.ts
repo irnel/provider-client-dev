@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -25,7 +26,9 @@ export class ProviderWorkspaceComponent implements OnInit {
 
   providers = data;
 
-  constructor() {
+  constructor(
+    private router: Router
+  ) {
     this.dataSource = new MatTableDataSource(this.providers);
   }
 
@@ -34,6 +37,16 @@ export class ProviderWorkspaceComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
+  delete (id: number) {
+
+  }
+
+  // redirect to edit provider
+  redirectToEditProvider(id: number) {
+    this.router.navigate([`/provider-dashboard/workspace/providers/${id}/edit`]);
+  }
+
+  // apply filter to data table
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
