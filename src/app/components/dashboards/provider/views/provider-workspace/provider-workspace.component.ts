@@ -71,7 +71,8 @@ const data: Provider [] = [
     'name': 'Youspan',
     'address': '98 Westridge Avenue',
     'description': 'dictumst morbi vestibulum velit id pretium iaculis diam erat asasasasas' +
-    'kajsnkajsnkasnaksnakjsnakjsnaksjansjanksnakjsnakjsnkajsnfermentum justo nec condimentum neque sapien placerat',
+    'kajsnkajsnkasnaksnakjsnakjsnaksjansjanksnakjsnakjsnkajsnfermentum justo nec condimentum neque sapien placerat' +
+    'kajsnkajsnkasnaksnakjs asas as as a sa s aaaaaaaaaaaaaaaaaaaaaaaas sasasa',
     'image': 'https://robohash.org/nemoomnistemporibus.bmp?size=100x100&set=set1'
   },
   {

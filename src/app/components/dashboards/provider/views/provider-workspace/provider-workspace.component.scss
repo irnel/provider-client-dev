@@ -20,6 +20,13 @@ img {
 }
 
 .block-options {
-  display: block;
+  display: inline-block;
 }
 
+td, th {
+  width: auto;
+}
+
+span.badge {
+  cursor: pointer;
+}
