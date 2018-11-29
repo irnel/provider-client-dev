@@ -17,6 +17,7 @@ import {
    CashierWorkspaceComponent,
    OrderWorkspaceComponent
   } from './components/dashboards/provider/views';
+import { EditProviderWorkspaceComponent } from './components/dashboards/provider/views/edit-provider-workspace/edit-provider-workspace.component';
 
 const routes: Routes = [
 
@@ -30,6 +31,7 @@ const routes: Routes = [
     children: [
       { path: 'home', component: HomeWorkspaceComponent },
       { path: 'providers', component: ProviderWorkspaceComponent },
+      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent },
       { path: 'products', component: ProductWorkspaceComponent },
       { path: 'categories', component: CategoryWorkspaceComponent },
       { path: 'cashiers', component: CashierWorkspaceComponent},
