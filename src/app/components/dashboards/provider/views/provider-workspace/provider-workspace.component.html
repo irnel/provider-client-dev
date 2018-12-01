@@ -15,6 +15,7 @@
         <td mat-cell *matCellDef="let provider" style="width: 10%;">
           <img src="{{provider.image}}" alt="provider" class="img-thumbnail mt-2 mb-2 mr-4">
         </td>
+
       </ng-container>
 
       <!-- Column Name -->
@@ -49,7 +50,7 @@
 
             <!-- Read More -->
             <h6 *ngIf="detail.isCollapsed">
-              <span (click)="detail.show()" class="badge badge-primary waves-light"  mdbWavesEffect>
+              <span (click)="detail.show()" class="badge badge-primary waves-light" mdbWavesEffect>
                 Read more
               </span>
             </h6>
