@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
@@ -37,10 +37,6 @@ export class ProviderWorkspaceComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  delete (id: number) {
-
-  }
-
   // redirect to edit provider
   redirectToEditProvider(id: number) {
     this.router.navigate([`/provider-dashboard/workspace/providers/${id}/edit`]);
@@ -54,6 +50,7 @@ export class ProviderWorkspaceComponent implements OnInit {
       this.paginator.firstPage();
     }
   }
+
 }
 
 export class Provider {
@@ -71,8 +68,12 @@ const data: Provider [] = [
     'name': 'Youspan',
     'address': '98 Westridge Avenue',
     'description': 'dictumst morbi vestibulum velit id pretium iaculis diam erat asasasasas' +
-    'kajsnkajsnkasnaksnakjsnakjsnaksjansjanksnakjsnakjsnkajsnfermentum justo nec condimentum neque sapien placerat' +
-    'kajsnkajsnkasnaksnakjs asas as as a sa s aaaaaaaaaaaaaaaaaaaaaaaas sasasa',
+    'kajsnkaj snkasnaksn akjsnakjsn aksjansjan ksnakjsnakjsnkajs nfermentum justo nec condimentum neque sapien placerat' +
+    'kajsnkajs nkasnaksnakjs asas as as a sa s aaaaaaaa aaaaaaaaa aaaaaaas sasasa erisque enim ligula venenatis dolor.' +
+    'Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet.' +
+    'Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed' +
+    'ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum.' +
+    'Sed dapibus pulvinar nibh tempor porta.',
     'image': 'https://robohash.org/nemoomnistemporibus.bmp?size=100x100&set=set1'
   },
   {
@@ -86,7 +87,13 @@ const data: Provider [] = [
     'id': 3,
     'name': 'Voonyx',
     'address': '9415 Monterey Parkway',
-    'description': 'luctus et ultrices posuere cubilia curae nulla dapibus dolor vel',
+    'description': 'luctus et ultrices posuere cubilia curae nulla dapibus dolor vel' +
+    'kajsnkaj snkasnaksn akjsnakjsn aksjansjan ksnakjsnakjsnkajs nfermentum justo nec condimentum neque sapien placerat' +
+    'kajsnkajs nkasnaksnakjs asas as as a sa s aaaaaaaa aaaaaaaaa aaaaaaas sasasa erisque enim ligula venenatis dolor.' +
+    'Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet.' +
+    'Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed' +
+    'ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum.' +
+    'Sed dapibus pulvinar nibh tempor porta.',
     'image': 'https://robohash.org/sedearumnon.png?size=100x100&set=set1'
   },
   {
