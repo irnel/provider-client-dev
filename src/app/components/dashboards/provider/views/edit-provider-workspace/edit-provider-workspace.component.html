@@ -1,3 +1,67 @@
-<p>
-  edit-provider-workspace works!
-</p>
+<!-- Create Provider -->
+<mdb-card class="w-responsive mt-4 center ml-auto mr-auto">
+
+  <!--Card Header-->
+  <mdb-card-header class="white-text text-center">
+    <h4>
+      <span class="badge badge-primary waves-light ml-2">
+        <strong> Create Provider </strong>
+      </span>
+    </h4>
+  </mdb-card-header>
+
+  <!--Card content-->
+  <mdb-card-body class="px-lg-5">
+
+    <form [formGroup]="editForm">
+      <!-- Name -->
+      <div class="md-form form-sm mt-2">
+        <input mdbInputDirective type="text" class="form-control"
+            id="formName" formControlName="name"
+            data-error="Name is required"
+            [validateSuccess]="false">
+
+        <label for="formName">Name</label>
+      </div>
+
+      <!-- Description -->
+      <div class="md-form form-sm mt-2">
+        <textarea class="md-textarea md-textarea-auto form-control"
+            id="formDescription" formControlName="name"
+            type="text" [validateSuccess]="false"
+             [validateError]="false" mdbInputDirective></textarea>
+
+        <label for="formDescription">Description</label>
+      </div>
+
+      <div class="md-form form-sm mt-2">
+
+        <!-- TODO: poner boton y input label -->
+
+        <button mdbBtn type="button" class="btn-round-xs" color="primary" outline="true" mdbWavesEffect>
+            Google
+
+           <input type="file">
+        </button>
+
+      </div>
+
+
+
+
+
+
+
+
+    </form>
+
+
+
+  </mdb-card-body>
+
+
+
+</mdb-card>
+
+
+
