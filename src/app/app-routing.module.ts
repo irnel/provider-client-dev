@@ -31,6 +31,7 @@ const routes: Routes = [
     children: [
       { path: 'home', component: HomeWorkspaceComponent },
       { path: 'providers', component: ProviderWorkspaceComponent },
+      { path: 'providers/create', component: EditProviderWorkspaceComponent },
       { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent },
       { path: 'products', component: ProductWorkspaceComponent },
       { path: 'categories', component: CategoryWorkspaceComponent },
