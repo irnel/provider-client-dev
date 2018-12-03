@@ -24,6 +24,38 @@
         <label for="formName">Name</label>
       </div>
 
+
+
+      <!-- Google maps (Location - Address) -->
+      <div class="md-form form-sm mt-2">
+
+        <agm-map
+            [zoom]="zoom"
+            [latitude]="address.lat"
+            [longitude]="address.lng"
+            (mouseOver)="window.open()"
+            (mouseOut)="window.close()"
+            (mapClick)="placeMarker($event)">
+
+          <agm-marker [latitude]="address.lat" [longitude]="address.lng"></agm-marker>
+
+          <agm-info-window #window>
+            <h6>Longitude: {{address.lat}}</h6>
+            <h6>Latitude: {{address.lng}}</h6>
+          </agm-info-window>
+        </agm-map>
+      </div>
+
+      <!-- Image -->
+      <div class="md-form form-sm mt-2">
+
+      <input mdbInputDirective type="file" class="form-control"
+          id="formImage"
+          data-error="Name is required"
+          [validateSuccess]="false">
+
+      </div>
+
       <!-- Description -->
       <div class="md-form form-sm mt-2">
         <textarea class="md-textarea md-textarea-auto form-control"
@@ -34,34 +66,9 @@
         <label for="formDescription">Description</label>
       </div>
 
-      <div class="md-form form-sm mt-2">
-
-        <!-- TODO: poner boton y input label -->
-
-        <button mdbBtn type="button" class="btn-round-xs" color="primary" outline="true" mdbWavesEffect>
-            Google
-
-           <input type="file">
-        </button>
-
-      </div>
-
-
-
-
-
-
-
 
     </form>
 
-
-
   </mdb-card-body>
 
-
-
 </mdb-card>
-
-
-
