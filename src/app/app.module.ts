@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule,  } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,9 +36,10 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    MDBBootstrapModule.forRoot(),
     ToastContainerModule,
-    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 1 })
+    MDBBootstrapModule.forRoot(),
+    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 1 }),
+    AgmCoreModule.forRoot({ apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4' })
   ],
   schemas: [
     NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA
