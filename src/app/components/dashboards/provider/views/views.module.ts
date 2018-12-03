@@ -7,6 +7,7 @@ import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/cor
 
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MaterialModule } from './../../../material/material.module';
+import { AgmCoreModule } from '@agm/core';
 
 import {
   StatsCardComponent,
@@ -22,6 +23,7 @@ import {
 } from './index';
 import { EditProviderWorkspaceComponent } from './edit-provider-workspace/edit-provider-workspace.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { EditProviderWorkspaceComponent } from './edit-provider-workspace/edit-p
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MaterialModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    AgmCoreModule.forRoot({ apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4' })
   ],
   declarations: [
     StatsCardComponent,
