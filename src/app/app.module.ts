@@ -39,7 +39,10 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     ToastContainerModule,
     MDBBootstrapModule.forRoot(),
     ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 1 }),
-    AgmCoreModule.forRoot({ apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4' })
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4',
+      libraries: ['places']
+    })
   ],
   schemas: [
     NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA
