@@ -26,23 +26,33 @@
 
 
 
-      <!-- Google maps (Location - Address) -->
-      <div class="md-form form-sm mt-2">
+      <!-- Google maps (Location) -->
+      <div class="md-form form-sm mt-6">
 
-        <agm-map
+        <div class="md-form form-sm">
+          <input #search mdbInputDirective type="text" class="form-control"
+              id="formAddress" formControlName="address"
+              data-error="Address is required"
+              [validateSuccess]="false"
+              placeholder="Introduce your address">
+
+        </div>
+
+        <agm-map #map
             [zoom]="zoom"
             [latitude]="address.lat"
             [longitude]="address.lng"
-            (mouseOver)="window.open()"
-            (mouseOut)="window.close()"
-            (mapClick)="placeMarker($event)">
+            [scrollwheel]="false">
 
           <agm-marker [latitude]="address.lat" [longitude]="address.lng"></agm-marker>
 
-          <agm-info-window #window>
-            <h6>Longitude: {{address.lat}}</h6>
-            <h6>Latitude: {{address.lng}}</h6>
+          <agm-info-window #infoWindow>
+            <div>
+              {{address.lat}}
+              {{address.lng}}
+            </div>
           </agm-info-window>
+
         </agm-map>
       </div>
 
@@ -65,6 +75,27 @@
 
         <label for="formDescription">Description</label>
       </div>
+
+      <div class="float-right">
+          <!-- Button Delete -->
+          <button mdbBtn
+              color="primary"
+              class="relative waves-light right" mdbWavesEffect>
+
+            <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Create
+          </button>
+
+          <!-- Button Cancel -->
+          <button mdbBtn
+              outline="true" color="primary"
+              aria-label="Close" mdbWavesEffect
+              (click)="cancel()">
+
+            <i class="fa fa-ban left mr-2" aria-hidden="true"></i>Cancel
+          </button>
+
+        </div>
+
 
 
     </form>
