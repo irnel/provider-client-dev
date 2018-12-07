@@ -5,7 +5,7 @@
   <mdb-card-header class="white-text text-center">
     <h4>
       <span class="badge badge-primary waves-light ml-2">
-        <strong> Create Provider </strong>
+        <strong> {{title}} </strong>
       </span>
     </h4>
   </mdb-card-header>
@@ -23,8 +23,6 @@
 
         <label for="formName">Name</label>
       </div>
-
-
 
       <!-- Google maps (Location) -->
       <div class="md-form form-sm mt-6">
@@ -77,12 +75,23 @@
       </div>
 
       <div class="float-right">
-          <!-- Button Delete -->
+
           <button mdbBtn
               color="primary"
-              class="relative waves-light right" mdbWavesEffect>
+              class="relative waves-light right" mdbWavesEffect
+              (click)="editCategory()">
 
-            <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Create
+
+            <!-- Create Mode -->
+            <div *ngIf="!edit" >
+              <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Create
+            </div>
+
+            <!-- Edit Mode -->
+            <div *ngIf="edit">
+              <i class="fa fa-floppy-o left mr-2" aria-hidden="true"></i>Save
+            </div>
+
           </button>
 
           <!-- Button Cancel -->
@@ -95,8 +104,6 @@
           </button>
 
         </div>
-
-
 
     </form>
 

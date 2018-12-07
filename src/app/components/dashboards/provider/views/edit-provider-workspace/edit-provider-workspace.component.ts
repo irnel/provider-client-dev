@@ -1,12 +1,11 @@
 /// <reference types="@types/googlemaps" />
 
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, ElementRef, ViewChild, NgZone } from '@angular/core';
 
 import { Address, Provider } from '../../../../../models';
 import { MapsAPILoader } from '@agm/core';
-
 
 @Component({
   selector: 'app-edit-provider-workspace',
@@ -17,16 +16,33 @@ export class EditProviderWorkspaceComponent implements OnInit {
   editForm: FormGroup;
   public zoom: number;
   public address: Address;
-  public provider: Provider;
 
+  // HTML values
   @ViewChild('search') search: ElementRef;
+  title: string;
+  edit: boolean;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private ngZone: NgZone,
     private formBuilder: FormBuilder,
     private mapsAPILoader: MapsAPILoader
-  ) { }
+  ) {
+
+    this.route.data.subscribe(data => {
+      if (data.mode === 'create') {
+        this.title = 'Create Provider';
+        this.edit = false;
+
+      } else {
+        this.title = 'Edit Provider';
+        this.edit = true;
+
+      }
+
+    });
+  }
 
   ngOnInit() {
     this.editForm = this.formBuilder.group({
@@ -69,7 +85,6 @@ export class EditProviderWorkspaceComponent implements OnInit {
           this.address.lng = place.geometry.location.lng();
           this.zoom = 12;
 
-          this.provider.address = this.address;
         });
       });
     });
@@ -84,7 +99,6 @@ export class EditProviderWorkspaceComponent implements OnInit {
         this.address.lng = position.coords.longitude;
         this.zoom = 8;
 
-        this.provider.address = this.address;
       });
     }
   }
@@ -95,6 +109,27 @@ export class EditProviderWorkspaceComponent implements OnInit {
 
   cancel() {
     this.redirectToProviderWorkspace();
+  }
+
+  MarkAsDirty() {
+    if (this.editForm.invalid) {
+      this.form.name.markAsDirty();
+      this.form.address.markAsDirty();
+
+      return;
+    }
+  }
+
+  editCategory() {
+    // Mark the control as dirty
+    this.MarkAsDirty();
+
+    // create
+    if (!this.edit) {
+
+    } else { // edit
+
+    }
   }
 
 }
