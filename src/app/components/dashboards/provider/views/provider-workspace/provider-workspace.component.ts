@@ -1,30 +1,25 @@
 import { Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { Config } from './../../../../../infrastructure';
 
 @Component({
   selector: 'app-provider-workspace',
   templateUrl: './provider-workspace.component.html',
-  styleUrls: ['./provider-workspace.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+  styleUrls: ['./provider-workspace.component.scss']
 })
 export class ProviderWorkspaceComponent implements OnInit {
 
   columnsToDisplay: string [] = ['image', 'name', 'address', 'description', 'operation'];
   dataSource: MatTableDataSource<Provider>;
-  expandedElement: Provider;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   providers = data;
+  maxChar: number = Config.maxChar;
+  pageSizeOptions: number[] = Config.pageSizeOptions;
 
   constructor(
     private router: Router
@@ -60,7 +55,6 @@ export class Provider {
   image: string;
   id?: number;
 }
-
 
 const data: Provider [] = [
   {
