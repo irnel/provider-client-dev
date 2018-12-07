@@ -12,12 +12,12 @@ import { HomeProviderComponent } from './components/dashboards/provider/home-pro
 import {
    HomeWorkspaceComponent,
    ProviderWorkspaceComponent,
+   EditProviderWorkspaceComponent,
    ProductWorkspaceComponent,
    CategoryWorkspaceComponent,
    CashierWorkspaceComponent,
    OrderWorkspaceComponent
   } from './components/dashboards/provider/views';
-import { EditProviderWorkspaceComponent } from './components/dashboards/provider/views/edit-provider-workspace/edit-provider-workspace.component';
 
 const routes: Routes = [
 
@@ -31,8 +31,8 @@ const routes: Routes = [
     children: [
       { path: 'home', component: HomeWorkspaceComponent },
       { path: 'providers', component: ProviderWorkspaceComponent },
-      { path: 'providers/create', component: EditProviderWorkspaceComponent },
-      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent },
+      { path: 'providers/create', component: EditProviderWorkspaceComponent, data: { mode: 'create'} },
+      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent, data: { mode: 'edit'} },
       { path: 'products', component: ProductWorkspaceComponent },
       { path: 'categories', component: CategoryWorkspaceComponent },
       { path: 'cashiers', component: CashierWorkspaceComponent},
