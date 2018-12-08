@@ -4,3 +4,7 @@ export * from './fake-backend';
 export * from './content-type.interceptor';
 export * from './key-values';
 
+export * from './provider';
+export * from './category';
+export * from './mock';
+

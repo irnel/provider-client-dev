@@ -1,3 +1,4 @@
+import { EditCategoryWorkspaceComponent } from './components/dashboards/provider/views/edit-category-workspace/edit-category-workspace.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -31,10 +32,12 @@ const routes: Routes = [
     children: [
       { path: 'home', component: HomeWorkspaceComponent },
       { path: 'providers', component: ProviderWorkspaceComponent },
-      { path: 'providers/create', component: EditProviderWorkspaceComponent, data: { mode: 'create'} },
-      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent, data: { mode: 'edit'} },
+      { path: 'providers/create', component: EditProviderWorkspaceComponent, data: { mode: 'create'}},
+      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent, data: { mode: 'edit'}},
       { path: 'products', component: ProductWorkspaceComponent },
       { path: 'categories', component: CategoryWorkspaceComponent },
+      { path: 'categories/create', component: EditCategoryWorkspaceComponent, data: { mode: 'create'}},
+      { path: 'categories/:id/edit', component: EditCategoryWorkspaceComponent, data: { mode: 'edit'}},
       { path: 'cashiers', component: CashierWorkspaceComponent},
       { path: 'orders', component: OrderWorkspaceComponent },
 

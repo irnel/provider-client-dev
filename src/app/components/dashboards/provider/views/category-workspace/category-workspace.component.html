@@ -76,7 +76,8 @@
             <a type="button"
                 mdbTooltip="Edit category"
                 placement="top"
-                class="waves-light mr-3 ml-3">
+                class="waves-light mr-3 ml-3"
+                (click)="redirectToEditCategory(category.id)">
 
               <i class="fa fa-pencil prefix" aria-hidden="true"></i>
             </a>
@@ -170,6 +171,6 @@
   </div>
 
   <!-- Floating Action Button -->
-  <a type="button" mat-fab color="accent">+</a>
+  <a routerLink="create" type="button" mat-fab color="accent">+</a>
 
 </div>

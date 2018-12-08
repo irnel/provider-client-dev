@@ -1,4 +1,4 @@
-<!-- Edit Provider -->
+<!-- Edit Category -->
 <mdb-card class="w-responsive mt-4 center ml-auto mr-auto">
 
   <!--Card Header-->
@@ -14,6 +14,7 @@
   <mdb-card-body class="px-lg-5">
 
     <form [formGroup]="editForm">
+
       <!-- Name -->
       <div class="md-form form-sm mt-2">
         <input mdbInputDirective type="text" class="form-control"
@@ -24,52 +25,50 @@
         <label for="formName">Name</label>
       </div>
 
-      <!-- Google maps (Location) -->
-      <div class="md-form form-sm mt-6">
+      <!-- Provider -->
+      <!-- <div class="md-form form-sm mt-2">
+        <input mdbInputDirective type="text" class="form-control"
+            id="providerForm" formControlName="provider"
+            data-error="Provider is required"
+            [validateSuccess]="false">
 
-        <div class="md-form form-sm">
-          <input #search mdbInputDirective type="text" class="form-control"
-              id="formAddress" formControlName="address"
-              data-error="Address is required"
-              [validateSuccess]="false"
-              placeholder="Introduce your address">
+          <label for="providerForm">Provider</label>
 
-        </div>
+      </div > -->
+      <div class="md-form form-sm mt-2">
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Provider" aria-label="Provider"
+              [matAutocomplete]="auto" formControlName="providerName">
 
-        <agm-map #map
-            [zoom]="zoom"
-            [latitude]="address.lat"
-            [longitude]="address.lng"
-            [scrollwheel]="false">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let provider of filteredProviders | async" [value]="provider.name">
+                <img class="option-img" aria-hidden [src]="provider.image" height="40">
 
-          <agm-marker [latitude]="address.lat" [longitude]="address.lng"></agm-marker>
+                <span>{{provider.name}}</span>
+              </mat-option>
 
-          <agm-info-window #infoWindow>
-            <div>
-              {{address.lat}}
-              {{address.lng}}
-            </div>
-          </agm-info-window>
+          </mat-autocomplete>
 
-        </agm-map>
+        </mat-form-field>
+
       </div>
+
 
       <!-- Image -->
       <div class="md-form form-sm mt-2">
-
-      <input mdbInputDirective type="file" class="form-control"
-          id="formImage"
-          data-error="Name is required"
-          [validateSuccess]="false">
+        <input mdbInputDirective type="file" class="form-control"
+            id="formImage" formControlName="image"
+            data-error="Name is required"
+            [validateSuccess]="false">
 
       </div>
 
       <!-- Description -->
       <div class="md-form form-sm mt-2">
         <textarea class="md-textarea md-textarea-auto form-control"
-            id="formDescription" formControlName="name"
+            id="formDescription" formControlName="description"
             type="text" [validateSuccess]="false"
-             [validateError]="false" mdbInputDirective></textarea>
+              [validateError]="false" mdbInputDirective></textarea>
 
         <label for="formDescription">Description</label>
       </div>
@@ -80,7 +79,6 @@
             color="primary"
             class="relative waves-light right" mdbWavesEffect
             (click)="editCategory()">
-
 
           <!-- Create Mode -->
           <div *ngIf="!edit" >
@@ -105,8 +103,12 @@
 
       </div>
 
+
+
     </form>
 
   </mdb-card-body>
+
+
 
 </mdb-card>

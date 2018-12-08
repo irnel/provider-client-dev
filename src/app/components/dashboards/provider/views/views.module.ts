@@ -19,9 +19,10 @@ import {
   ProductWorkspaceComponent,
   CategoryWorkspaceComponent,
   CashierWorkspaceComponent,
-  OrderWorkspaceComponent
+  OrderWorkspaceComponent,
+  EditProviderWorkspaceComponent,
+  EditCategoryWorkspaceComponent,
 } from './index';
-import { EditProviderWorkspaceComponent } from './edit-provider-workspace/edit-provider-workspace.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { EditProviderWorkspaceComponent } from './edit-provider-workspace/edit-p
     CategoryWorkspaceComponent,
     CashierWorkspaceComponent,
     OrderWorkspaceComponent,
-    EditProviderWorkspaceComponent
+    EditProviderWorkspaceComponent,
+    EditCategoryWorkspaceComponent
   ],
   exports: [
     StatsCardComponent,

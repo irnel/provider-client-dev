@@ -20,8 +20,9 @@
             <div class="md-form form-sm mt-1">
               <i class="fa fa-user prefix" aria-hidden="true"></i>
               <input mdbInputDirective type="email" class="form-control"
-                id="formEmail" data-error="invalid email"
-                data-success="valid email" formControlName="email">
+                  id="formEmail" formControlName="email"
+                  data-error="invalid email"
+                  [validateSuccess]="false">
 
               <label for="formEmail">Email</label>
             </div>
@@ -30,8 +31,9 @@
             <div class="md-form form-sm">
               <i class="fa fa-lock prefix" aria-hidden="true"></i>
               <input mdbInputDirective type="password" class="form-control"
-                id="formPassword" data-error="password must be at least 6 character"
-                data-success="valid password" minlength="6" formControlName="password">
+                  id="formPassword" formControlName="password"
+                  data-error="password must be at least 6 character"
+                  [validateSuccess]="false" minlength="6" >
 
               <label for="formPassword">Password</label>
             </div>
