@@ -8,6 +8,7 @@ import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/cor
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MaterialModule } from './../../../material/material.module';
 import { AgmCoreModule } from '@agm/core';
+import { ToastrModule } from 'ngx-toastr';
 
 import {
   StatsCardComponent,
@@ -24,7 +25,6 @@ import {
   EditCategoryWorkspaceComponent,
 } from './index';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -35,6 +35,7 @@ import {
     ReactiveFormsModule,
     MaterialModule,
     MDBBootstrapModule.forRoot(),
+    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 1 }),
     AgmCoreModule.forRoot({ apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4' })
   ],
   declarations: [
