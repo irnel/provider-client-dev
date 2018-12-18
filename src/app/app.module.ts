@@ -1,13 +1,14 @@
 import { JwtInterceptor, ErrorInterceptor, fakeBackendProvider, ContentTypeInterceptor } from './helpers';
 
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule,  } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
 import { AgmCoreModule } from '@agm/core';
+import { SnotifyModule, ToastDefaults, SnotifyService } from 'ng-snotify';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,6 +38,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     AppRoutingModule,
     HttpClientModule,
     ToastContainerModule,
+    SnotifyModule,
     MDBBootstrapModule.forRoot(),
     ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 1 }),
     AgmCoreModule.forRoot({
@@ -51,6 +53,9 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ContentTypeInterceptor, multi: true },
+
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
+    SnotifyService,
 
     fakeBackendProvider
   ],
