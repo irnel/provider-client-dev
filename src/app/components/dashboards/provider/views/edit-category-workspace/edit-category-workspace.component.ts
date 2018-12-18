@@ -1,14 +1,13 @@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
 
 import { Provider, Category, PROVIDERS_DATA } from './../../../../../helpers';
 import { Config } from './../../../../../infrastructure';
-
+import { SnotifyService } from 'ng-snotify';
 
 @Component({
   selector: 'app-edit-category-workspace',
@@ -16,7 +15,6 @@ import { Config } from './../../../../../infrastructure';
   styleUrls: ['./edit-category-workspace.component.scss']
 })
 export class EditCategoryWorkspaceComponent implements OnInit {
-  @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
   editForm: FormGroup;
   edit: boolean;
   title: string;
@@ -26,16 +24,16 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   providers: Provider[] = PROVIDERS_DATA;
   filteredProviders: Observable<Provider[]>;
   currentProviders: Provider[];
+  providerNotFound = false;
 
-  providerNotFound = true;
-  inputProvider: any;
-
+  providerName: any;
+  nameError = 'required';
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private readonly toast: ToastrService
+    private readonly toast: SnotifyService
   ) {
     // Change Form values
     this.route.data.subscribe(data => {
@@ -52,8 +50,6 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toast.overlayContainer = this.toastContainer;
-
     this.editForm = this.formBuilder.group({
       name: ['', Validators.compose([
         Validators.required,
@@ -64,27 +60,34 @@ export class EditCategoryWorkspaceComponent implements OnInit {
         Validators.pattern(this.regEx)]
       )],
       image: ['', Validators.nullValidator],
-      description: ['', Validators.pattern(this.regEx1)]
+      description: ['',  Validators.pattern(this.regEx1)]
     });
 
-    this.inputProvider = this.form.providerName;
-
-    this.form.providerName.valueChanges
-      .pipe(
-        startWith(''),
-        map(name => {
-          if (name) {
-            this.providerNotFound = false;
-            return this.elementFilter(name);
-          } else {
-            this.providerNotFound = true;
-            return this.providers.slice();
-          }
+    // validate name
+    this.form.name.valueChanges.pipe(
+      startWith(''),
+      map(() => {
+        let error = '';
+        if (this.form.name.hasError('required')) {
+          error = 'name is required';
         }
-      ))
-      .subscribe(
-        list => this.currentProviders = list
-      );
+
+        if (this.form.name.hasError('pattern')) {
+          error = 'only letters and numbers are allowed';
+        }
+
+        return error;
+      })
+    ).subscribe(error => this.nameError = error );
+
+    // provider list
+    this.providerName = this.form.providerName;
+    this.form.providerName.valueChanges.pipe(
+      startWith(''),
+      map(name => {
+        return name ? this.elementFilter(name) : this.providers.slice();
+      }
+    )).subscribe(list => this.currentProviders = list);
   }
 
   get form() { return this.editForm.controls; }
@@ -93,6 +96,30 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     if (this.editForm.invalid) {
       this.form.name.markAsDirty();
       this.form.providerName.markAsDirty();
+
+      if (this.form.description.hasError('pattern')) {
+        this.showErrorMessage(
+          'Validation error',
+          'Character not allowed. ' +
+          'Only letters and numbers are allowed', 2500
+        );
+      }
+
+      return;
+    }
+  }
+
+  foundMatchValidator() {
+    // search match with input value from provider list
+    const foundMatch = this.currentProviders.find(item => {
+      return item.name === this.form.providerName.value;
+    });
+
+    if (!foundMatch && this.form.providerName.value !== '') {
+      this.showErrorMessage(
+        'Validation error',
+        'Select a provider from the list.', 2500
+      );
 
       return;
     }
@@ -109,6 +136,8 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   editCategory() {
     // Mark the control as dirty
     this.MarkAsDirty();
+    // match value provider
+    this.foundMatchValidator();
 
     if (!this.edit) {
 
@@ -121,23 +150,15 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.providers.filter(provider =>
-      provider.name.toLowerCase().indexOf(filterValue) === 0
-    );
+      provider.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  showSuccessMessage(message: string, time: number) {
-    this.toast.success(message, '', {
-      tapToDismiss: true,
-      timeOut: time
+  showErrorMessage(title: string, body: string, timeOut: number) {
+    this.toast.error(body, title, {
+      timeout: timeOut,
+      showProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true
     });
   }
-
-  showErrorMessage(message: string, time: number) {
-    this.toast.error(message, '', {
-      tapToDismiss: true,
-      timeOut: time
-    });
-  }
-
-
 }

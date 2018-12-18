@@ -19,29 +19,20 @@
       <div class="md-form form-sm mt-2">
           <input mdbInputDirective type="text" class="form-control"
             id="formName" formControlName="name"
-            data-error="invalid name"
+            [errorMessage]="nameError"
             [validateSuccess]="false">
 
         <label for="formName">Name</label>
       </div>
 
-      <!-- Provider -->
-      <!-- <div class="md-form form-sm mt-2">
-        <input mdbInputDirective type="text" class="form-control"
-            id="providerForm" formControlName="provider"
-            data-error="Provider is required"
-            [validateSuccess]="false">
-
-          <label for="providerForm">Provider</label>
-
-      </div > -->
       <div class="md-form form-sm mt-2">
         <mat-form-field class="full-width">
           <input matInput placeholder="Provider" aria-label="Provider"
               [matAutocomplete]="auto" formControlName="providerName">
 
-            <mat-error *ngIf="inputProvider.errors.required">
-              provider is required
+            <mat-error *ngIf="providerName.errors">
+              <p *ngIf="providerName.errors.required"> provider is required </p>
+              <p *ngIf="providerName.errors.pattern"> only letters and numbers are allowed </p>
             </mat-error>
 
             <mat-autocomplete #auto="matAutocomplete">
@@ -71,13 +62,10 @@
         <textarea class="md-textarea md-textarea-auto form-control"
             id="formDescription" formControlName="description"
             type="text" [validateSuccess]="false"
-            data-error="invalid character" mdbInputDirective></textarea>
+            [validateError]="false" mdbInputDirective></textarea>
 
         <label for="formDescription">Description</label>
       </div>
-
-      <!-- Notification Container -->
-      <div toastContainer></div>
 
       <div class="float-right mt-2">
 
