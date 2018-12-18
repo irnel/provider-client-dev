@@ -18,7 +18,7 @@
       <div class="md-form form-sm mt-2">
         <input mdbInputDirective type="text" class="form-control"
             id="formName" formControlName="name"
-            data-error="Name is required"
+            [errorMessage]="nameError"
             [validateSuccess]="false">
 
         <label for="formName">Name</label>
@@ -30,7 +30,7 @@
         <div class="md-form form-sm">
           <input #search mdbInputDirective type="text" class="form-control"
               id="formAddress" formControlName="address"
-              data-error="Address is required"
+              [errorMessage]="addressError"
               [validateSuccess]="false"
               placeholder="Introduce your address">
 
@@ -67,9 +67,9 @@
       <!-- Description -->
       <div class="md-form form-sm mt-2">
         <textarea class="md-textarea md-textarea-auto form-control"
-            id="formDescription" formControlName="name"
+            id="formDescription" formControlName="description"
             type="text" [validateSuccess]="false"
-             [validateError]="false" mdbInputDirective></textarea>
+            [validateError]="false" mdbInputDirective></textarea>
 
         <label for="formDescription">Description</label>
       </div>
