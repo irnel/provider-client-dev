@@ -1,12 +1,12 @@
-import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../services';
 import { Roles } from './../../helpers/enum-roles';
+import { SnotifyService } from 'ng-snotify';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +14,6 @@ import { Roles } from './../../helpers/enum-roles';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
   loginForm: FormGroup;
   loading = false;
   returnUrl: string;
@@ -23,7 +22,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private readonly toast: ToastrService,
+    private readonly toast: SnotifyService,
     private readonly authService: AuthService
   ) {
 
@@ -44,9 +43,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Put toasts in a specific div
-    this.toast.overlayContainer = this.toastContainer;
-
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
@@ -76,9 +72,12 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         error => {
-          this.toast.error(error, '', {
-            tapToDismiss: true,
-            timeOut: 1500
+          this.toast.error(error, 'Validation Error', {
+            backdrop: 0.2,
+            closeOnClick: true,
+            pauseOnHover: true,
+            showProgressBar: false,
+            timeout: 2500
           });
 
           this.loading = false;

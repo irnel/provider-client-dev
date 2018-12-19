@@ -1,9 +1,9 @@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { SnotifyService } from 'ng-snotify';
 import { AuthService } from './../../services';
-import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
 
 @Component({
   selector: 'app-forgot-password',
@@ -11,14 +11,13 @@ import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
   styleUrls: ['./forgot-password.component.scss']
 })
 export class ForgotPasswordComponent implements OnInit {
-  @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
   forgotPasswordForm: FormGroup;
   loading = false;
 
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private readonly toast: ToastrService,
+    private readonly toast: SnotifyService,
     private readonly authService: AuthService
   ) {
 
@@ -29,8 +28,6 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toast.overlayContainer = this.toastContainer;
-
     this.forgotPasswordForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])]
     });
@@ -39,7 +36,16 @@ export class ForgotPasswordComponent implements OnInit {
   get form() { return this.forgotPasswordForm.controls; }
 
   send() {
-    this.toast.success('email send');
-  }
+    this.toast.success(
+      'An email has been sent to your account.',
+      '', {
+        backdrop: 0.2,
+        closeOnClick: true,
+        pauseOnHover: true,
+        showProgressBar: false,
+        timeout: 2500,
+      });
 
+      this.router.navigate(['/auth/login']);
+  }
 }
