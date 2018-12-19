@@ -6,9 +6,9 @@ import { FormsModule, ReactiveFormsModule,  } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
 import { AgmCoreModule } from '@agm/core';
 import { SnotifyModule, ToastDefaults, SnotifyService } from 'ng-snotify';
+import { NgxPageScrollModule } from 'ngx-page-scroll';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,10 +37,9 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    ToastContainerModule,
     SnotifyModule,
+    NgxPageScrollModule,
     MDBBootstrapModule.forRoot(),
-    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 1 }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4',
       libraries: ['places']
