@@ -1,13 +1,17 @@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
+import { SnotifyService } from 'ng-snotify';
+import { PageScrollInstance, PageScrollService } from 'ngx-page-scroll';
 import { Provider, Category, PROVIDERS_DATA } from './../../../../../helpers';
 import { Config } from './../../../../../infrastructure';
-import { SnotifyService } from 'ng-snotify';
+
+
 
 @Component({
   selector: 'app-edit-category-workspace',
@@ -33,7 +37,9 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private readonly toast: SnotifyService
+    private readonly toast: SnotifyService,
+    private readonly pageScrollService: PageScrollService,
+    @Inject(DOCUMENT) private document: any
   ) {
     // Change Form values
     this.route.data.subscribe(data => {
@@ -97,9 +103,14 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       this.form.name.markAsDirty();
       this.form.providerName.markAsDirty();
 
+      // scroll behavior
+      if (this.form.name.errors || this.form.providerName.errors) {
+        this.goToTop();
+      }
+
       if (this.form.description.hasError('pattern')) {
         this.showErrorMessage(
-          'Validation error',
+          'Invalid description',
           'Character not allowed. ' +
           'Only letters and numbers are allowed', 2500
         );
@@ -117,9 +128,11 @@ export class EditCategoryWorkspaceComponent implements OnInit {
 
     if (!foundMatch && this.form.providerName.value !== '') {
       this.showErrorMessage(
-        'Validation error',
+        'Invalid provider',
         'Select a provider from the list.', 2500
       );
+
+      this.goToTop();
 
       return;
     }
@@ -156,9 +169,16 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   showErrorMessage(title: string, body: string, timeOut: number) {
     this.toast.error(body, title, {
       timeout: timeOut,
+      backdrop: 0.2,
       showProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true
     });
+  }
+
+  // scroll behavior
+  goToTop() {
+    const scroll: PageScrollInstance = PageScrollInstance.simpleInstance(this.document, '#header');
+    this.pageScrollService.start(scroll);
   }
 }

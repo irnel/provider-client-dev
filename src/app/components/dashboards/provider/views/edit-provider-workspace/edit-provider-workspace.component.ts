@@ -1,14 +1,18 @@
 /// <reference types="@types/googlemaps" />
 
+import { DOCUMENT } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit, ElementRef, ViewChild, NgZone } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, NgZone, Inject } from '@angular/core';
 
 import { startWith, map } from 'rxjs/operators';
-import { Address, Provider } from '../../../../../models';
 import { MapsAPILoader } from '@agm/core';
-import { Config } from '../../../../../infrastructure';
 import { SnotifyService } from 'ng-snotify';
+import { PageScrollService, PageScrollInstance } from 'ngx-page-scroll';
+
+import { Config } from '../../../../../infrastructure';
+import { Address, Provider } from '../../../../../models';
+
 
 @Component({
   selector: 'app-edit-provider-workspace',
@@ -24,7 +28,6 @@ export class EditProviderWorkspaceComponent implements OnInit {
   @ViewChild('search') search: ElementRef;
   title: string;
   edit: boolean;
-
   test: string;
 
   regEx: string = Config.regex[0];
@@ -38,7 +41,9 @@ export class EditProviderWorkspaceComponent implements OnInit {
     private ngZone: NgZone,
     private formBuilder: FormBuilder,
     private readonly mapsAPILoader: MapsAPILoader,
-    private readonly toast: SnotifyService
+    private readonly toast: SnotifyService,
+    private readonly pageScrollService: PageScrollService,
+    @Inject(DOCUMENT) private document: any
   ) {
 
     this.route.data.subscribe(data => {
@@ -167,21 +172,33 @@ export class EditProviderWorkspaceComponent implements OnInit {
       this.form.name.markAsDirty();
       this.form.address.markAsDirty();
 
-      // validate address
-      if (this.address.formattedAddress === '' && this.form.address.value !== '') {
-        this.showErrorMessage(
-          'Validation error',
-          'select a valid address from the list.', 2500);
+      // scroll behavior
+      if (this.form.name.errors || this.form.address.errors) {
+        this.goToTop();
       }
 
       // validate description
       if (this.form.description.hasError('pattern')) {
         this.showErrorMessage(
           'Validation error',
-          'Character not allowed. ' +
+          'Invalid description. Character not allowed. ' +
           'Only letters and numbers are allowed', 2500
         );
       }
+
+      return;
+    }
+
+    // validate address
+    if (this.address.formattedAddress === '' && this.form.address.value !== '') {
+      this.showErrorMessage(
+        'Validation error',
+        'select a valid address from the list.',
+        2500
+      );
+
+      this.goToTop();
+
       return;
     }
   }
@@ -201,10 +218,17 @@ export class EditProviderWorkspaceComponent implements OnInit {
   showErrorMessage(title: string, body: string, timeOut: number) {
     this.toast.error(body, title, {
       timeout: timeOut,
+      backdrop: 0.2,
       showProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true
     });
+  }
+
+  // scroll behavior
+  goToTop() {
+    const scroll: PageScrollInstance = PageScrollInstance.simpleInstance(this.document, '#header');
+    this.pageScrollService.start(scroll);
   }
 
 }
