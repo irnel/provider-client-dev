@@ -1,11 +1,12 @@
-import { first } from 'rxjs/operators';
-
-import { AuthService, UserService } from './../../services';
-import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
 
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { first } from 'rxjs/operators';
+
+import { SnotifyService } from 'ng-snotify';
+import { AuthService, UserService } from './../../services';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
   registerForm: FormGroup;
   loading = false;
   submitted = false;
@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private readonly toast: ToastrService,
+    private readonly toast: SnotifyService,
     private readonly authService: AuthService,
     private readonly userService: UserService
   ) {
@@ -33,8 +33,6 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toast.overlayContainer = this.toastContainer;
-
     this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -61,7 +59,8 @@ export class RegisterComponent implements OnInit {
       this.form.passwordConfirmation.markAsDirty();
 
       if (this.registerForm.hasError('passwordMismatch')) {
-        this.showErrorMessage('Passwords do not match', 1500);
+        this.showErrorMessage(
+          'Passwords do not match', 'Validation error', 1500);
       }
 
       return;
@@ -78,23 +77,29 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/auth/login']);
       },
       error => {
-        this.showErrorMessage(error, 2000);
+        this.showErrorMessage(error, '', 2000);
         this.loading = false;
       }
     );
   }
 
-  showSuccessMessage(message: string, time: number) {
-    this.toast.success(message, '', {
-      tapToDismiss: true,
-      timeOut: time
+  showSuccessMessage(message: string, title: string, time: number) {
+    this.toast.success(message, title, {
+      backdrop: 0.2,
+      closeOnClick: true,
+      pauseOnHover: true,
+      showProgressBar: false,
+      timeout: time
     });
   }
 
-  showErrorMessage(message: string, time: number) {
-    this.toast.error(message, '', {
-      tapToDismiss: true,
-      timeOut: time
+  showErrorMessage(message: string, title: string, time: number) {
+    this.toast.error(message, title, {
+      backdrop: 0.2,
+      closeOnClick: true,
+      pauseOnHover: true,
+      showProgressBar: false,
+      timeout: time
     });
   }
 }
