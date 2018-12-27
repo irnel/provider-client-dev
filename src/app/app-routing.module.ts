@@ -10,11 +10,13 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AuthGuard } from './guards';
 
 import { HomeProviderComponent } from './components/dashboards/provider/home-provider/home-provider.component';
+
 import {
    HomeWorkspaceComponent,
    ProviderWorkspaceComponent,
    EditProviderWorkspaceComponent,
    ProductWorkspaceComponent,
+   EditProductWorkspaceComponent,
    CategoryWorkspaceComponent,
    CashierWorkspaceComponent,
    OrderWorkspaceComponent
@@ -32,13 +34,15 @@ const routes: Routes = [
     children: [
       { path: 'home', component: HomeWorkspaceComponent },
       { path: 'providers', component: ProviderWorkspaceComponent },
-      { path: 'providers/create', component: EditProviderWorkspaceComponent, data: { mode: 'create'}},
-      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent, data: { mode: 'edit'}},
+      { path: 'providers/create', component: EditProviderWorkspaceComponent, data: { mode: 'create' }},
+      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent, data: { mode: 'edit' }},
       { path: 'products', component: ProductWorkspaceComponent },
+      { path: 'products/create', component: EditProductWorkspaceComponent, data: { mode: 'create' }},
+      { path: 'products/:id/edit', component: EditProductWorkspaceComponent, data: { mode: 'edit' }},
       { path: 'categories', component: CategoryWorkspaceComponent },
-      { path: 'categories/create', component: EditCategoryWorkspaceComponent, data: { mode: 'create'}},
-      { path: 'categories/:id/edit', component: EditCategoryWorkspaceComponent, data: { mode: 'edit'}},
-      { path: 'cashiers', component: CashierWorkspaceComponent},
+      { path: 'categories/create', component: EditCategoryWorkspaceComponent, data: { mode: 'create' }},
+      { path: 'categories/:id/edit', component: EditCategoryWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'cashiers', component: CashierWorkspaceComponent },
       { path: 'orders', component: OrderWorkspaceComponent },
 
       // redirect to workspace home by default
