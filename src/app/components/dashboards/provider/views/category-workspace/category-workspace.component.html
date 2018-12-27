@@ -21,7 +21,7 @@
       <!-- Column Name -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-        <td mat-cell *matCellDef="let category" style="width: 10%;">
+        <td mat-cell *matCellDef="let category">
           <p class="ml-2">{{category.name}}</p>
         </td>
       </ng-container>
@@ -29,7 +29,7 @@
       <!-- Column Provider -->
       <ng-container matColumnDef="provider">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Provider </th>
-        <td mat-cell *matCellDef="let category" style="width: 10%;">
+        <td mat-cell *matCellDef="let category">
           <p class="ml-2">{{category.provider}}</p>
         </td>
       </ng-container>
@@ -37,7 +37,7 @@
       <!-- Column Description -->
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
-        <td mat-cell *matCellDef="let category" style="width: 44%;">
+        <td mat-cell *matCellDef="let category">
 
           <p *ngIf="category.description.length <= maxChar" class="ml-2">{{category.description}}</p>
 
