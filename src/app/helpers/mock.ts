@@ -1,4 +1,4 @@
-import { Provider, Category } from './index';
+import { Provider, Category, Product } from './index';
 
 export const PROVIDERS_DATA: Provider [] = [
     {
@@ -349,4 +349,99 @@ export const CATEGORY_DATA: Category[] = [
       'mattis odio. Donec vitae nisi.',
       'image': 'https://robohash.org/ipsumomnisvoluptates.png?size=100x100&set=set1'
     }
+];
+
+export const PRODUCT_DATA: Product [] = [
+  {
+    'id': 1,
+    'name': 'Dodge los mejores de todos los tiempos',
+    'price': 7,
+    'provider': 'Consumer Durables es lo maximo',
+    'category': 'Ram 2500',
+    'image': 'https://robohash.org/nobisideligendi.bmp?size=100x100&set=set1',
+    'description': 'Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem.' +
+    'Quisque ut erat.\n\nCurabitur gravida nisi at nibh. In hac habitasse platea dictumst. ' +
+    'Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.'
+  }, {
+    'id': 2,
+    'name': 'Cadillac',
+    'price': 33,
+    'provider': 'Capital Goods',
+    'category': 'DeVille',
+    'image': 'https://robohash.org/rerumenimnesciunt.bmp?size=100x100&set=set1',
+    'description': 'Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.'
+  }, {
+    'id': 3,
+    'name': 'Audi',
+    'price': 27,
+    'provider': 'Energy',
+    'category': '200',
+    'image': 'https://robohash.org/sintutet.bmp?size=100x100&set=set1',
+    'description': 'Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\n\nCras ' +
+    'non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget ' +
+    'eros elementum pellentesque.'
+  }, {
+    'id': 4,
+    'name': 'Chrysler',
+    'price': 48,
+    'provider': 'Finance',
+    'category': 'Sebring',
+    'image': 'https://robohash.org/quiatquequaerat.jpg?size=100x100&set=set1',
+    'description': 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper ' +
+    'rutrum, nulla. Nunc purus.\n\nPhasellus in felis. Donec semper sapien a libero. Nam dui.'
+  }, {
+    'id': 5,
+    'name': 'Hyundai',
+    'price': 9,
+    'provider': 'Health Care',
+    'category': 'XG350',
+    'image': 'https://robohash.org/utsintvitae.png?size=100x100&set=set1',
+    'description': 'Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, ' +
+    'interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.'
+  }, {
+    'id': 6,
+    'name': 'Toyota',
+    'price': 26,
+    'provider': 'Finance',
+    'category': 'Solara',
+    'image': 'https://robohash.org/etsuntut.bmp?size=100x100&set=set1',
+    'description': 'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.'
+  }, {
+    'id': 7,
+    'name': 'Dodge',
+    'price': 52,
+    'provider': 'Finance',
+    'category': 'Durango',
+    'image': 'https://robohash.org/aliquidasperioresut.bmp?size=100x100&set=set1',
+    'description': 'In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.'
+  }, {
+    'id': 8,
+    'name': 'Nissan',
+    'price': 48,
+    'provider': 'Health Care',
+    'category': 'Versa',
+    'image': 'https://robohash.org/aliquamillorerum.jpg?size=100x100&set=set1',
+    'description': 'Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, ' +
+    'in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.'
+  }, {
+    'id': 9,
+    'name': 'Mercedes-Benz',
+    'price': 56,
+    'provider': 'Finance',
+    'category': 'SLK-Class',
+    'image': 'https://robohash.org/dolordistinctiosaepe.bmp?size=100x100&set=set1',
+    'description': 'Phasellus in felis. Donec semper sapien a libero. Nam dui.'
+  }, {
+    'id': 10,
+    'name': 'Honda',
+    'price': 30,
+    'provider': 'Consumer Services',
+    'category': 'Odyssey',
+    'image': 'https://robohash.org/illumutnobis.jpg?size=100x100&set=set1',
+    'description': 'Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque ' +
+    'libero, convallis eget, eleifend luctus, ultricies eu, nibh.\n\nQuisque id justo sit amet ' +
+    'sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ' +
+    'ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ' +
+    ' ut, suscipit a, feugiat et, eros.'
+  }
 ];
