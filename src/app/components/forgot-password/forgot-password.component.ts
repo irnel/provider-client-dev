@@ -43,7 +43,8 @@ export class ForgotPasswordComponent implements OnInit {
         closeOnClick: true,
         pauseOnHover: true,
         showProgressBar: false,
-        timeout: 2500,
+        position: 'centerCenter',
+        timeout: 3000,
       });
 
       this.router.navigate(['/auth/login']);

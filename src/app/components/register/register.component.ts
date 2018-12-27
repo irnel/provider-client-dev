@@ -1,12 +1,12 @@
-
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
-import { first } from 'rxjs/operators';
+import { first, startWith, map } from 'rxjs/operators';
 
 import { SnotifyService } from 'ng-snotify';
 import { AuthService, UserService } from './../../services';
+import { Config } from './../../infrastructure';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +17,10 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
   submitted = false;
+
+  regEx = Config.regex[0];
+  firstNameError: string;
+  lastNameError: string;
 
   constructor(
     private router: Router,
@@ -34,12 +38,58 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      firstName: ['', Validators.compose([
+        Validators.required,
+        Validators.pattern(this.regEx)]
+      )],
+      lastName: ['', Validators.compose([
+        Validators.required,
+        Validators.pattern(this.regEx)]
+      )],
+      email: ['', Validators.compose([
+        Validators.required,
+        Validators.email]
+      )],
+      password: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(6)]
+      )],
       passwordConfirmation: ['', Validators.required]
     }, { validator: this.passwordMatchValidator });
+
+    // validate First Name
+    this.form.firstName.valueChanges.pipe(
+      startWith(''),
+      map(() => {
+        let error = '';
+        if (this.form.firstName.hasError('required')) {
+          error = 'first name is required';
+        }
+
+        if (this.form.firstName.hasError('pattern')) {
+          error = 'character not allowed';
+        }
+
+        return error;
+      })
+    ).subscribe(error => this.firstNameError = error);
+
+    // validate Last Name
+    this.form.lastName.valueChanges.pipe(
+      startWith(''),
+      map(() => {
+        let error = '';
+        if (this.form.lastName.hasError('required')) {
+          error = 'last name is required';
+        }
+
+        if (this.form.lastName.hasError('pattern')) {
+          error = 'character not allowed';
+        }
+
+        return error;
+      })
+    ).subscribe(error => this.lastNameError = error);
   }
 
   get form() { return this.registerForm.controls; }

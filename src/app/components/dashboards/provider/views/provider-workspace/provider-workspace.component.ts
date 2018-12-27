@@ -35,7 +35,7 @@ export class ProviderWorkspaceComponent implements OnInit {
 
   // redirect to edit provider
   redirectToEditProvider(id: number) {
-    this.router.navigate([`/provider-dashboard/workspace/providers/${id}/edit`]);
+    this.router.navigate([`provider-dashboard/workspace/providers/${id}/edit`]);
   }
 
   // apply filter to data table

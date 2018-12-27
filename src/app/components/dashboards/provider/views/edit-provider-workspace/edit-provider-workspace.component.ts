@@ -177,15 +177,6 @@ export class EditProviderWorkspaceComponent implements OnInit {
         this.goToTop();
       }
 
-      // validate description
-      if (this.form.description.hasError('pattern')) {
-        this.showErrorMessage(
-          'Validation error',
-          'Invalid description. Character not allowed. ' +
-          'Only letters and numbers are allowed', 2500
-        );
-      }
-
       return;
     }
 

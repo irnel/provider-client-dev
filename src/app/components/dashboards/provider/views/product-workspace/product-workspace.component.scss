@@ -7,13 +7,23 @@ table {
   width: 100%;
 }
 
-td, th {
-  width: 25%;
-}
-
 .mat-fab {
   font-size: 2rem;
   position: fixed;
   bottom: 3rem;
   right: 1rem;
+}
+
+img {
+  max-width: 80px;
+  max-height: 80px;
+}
+
+span.badge {
+  cursor: pointer;
+}
+
+a.href {
+  width: 100%;
+  height: 100%;
 }

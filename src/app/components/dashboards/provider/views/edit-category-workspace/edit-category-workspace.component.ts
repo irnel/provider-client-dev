@@ -20,6 +20,7 @@ import { Config } from './../../../../../infrastructure';
 })
 export class EditCategoryWorkspaceComponent implements OnInit {
   editForm: FormGroup;
+  providerFormControl: any;
   edit: boolean;
   title: string;
   regEx: string = Config.regex[0];
@@ -31,7 +32,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   providerNotFound = false;
 
   providerName: any;
-  nameError = 'required';
+  nameError: string;
 
   constructor(
     private router: Router,
@@ -87,7 +88,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     ).subscribe(error => this.nameError = error );
 
     // provider list
-    this.providerName = this.form.providerName;
+    this.providerFormControl = this.form.providerName;
     this.form.providerName.valueChanges.pipe(
       startWith(''),
       map(name => {
@@ -106,14 +107,6 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       // scroll behavior
       if (this.form.name.errors || this.form.providerName.errors) {
         this.goToTop();
-      }
-
-      if (this.form.description.hasError('pattern')) {
-        this.showErrorMessage(
-          'Invalid description',
-          'Character not allowed. ' +
-          'Only letters and numbers are allowed', 2500
-        );
       }
 
       return;
@@ -163,7 +156,8 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.providers.filter(provider =>
-      provider.name.toLowerCase().indexOf(filterValue) === 0);
+      provider.name.toLowerCase().indexOf(filterValue) === 0
+    );
   }
 
   showErrorMessage(title: string, body: string, timeOut: number) {

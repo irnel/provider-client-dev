@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
+import { Product, PRODUCT_DATA } from '../../../../../helpers';
+import { Config } from '../../../../../infrastructure/config';
 
 @Component({
   selector: 'app-product-workspace',
@@ -8,19 +11,22 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
   styleUrls: ['./product-workspace.component.scss']
 })
 export class ProductWorkspaceComponent implements OnInit {
+  displayedColumns: string[] = [
+    'image', 'name', 'provider', 'category', 'price', 'description', 'operation'
+  ];
 
-  displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
-  dataSource: MatTableDataSource<UserData>;
-
+  dataSource: MatTableDataSource<Product>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() {
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
+  products = PRODUCT_DATA;
+  maxChar = Config.maxChar;
+  pageSizeOptions = Config.pageSizeOptions;
 
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+  constructor(
+    private router: Router
+  ) {
+    this.dataSource = new MatTableDataSource(this.products);
   }
 
   ngOnInit() {
@@ -35,36 +41,8 @@ export class ProductWorkspaceComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-}
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-  'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-const NAMES: string[] = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-  'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-  'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-
-/**
- * @title Data table with sorting, pagination, and filtering.
- */
-
- /** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name =
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
+  redirectToEditProduct(id: number) {
+    this.router.navigate([`provider-dashboard/workspace/products/${id}/edit`]);
+  }
 }

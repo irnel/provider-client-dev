@@ -25,14 +25,15 @@
         <label for="formName">Name</label>
       </div>
 
+      <!-- Provider -->
       <div class="md-form form-sm mt-2">
         <mat-form-field class="full-width">
           <input matInput placeholder="Provider" aria-label="Provider"
               [matAutocomplete]="auto" formControlName="providerName">
 
-            <mat-error *ngIf="providerName.errors">
-              <p *ngIf="providerName.errors.required"> provider is required </p>
-              <p *ngIf="providerName.errors.pattern"> only letters and numbers are allowed </p>
+            <mat-error *ngIf="providerFormControl.errors">
+              <p *ngIf="providerFormControl.errors.required"> provider is required </p>
+              <p *ngIf="providerFormControl.errors.pattern"> only letters and numbers are allowed </p>
             </mat-error>
 
             <mat-autocomplete #auto="matAutocomplete">
@@ -61,8 +62,9 @@
       <div class="md-form form-sm mt-2">
         <textarea class="md-textarea md-textarea-auto form-control"
             id="formDescription" formControlName="description"
-            type="text" [validateSuccess]="false"
-            [validateError]="false" mdbInputDirective></textarea>
+            mdbInputDirective type="text"
+            [validateSuccess]="false"
+            data-error="character not allowed"></textarea>
 
         <label for="formDescription">Description</label>
       </div>
