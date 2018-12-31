@@ -3,6 +3,7 @@ export class Config {
   static pageSizeOptions = [5, 10, 15];
   static regex = [
     '^[A-Za-z0-9_ -.]+$',
-    '^[A-Za-z0-9_ -.\n]+$'
+    '^[A-Za-z0-9_ -.\n]+$',
+    '^[0-9]+(.[0-9]{1,2})?$'
   ];
 }
