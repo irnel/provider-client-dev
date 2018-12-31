@@ -24,6 +24,7 @@ import {
   EditCategoryWorkspaceComponent,
 } from './index';
 import { EditProductWorkspaceComponent } from './edit-product-workspace/edit-product-workspace.component';
+import { EditCashierWorkspaceComponent } from './edit-cashier-workspace/edit-cashier-workspace.component';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { EditProductWorkspaceComponent } from './edit-product-workspace/edit-pro
     OrderWorkspaceComponent,
     EditProviderWorkspaceComponent,
     EditCategoryWorkspaceComponent,
-    EditProductWorkspaceComponent
+    EditProductWorkspaceComponent,
+    EditCashierWorkspaceComponent
   ],
   exports: [
     StatsCardComponent,
@@ -64,7 +66,8 @@ import { EditProductWorkspaceComponent } from './edit-product-workspace/edit-pro
     CashierWorkspaceComponent,
     OrderWorkspaceComponent,
     EditProviderWorkspaceComponent,
-    EditProductWorkspaceComponent
+    EditProductWorkspaceComponent,
+    EditCashierWorkspaceComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,
