@@ -1,4 +1,4 @@
-<!-- Edit Category -->
+<!-- Edit Cashier -->
 <mdb-card id="header" class="w-responsive mt-4 center ml-auto mr-auto">
 
   <!--Card Header-->
@@ -17,10 +17,10 @@
 
       <!-- Name -->
       <div class="md-form form-sm mt-2">
-          <input mdbInputDirective type="text" class="form-control"
+        <input mdbInputDirective type="text" class="form-control"
             id="formName" formControlName="name"
-            [validateSuccess]="false"
-            [errorMessage]="nameError">
+            [errorMessage]="nameError"
+            [validateSuccess]="false">
 
         <label for="formName">Name</label>
       </div>
@@ -49,24 +49,14 @@
 
       </div>
 
-      <!-- Image -->
-      <div class="md-form form-sm mt-2">
-        <input mdbInputDirective type="file" class="form-control"
-            id="formImage" formControlName="image"
-            data-error="Name is required"
-            [validateSuccess]="false">
-
-      </div>
-
-      <!-- Description -->
-      <div class="md-form form-sm mt-2">
-        <textarea class="md-textarea md-textarea-auto form-control"
-            id="formDescription" formControlName="description"
-            mdbInputDirective type="text"
+      <!-- Email -->
+      <div class="md-form form-sm mt-1">
+        <input mdbInputDirective type="email" class="form-control"
+            id="formEmail" formControlName="email"
             [validateSuccess]="false"
-            data-error="character not allowed"></textarea>
+            [errorMessage]="emailError">
 
-        <label for="formDescription">Description</label>
+        <label for="formEmail">Email</label>
       </div>
 
       <div class="float-right mt-2">
@@ -74,7 +64,7 @@
         <button mdbBtn
             color="primary"
             class="relative waves-light right" mdbWavesEffect
-            (click)="editCategory()">
+            (click)="editCashier()">
 
           <!-- Create Mode -->
           <div *ngIf="!edit" >

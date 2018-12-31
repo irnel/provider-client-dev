@@ -21,8 +21,8 @@
               <i class="fa fa-user prefix" aria-hidden="true"></i>
               <input mdbInputDirective type="email" class="form-control"
                   id="formEmail" formControlName="email"
-                  data-error="invalid email"
-                  [validateSuccess]="false">
+                  [validateSuccess]="false"
+                  [errorMessage]="emailError">
 
               <label for="formEmail">Email</label>
             </div>

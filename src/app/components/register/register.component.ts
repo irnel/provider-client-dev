@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit {
   regEx = Config.regex[0];
   firstNameError: string;
   lastNameError: string;
+  emailError: string;
 
   constructor(
     private router: Router,
@@ -90,6 +91,23 @@ export class RegisterComponent implements OnInit {
         return error;
       })
     ).subscribe(error => this.lastNameError = error);
+
+    // validate email
+    this.form.email.valueChanges.pipe(
+      startWith(''),
+      map(() => {
+        let error = '';
+        if (this.form.email.hasError('required')) {
+          error = 'email is required';
+        }
+
+        if (this.form.email.hasError('email')) {
+          error = 'invalid email';
+        }
+
+        return error;
+      })
+    ).subscribe(error => this.emailError = error);
   }
 
   get form() { return this.registerForm.controls; }

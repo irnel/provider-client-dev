@@ -51,8 +51,9 @@
             <div class="md-form form-sm mt-0">
                 <i class="fa fa-envelope prefix" aria-hidden="true"></i>
               <input mdbInputDirective type="email" class="form-control"
-                id="formEmail" data-error="invalid email"
-                [validateSuccess]="false" formControlName="email">
+                id="formEmail" formControlName="email"
+                [validateSuccess]="false"
+                [errorMessage]="emailError">
 
               <label for="formEmail">Email</label>
             </div>

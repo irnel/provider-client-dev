@@ -19,8 +19,8 @@
       <div class="md-form form-sm mt-2">
         <input mdbInputDirective type="text" class="form-control"
           id="formName" formControlName="name"
-          [errorMessage]="nameError"
-          [validateSuccess]="false">
+          [validateSuccess]="false"
+          [errorMessage]="nameError">
 
         <label for="formName">Name</label>
       </div>
@@ -70,6 +70,66 @@
             </mat-autocomplete>
 
         </mat-form-field>
+
+      </div>
+
+      <!-- Price -->
+      <div class="md-form form-sm mt-2">
+        <input mdbInputDirective type="number" class="form-control"
+          id="formPrice" formControlName="price"
+          [errorMessage]="priceError"
+          [validateSuccess]="false">
+
+        <label for="formPrice">Price</label>
+      </div>
+
+      <!-- Image -->
+      <div class="md-form form-sm mt-2">
+        <input mdbInputDirective type="file" class="form-control"
+            id="formImage" formControlName="image"
+            data-error="Name is required"
+            [validateSuccess]="false">
+
+      </div>
+
+      <!-- Description -->
+      <div class="md-form form-sm mt-2">
+        <textarea class="md-textarea md-textarea-auto form-control"
+            id="formDescription" formControlName="description"
+            mdbInputDirective type="text"
+            [validateSuccess]="false"
+            data-error="character not allowed"></textarea>
+
+        <label for="formDescription">Description</label>
+      </div>
+
+      <div class="float-right mt-2">
+
+        <button mdbBtn
+            color="primary"
+            class="relative waves-light right" mdbWavesEffect
+            (click)="editProduct()">
+
+          <!-- Create Mode -->
+          <div *ngIf="!edit" >
+            <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Create
+          </div>
+
+          <!-- Edit Mode -->
+          <div *ngIf="edit">
+            <i class="fa fa-floppy-o left mr-2" aria-hidden="true"></i>Save
+          </div>
+
+        </button>
+
+        <!-- Button Cancel -->
+        <button mdbBtn
+            outline="true" color="primary"
+            aria-label="Close" mdbWavesEffect
+            (click)="cancel()">
+
+          <i class="fa fa-ban left mr-2" aria-hidden="true"></i>Cancel
+        </button>
 
       </div>
 

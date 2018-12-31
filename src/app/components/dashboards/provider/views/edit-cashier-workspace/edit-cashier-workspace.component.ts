@@ -1,60 +1,53 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
-import { SnotifyService } from 'ng-snotify';
-import { PageScrollInstance, PageScrollService } from 'ngx-page-scroll';
-import { Provider, Category, PROVIDERS_DATA } from './../../../../../helpers';
 import { Config } from './../../../../../infrastructure';
-
+import { Provider, PROVIDERS_DATA } from '../../../../../helpers';
+import { SnotifyService } from 'ng-snotify';
 
 
 @Component({
-  selector: 'app-edit-category-workspace',
-  templateUrl: './edit-category-workspace.component.html',
-  styleUrls: ['./edit-category-workspace.component.scss']
+  selector: 'app-edit-cashier-workspace',
+  templateUrl: './edit-cashier-workspace.component.html',
+  styleUrls: ['./edit-cashier-workspace.component.scss']
 })
-export class EditCategoryWorkspaceComponent implements OnInit {
+export class EditCashierWorkspaceComponent implements OnInit {
   editForm: FormGroup;
   providerFormControl: any;
-  edit: boolean;
   title: string;
-  regEx: string = Config.regex[0];
-  regEx1: string = Config.regex[1];
+  edit: boolean;
+
+  regEx = Config.regex[0];
+  nameError: string;
+  emailError: string;
 
   providers: Provider[] = PROVIDERS_DATA;
   filteredProviders: Observable<Provider[]>;
   currentProviders: Provider[];
   providerNotFound = false;
 
-  providerName: any;
-  nameError: string;
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private readonly toast: SnotifyService,
-    private readonly pageScrollService: PageScrollService,
-    @Inject(DOCUMENT) private document: any
-  ) {
-    // Change Form values
+    private readonly toast: SnotifyService
+    ) {
+      // Change Form values
     this.route.data.subscribe(data => {
       if (data.mode === 'edit') {
         this.edit = true;
-        this.title = 'Edit Category';
+        this.title = 'Edit Cashier';
 
       } else {
         this.edit = false;
-        this.title = 'Create Category';
+        this.title = 'Create Cashier';
 
       }
     });
-  }
+    }
 
   ngOnInit() {
     this.editForm = this.formBuilder.group({
@@ -66,8 +59,10 @@ export class EditCategoryWorkspaceComponent implements OnInit {
         Validators.required,
         Validators.pattern(this.regEx)]
       )],
-      image: ['', Validators.nullValidator],
-      description: ['',  Validators.pattern(this.regEx1)]
+      email: ['', Validators.compose([
+        Validators.required,
+        Validators.email]
+      )]
     });
 
     // validate name
@@ -93,8 +88,25 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       startWith(''),
       map(name => {
         return name ? this.elementFilter(name) : this.providers.slice();
-      }
-    )).subscribe(list => this.currentProviders = list);
+      })
+    ).subscribe(list => this.currentProviders = list);
+
+    // validate email
+    this.form.email.valueChanges.pipe(
+      startWith(''),
+      map(() => {
+        let error = '';
+        if (this.form.email.hasError('required')) {
+          error = 'email is required';
+        }
+
+        if (this.form.email.hasError('email')) {
+          error = 'invalid email';
+        }
+
+        return error;
+      })
+    ).subscribe(error => this.emailError = error);
   }
 
   get form() { return this.editForm.controls; }
@@ -103,11 +115,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     if (this.editForm.invalid) {
       this.form.name.markAsDirty();
       this.form.providerName.markAsDirty();
-
-      // scroll behavior
-      if (this.form.name.errors || this.form.providerName.errors) {
-        this.goToTop();
-      }
+      this.form.email.markAsDirty();
 
       return;
     }
@@ -122,24 +130,22 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     if (!foundMatch && this.form.providerName.value !== '') {
       this.showErrorMessage(
         'Validation error',
-        'Select a category from the list.', 2500
+        'Select a cashier from the list.', 2500
       );
-
-      this.goToTop();
 
       return;
     }
   }
 
-  private redirectCategoryWorkspace() {
-    this.router.navigate(['/provider-dashboard/workspace/categories']);
+  private redirectToCashierWorkspace() {
+    this.router.navigate(['/provider-dashboard/workspace/cashiers']);
   }
 
   cancel() {
-    this.redirectCategoryWorkspace();
+    this.redirectToCashierWorkspace();
   }
 
-  editCategory() {
+  editCashier() {
     // Mark the control as dirty
     this.MarkAsDirty();
     // match value provider
@@ -168,11 +174,5 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       closeOnClick: true,
       pauseOnHover: true
     });
-  }
-
-  // scroll behavior
-  goToTop() {
-    const scroll: PageScrollInstance = PageScrollInstance.simpleInstance(this.document, '#header');
-    this.pageScrollService.start(scroll);
   }
 }
