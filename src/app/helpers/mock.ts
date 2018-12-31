@@ -1,4 +1,4 @@
-import { Provider, Category, Product } from './index';
+import { Provider, Category, Product, Cashier } from './index';
 
 export const PROVIDERS_DATA: Provider [] = [
     {
@@ -444,4 +444,17 @@ export const PRODUCT_DATA: Product [] = [
     'ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ' +
     ' ut, suscipit a, feugiat et, eros.'
   }
+];
+
+export const CASHIER_DATA: Cashier [] = [
+  { 'id': 1, 'name': 'Cacilie', 'email': 'cmcgarel0@diigo.com', 'provider': 'Skyble' },
+  { 'id': 2, 'name': 'Lin', 'email': 'lbelliss1@privacy.gov.au', 'provider': 'InnoZ' },
+  { 'id': 3, 'name': 'Petronella', 'email': 'pcattach2@slideshare.net', 'provider': 'Skiba' },
+  { 'id': 4, 'name': 'Laurena', 'email': 'lmanton3@linkedin.com', 'provider': 'Avamm' },
+  { 'id': 5, 'name': 'Thorsten', 'email': 'tmandifield4@shinystat.com', 'provider': 'Babblestorm' },
+  { 'id': 6, 'name': 'Maisey', 'email': 'mkennard5@epa.gov', 'provider': 'Abatz' },
+  { 'id': 7, 'name': 'L;urette', 'email': 'lstonard6@cloudflare.com', 'provider': 'Leenti' },
+  { 'id': 8, 'name': 'Ogdon', 'email': 'ocaser7@feedburner.com', 'provider': 'Eabox' },
+  { 'id': 9, 'name': 'Kaylil', 'email': 'kocarran8@mapquest.com', 'provider': 'Skivee' },
+  { 'id': 10, 'name': 'Libby', 'email': 'lyglesia9@over-blog.com', 'provider': 'Kazio' }
 ];
