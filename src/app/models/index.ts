@@ -3,3 +3,4 @@ export * from './provider';
 export * from './address';
 export * from './category';
 export * from './product';
+export * from './cashier';
