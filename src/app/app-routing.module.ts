@@ -1,4 +1,3 @@
-import { EditCategoryWorkspaceComponent } from './components/dashboards/provider/views/edit-category-workspace/edit-category-workspace.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -18,7 +17,9 @@ import {
    ProductWorkspaceComponent,
    EditProductWorkspaceComponent,
    CategoryWorkspaceComponent,
+   EditCategoryWorkspaceComponent,
    CashierWorkspaceComponent,
+   EditCashierWorkspaceComponent,
    OrderWorkspaceComponent
   } from './components/dashboards/provider/views';
 
@@ -43,6 +44,8 @@ const routes: Routes = [
       { path: 'categories/create', component: EditCategoryWorkspaceComponent, data: { mode: 'create' }},
       { path: 'categories/:id/edit', component: EditCategoryWorkspaceComponent, data: { mode: 'edit' }},
       { path: 'cashiers', component: CashierWorkspaceComponent },
+      { path: 'cashiers/create', component: EditCashierWorkspaceComponent, data: { mode: 'create' }},
+      { path: 'cashiers/:id/edit', component: EditCashierWorkspaceComponent, data: { mode: 'edit' }},
       { path: 'orders', component: OrderWorkspaceComponent },
 
       // redirect to workspace home by default
