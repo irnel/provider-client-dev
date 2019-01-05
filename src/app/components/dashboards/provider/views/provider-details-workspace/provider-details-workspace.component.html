@@ -1,0 +1,51 @@
+<!-- Provider Details -->
+<mdb-card class="w-responsive mt-4 center ml-auto mr-auto">
+
+  <!-- Card Header -->
+  <mdb-card-header>
+    <img class="mx-auto d-block rounded" src={{currentProvider.image}} alt="Provider image">
+  </mdb-card-header>
+
+  <!--Card content-->
+  <mdb-card-body class="px-lg-5">
+    <!-- Name -->
+    <mdb-card-text class="mt-4">
+      <h6>Name: {{currentProvider.name}}</h6>
+    </mdb-card-text>
+
+    <!-- Address -->
+    <mdb-card-text class="mt-2">
+      <h6>Address: {{currentProvider.address}}</h6>
+    </mdb-card-text>
+
+    <!-- Address -->
+    <mdb-card-text class="mt-2">
+      <h6>Description: {{currentProvider.description}}</h6>
+    </mdb-card-text>
+
+    <hr class="mb-1">
+
+    <div class="float-right mt-2">
+      <!-- New Category -->
+      <button mdbBtn
+          outline="true" color="primary" mdbWavesEffect
+          mdbTooltip="Add new category"
+          (click)="redirectToEditCategory()">
+
+        <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Category
+      </button>
+
+      <!-- List Categories -->
+      <button mdbBtn
+          outline="true" color="primary" mdbWavesEffect
+          mdbTooltip="List categories"
+          (click)="redirectToCategoryWorkspace()">
+
+        <i class="fa fa-list-ol left mr-2" aria-hidden="true"></i>Categories
+      </button>
+    </div>
+
+
+  </mdb-card-body>
+
+</mdb-card>
