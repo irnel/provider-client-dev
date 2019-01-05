@@ -10,6 +10,7 @@ import { SnotifyService } from 'ng-snotify';
 import { PageScrollInstance, PageScrollService } from 'ngx-page-scroll';
 import { Provider, Category, PROVIDERS_DATA } from './../../../../../helpers';
 import { Config } from './../../../../../infrastructure';
+import { stringify } from 'querystring';
 
 
 
@@ -23,24 +24,19 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   providerFormControl: any;
   edit: boolean;
   title: string;
+  msg: string;
+  nameError: string;
   regEx: string = Config.regex[0];
   regEx1: string = Config.regex[1];
 
   providers: Provider[] = PROVIDERS_DATA;
-  filteredProviders: Observable<Provider[]>;
-  currentProviders: Provider[];
-  providerNotFound = false;
-
-  providerName: any;
-  nameError: string;
+  currentProvider: Provider;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private readonly toast: SnotifyService,
-    private readonly pageScrollService: PageScrollService,
-    @Inject(DOCUMENT) private document: any
   ) {
     // Change Form values
     this.route.data.subscribe(data => {
@@ -57,12 +53,13 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   }
 
   ngOnInit() {
+    // find provider by url params
+    const providerId = +this.route.snapshot.params['id'];
+    this.currentProvider = this.providers.find(p => p.id === providerId);
+
+    // create controls
     this.editForm = this.formBuilder.group({
       name: ['', Validators.compose([
-        Validators.required,
-        Validators.pattern(this.regEx)]
-      )],
-      providerName: ['', Validators.compose([
         Validators.required,
         Validators.pattern(this.regEx)]
       )],
@@ -86,15 +83,6 @@ export class EditCategoryWorkspaceComponent implements OnInit {
         return error;
       })
     ).subscribe(error => this.nameError = error );
-
-    // provider list
-    this.providerFormControl = this.form.providerName;
-    this.form.providerName.valueChanges.pipe(
-      startWith(''),
-      map(name => {
-        return name ? this.elementFilter(name) : this.providers.slice();
-      }
-    )).subscribe(list => this.currentProviders = list);
   }
 
   get form() { return this.editForm.controls; }
@@ -104,60 +92,41 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       this.form.name.markAsDirty();
       this.form.providerName.markAsDirty();
 
-      // scroll behavior
-      if (this.form.name.errors || this.form.providerName.errors) {
-        this.goToTop();
-      }
-
       return;
     }
   }
 
-  foundMatchValidator() {
-    // search match with input value from provider list
-    const foundMatch = this.currentProviders.find(item => {
-      return item.name === this.form.providerName.value;
-    });
-
-    if (!foundMatch && this.form.providerName.value !== '') {
-      this.showErrorMessage(
-        'Validation error',
-        'Select a category from the list.', 2500
-      );
-
-      this.goToTop();
-
-      return;
-    }
-  }
-
-  private redirectCategoryWorkspace() {
-    this.router.navigate(['/provider-dashboard/workspace/categories']);
+  redirectToCategoryWorkspace() {
+    this.router.navigate([
+      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories`]);
   }
 
   cancel() {
-    this.redirectCategoryWorkspace();
+    this.redirectToCategoryWorkspace();
   }
 
   editCategory() {
     // Mark the control as dirty
     this.MarkAsDirty();
-    // match value provider
-    this.foundMatchValidator();
 
     if (!this.edit) {
+      this.msg = 'New category created';
 
     } else {
+      this.msg = 'Category edited';
 
     }
+
+    this.showSuccessMessage(this.msg, 2000);
+    this.redirectToCategoryWorkspace();
   }
 
-  private elementFilter(value: string): Provider[] {
-    const filterValue = value.toLowerCase();
+  showSuccessMessage(body: string, timeOut: number) {
+    this.toast.success(body, '', {
+      timeout: timeOut,
+      showProgressBar: false,
 
-    return this.providers.filter(provider =>
-      provider.name.toLowerCase().indexOf(filterValue) === 0
-    );
+    });
   }
 
   showErrorMessage(title: string, body: string, timeOut: number) {
@@ -168,11 +137,5 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       closeOnClick: true,
       pauseOnHover: true
     });
-  }
-
-  // scroll behavior
-  goToTop() {
-    const scroll: PageScrollInstance = PageScrollInstance.simpleInstance(this.document, '#header');
-    this.pageScrollService.start(scroll);
   }
 }

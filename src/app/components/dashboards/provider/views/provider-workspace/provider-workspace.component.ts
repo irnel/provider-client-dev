@@ -38,6 +38,11 @@ export class ProviderWorkspaceComponent implements OnInit {
     this.router.navigate([`provider-dashboard/workspace/providers/${id}/edit`]);
   }
 
+  // redirect to provider details
+  redirectToProviderDetails(id: number) {
+    this.router.navigate([`provider-dashboard/workspace/providers/${id}/details`]);
+  }
+
   // apply filter to data table
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();

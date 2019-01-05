@@ -25,30 +25,6 @@
         <label for="formName">Name</label>
       </div>
 
-      <!-- Provider -->
-      <div class="md-form form-sm mt-2">
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Provider" aria-label="Provider"
-              [matAutocomplete]="auto" formControlName="providerName">
-
-            <mat-error *ngIf="providerFormControl.errors">
-              <p *ngIf="providerFormControl.errors.required"> provider is required </p>
-              <p *ngIf="providerFormControl.errors.pattern"> only letters and numbers are allowed </p>
-            </mat-error>
-
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let provider of currentProviders" [value]="provider.name">
-                <img class="option-img" aria-hidden [src]="provider.image" height="40">
-
-                <span>{{provider.name}}</span>
-              </mat-option>
-
-            </mat-autocomplete>
-
-        </mat-form-field>
-
-      </div>
-
       <!-- Image -->
       <div class="md-form form-sm mt-2">
         <input mdbInputDirective type="file" class="form-control"

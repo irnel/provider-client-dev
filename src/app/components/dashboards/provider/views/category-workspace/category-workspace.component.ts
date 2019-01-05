@@ -44,4 +44,8 @@ export class CategoryWorkspaceComponent implements OnInit {
     this.router.navigate([`provider-dashboard/workspace/categories/${id}/edit`]);
   }
 
+  test() {
+    console.log('click');
+  }
+
 }
