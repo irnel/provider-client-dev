@@ -12,14 +12,14 @@ export const PROVIDERS_DATA: Provider [] = [
       'Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed' +
       'ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum.' +
       'Sed dapibus pulvinar nibh tempor porta.',
-      'image': 'https://robohash.org/nemoomnistemporibus.bmp?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(1).jpg'
     },
     {
       'id': 2,
       'name': 'Feedfire',
       'address': '31 Anhalt Place',
       'description': 'venenatis non sodales sed tincidunt eu felis fusce posuere felis sed lacus morbi sem mauris laoreet ut rhoncus',
-      'image': 'https://robohash.org/voluptatesconsequaturexpedita.bmp?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(2).jpg'
     },
     {
       'id': 3,
@@ -32,42 +32,42 @@ export const PROVIDERS_DATA: Provider [] = [
       'Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed' +
       'ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum.' +
       'Sed dapibus pulvinar nibh tempor porta.',
-      'image': 'https://robohash.org/sedearumnon.png?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(3).jpg'
     },
     {
       'id': 4,
       'name': 'Eamia',
       'address': '5 Carberry Street',
       'description': 'platea dictumst aliquam augue quam sollicitudin vitae consectetuer lorem integer tincidunt ante vel ipsum',
-      'image': 'https://robohash.org/accusamusremqui.jpg?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(4).jpg'
     },
     {
       'id': 5,
       'name': 'Topicshots',
       'address': '9187 Mockingbird Road',
       'description': 'velit vivamus vel nulla eget eros elementum pellentesque quisque porta volutpat erat quisque erat',
-      'image': 'https://robohash.org/animiomniset.jpg?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(5).jpg'
     },
     {
       'id': 6,
       'name': 'Yakidoo',
       'address': '6 Fisk Way',
       'description': 'nisl duis bibendum felis sed interdum blandit mi in porttitor pede justo eu massa donec dapibus duis at velit eu',
-      'image': 'https://robohash.org/corruptietexcepturi.png?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(6).jpg'
     },
     {
       'id': 7,
       'name': 'Demimbu',
       'address': '19 Oak Valley Parkway',
       'description': 'primis in faucibus orci luctus et vestibulum aliquet ultrices erat tortor sollicitudin mi sit amet lobortis',
-      'image': 'https://robohash.org/eiusexercitationemquis.jpg?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(7).jpg'
     },
     {
       'id': 8,
       'name': 'Linkbridge',
       'address': '1654 Clarendon Hill',
       'description': 'leo odio porttitor sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque',
-      'image': 'https://robohash.org/aperiamtemporaconsequatur.bmp?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(8).jpg'
     },
     {
       'id': 9,
@@ -75,81 +75,81 @@ export const PROVIDERS_DATA: Provider [] = [
       'address':
       '3367 Mccormick Avenue',
       'description': 'libero non mattis pulvinar nulla pede ullamcorper augue a suscipit nulla elit ac',
-      'image': 'https://robohash.org/doloretlaboriosam.bmp?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(9).jpg'
     },
     {
       'id': 10,
       'name': 'Oyoyo',
       'address': '43 Texas Street',
       'description': 'erat eros viverra eget congue eget semper rutrum nulla nunc purus',
-      'image': 'https://robohash.org/solutaducimusvitae.png?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(10).jpg'
     },
     {
       'id': 11,
       'name': 'Skivee',
       'address': '85 Dakota Trail',
       'description': 'varius donec vitae nisi nam ultrices libero non mattis pulvinar nulla pede ullamcorper augue a',
-      'image': 'https://robohash.org/rerumsaepeet.png?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(11).jpg'
     },
     {
       'id': 12,
       'name': 'Mycat',
       'address': '14387 Spenser Lane',
       'description': 'ornare consequat lectus in est risus auctor sed tristique in',
-      'image': 'https://robohash.org/numquamomniset.bmp?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(12).jpg'
     },
     {
       'id': 13,
       'name': 'Youfeed',
       'address': '6485 Londonderry Drive',
       'description': 'curabitur in libero ut massa volutpat convallis morbi odio odio elementum eu interdum eu tincidunt in',
-      'image': 'https://robohash.org/veromaximesaepe.png?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(13).jpg'
     },
     {
       'id': 14,
       'name': 'Bubblebox',
       'address': '5267 Loftsgordon Avenue',
       'description': 'quis justo maecenas quis ultrices aliquet maecenas leo odio condimentum id luctus nec molestie sed justo',
-      'image': 'https://robohash.org/molestiasenimearum.jpg?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(14).jpg'
     },
     { 'id': 15,
       'name': 'Vidoo',
       'address': '6 Warner Pass',
       'description': 'facilisi cras non velit nec ni lacus at velit vivamus vel nulla eget eros elementum pellentesque',
-      'image': 'https://robohash.org/nihilofficiaest.png?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(15).jpg'
     },
     {
       'id': 16,
       'name': 'Mynte',
       'address': '2411 Sutteridge Crossing',
       'description': 'varius nulla facilisi cra nonummy maecenas tincidunt lacus at velit',
-      'image': 'https://robohash.org/odiosuntnihil.jpg?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(16).jpg'
     },
     {
       'id': 17, 'name': 'Realblab',
       'address': '8074 Reindahl Pass',
       'description': 'purus aliquet at feugiat non pretium quis  potenti in eleifend',
-      'image': 'https://robohash.org/doloreetnon.jpg?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(17).jpg'
     },
     { 'id': 18,
     'name': 'Skidoo',
     'address': '0 Eagle Crest Way',
     'description': 'eget orci vehicula volutpat convallis morbi odio odio elementum eu interdum eu tincidunt in leo maecenas',
-    'image': 'https://robohash.org/minimarepudiandaesint.bmp?size=200x200&set=set1'
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(18).jpg'
     },
     {
       'id': 19,
       'name': 'Linklinks',
       'address': '31391 Morning Park',
       'description': 'fusce consequat nulla nisl felis sed interdum venenatis turpis enim blandit mi in porttitor pede',
-      'image': 'https://robohash.org/sequitemporaqui.jpg?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(19).jpg'
     },
     {
       'id': 20,
       'name': 'Gabspot',
       'address': '54 Thierer Alley',
       'description': 'a nibh in quis justo maecenas rhoncus aliquam lacus morbi quis tortor id nulla ultrices aliquet',
-      'image': 'https://robohash.org/quasiiustolaboriosam.jpg?size=200x200&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(20).jpg'
     }
   ];
 
@@ -167,7 +167,7 @@ export const CATEGORY_DATA: Category[] = [
     '\n\nAenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.' +
     '\n\nCurabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu,' +
     'tincidunt in, leo. Maecenas pulvinar lobortis est.',
-    'image': 'https://robohash.org/quasiperspiciatiseum.png?size=100x100&set=set1'
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(21).jpg'
   }, {
     'id': 2,
     'name': 'Tuna - Yellowfin',
@@ -175,7 +175,7 @@ export const CATEGORY_DATA: Category[] = [
     'description': 'Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus,' +
     'ultricies eu, nibh. \n\nQuisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus' +
     'et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.',
-    'image': 'https://robohash.org/aliassimiliquedignissimos.jpg?size=100x100&set=set1'
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(22).jpg'
   }, {
     'id': 3,
     'name': 'Truffle - Whole Black Peeled',
@@ -187,14 +187,14 @@ export const CATEGORY_DATA: Category[] = [
     'magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.' +
     '\n\nDuis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.\n\nIn sagittis dui vel nisl. Duis ac nibh. '+
     'Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.',
-    'image': 'https://robohash.org/velitoditmodi.png?size=100x100&set=set1'
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(23).jpg'
   }, {
     'id': 4,
     'name': 'Wine - Chenin Blanc K.w.v.',
     'provider': 'Gibson, Gorczany and Schamberger',
     'description': 'In congue. Etiam justo. Etiam pretium iaculis justo.' +
     '\n\nIn hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.',
-    'image': 'https://robohash.org/nonetdolor.jpg?size=100x100&set=set1'
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(24).jpg'
   }, {
     'id': 5,
     'name': 'Calaloo',
@@ -204,7 +204,7 @@ export const CATEGORY_DATA: Category[] = [
     'nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.' +
     '\n\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque ' +
       'arcu libero, rutrum ac, lobortis vel, dapibus at, diam.',
-      'image': 'https://robohash.org/molestiaevoluptatemet.bmp?size=100x100&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(25).jpg'
     }, {
       'id': 6,
       'name': 'Pork - Bacon, Double Smoked',
@@ -217,14 +217,14 @@ export const CATEGORY_DATA: Category[] = [
       'elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus. ' +
       '\n\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque ' +
       'arcu libero, rutrum ac, lobortis vel, dapibus at, diam.',
-      'image': 'https://robohash.org/temporainadipisci.jpg?size=100x100&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(26).jpg'
     }, {
       'id': 7,
       'name': 'Star Fruit',
       'provider': 'Rippin Inc',
       'description': 'Cras mi pede, malesuada in,imperdiet et, commodo vulputate, justo. In blandit ultrices enim. ' +
       'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-      'image': 'https://robohash.org/quiaminimaratione.jpg?size=100x100&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(27).jpg'
     }, {
       'id': 8,
       'name': 'Lamb - Leg, Boneless',
@@ -234,7 +234,7 @@ export const CATEGORY_DATA: Category[] = [
       'tincidunt. Nulla mollis molestie lorem. Quisque ut erat.\n\nCurabitur gravida nisi at nibh. In hac habitasse platea dictumst. ' +
       'Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.\n\nInteger tincidunt ante vel ipsum. ' +
       'Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.',
-      'image': 'https://robohash.org/praesentiumfugiatid.png?size=100x100&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(28).jpg'
     }, {
       'id': 9,
       'name': 'Tart - Raisin And Pecan',
@@ -242,112 +242,7 @@ export const CATEGORY_DATA: Category[] = [
       'description': 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum ' +
       'dolor sit amet, consectetuer adipiscing elit.\n\nProin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien ' +
       'in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.',
-      'image': 'https://robohash.org/autaperiamvoluptatem.png?size=100x100&set=set1'
-    }, {
-      'id': 10,
-      'name': 'Ice Cream - Vanilla',
-      'provider': 'Tillman-Barrows',
-      'description': 'In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.\n\nNulla ut erat id mauris vulputate ' +
-      'elementum. Nullam varius. Nulla facilisi.\n\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. ' +
-      'Vivamus vel nulla eget eros elementum pellentesque.\n\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, ' +
-      'semper rutrum, nulla. Nunc purus.\n\nPhasellus in felis. Donec semper sapien a libero. Nam dui.\n\nProin leo odio, porttitor id, ' +
-      'consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.',
-      'image': 'https://robohash.org/eainciduntsunt.bmp?size=100x100&set=set1'
-    }, {
-      'id': 11,
-      'name': 'Rum - White, Gg White',
-      'provider': 'Zboncak-Morar',
-      'description': 'Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ' +
-      'ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros. ' +
-      '\n\nVestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut ' +
-      'volutpat sapien arcu sed augue. Aliquam erat volutpat.\n\nIn congue. Etiam justo. Etiam pretium iaculis justo.\n\n ' +
-      'In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.\n\nNulla ut erat id mauris vulputate elementum. ' +
-      'Nullam varius. Nulla facilisi.\n\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel ' +
-      'nulla eget eros elementum pellentesque.',
-      'image': 'https://robohash.org/autasperiorescum.bmp?size=100x100&set=set1'
-    }, {
-      'id': 12,
-      'name': 'Liquid Aminios Acid - Braggs',
-      'provider': 'Hammes, Mann and Von',
-      'description': 'Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis ' +
-      'nibh ligula nec sem.\n\nDuis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.\n\nDonec diam ' +
-      'neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices ' +
-      'posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien ' +
-      'sapien non mi. Integer ac neque.',
-      'image': 'https://robohash.org/vitaeculpaut.bmp?size=100x100&set=set1'
-    }, {
-      'id': 13,
-      'name': 'Southern Comfort',
-      'provider': 'Rath and Sons',
-      'description': 'Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. ' +
-      'Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\n\nAenean lectus. Pellentesque eget nunc. Donec ' +
-      'quis orci eget orci vehicula condimentum.\n\nCurabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, ' +
-      'interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.\n\nPhasellus sit amet erat. Nulla tempus. Vivamus in felis eu ' +
-      'sapien cursus vestibulum.',
-      'image': 'https://robohash.org/quaeratsedasperiores.bmp?size=100x100&set=set1'
-    }, {
-      'id': 14,
-      'name': 'Gatorade - Orange',
-      'provider': 'Boyer Inc',
-      'description': 'Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.\n\nIn quis justo. ' +
-      'Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.\n\nMaecenas leo odio, condimentum id, luctus nec, ' +
-      'molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.\n\nMaecenas tristique, est et tempus ' +
-      'semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ' +
-      'ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.\n\nNullam porttitor lacus at turpis. Donec ' +
-      'posuere metus vitae ipsum. Aliquam non mauris.',
-      'image': 'https://robohash.org/excepturiminussuscipit.png?size=100x100&set=set1'
-    }, {
-      'id': 15,
-      'name': 'Potatoes - Parissienne',
-      'provider': 'Daniel-Cronin',
-      'description': 'Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis ' +
-      'convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.\n\nNullam sit amet ' +
-      'turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.\n\nIn quis justo. Maecenas rhoncus aliquam lacus. Morbi' +
-      'quis tortor id nulla ultrices aliquet.',
-      'image': 'https://robohash.org/eosblanditiissint.png?size=100x100&set=set1'
-    }, {
-      'id': 16,
-      'name': 'Pumpkin',
-      'provider': 'Pouros, Osinski and Hegmann',
-      'description': 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.' +
-      '\n\nPhasellus in felis. Donec semper sapien a libero. Nam dui.\n\nProin leo odio, porttitor id, consequat in, consequat ut, nulla.' +
-      'Sed accumsan felis. Ut at dolor quis odio consequat varius.',
-      'image': 'https://robohash.org/delenitilaboredolor.bmp?size=100x100&set=set1'
-    }, {
-      'id': 17,
-      'name': 'Bar Nature Valley',
-      'provider': 'Leuschke Group',
-      'description': 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.',
-      'image': 'https://robohash.org/oditquosint.bmp?size=100x100&set=set1'
-    }, {
-      'id': 18,
-      'name': 'Sugar - White Packet',
-      'provider': 'Wilkinson-Walsh',
-      'description': 'Phasellus in felis. Donec semper sapien a libero. Nam dui.\n\nProin leo odio, porttitor id, consequat in, ' +
-      'consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.\n\nInteger ac leo. Pellentesque ultrices ' +
-      'mattis odio. Donec vitae nisi.\n\nNam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla ' +
-      'elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\n\nCurabitur at ipsum ac tellus ' +
-      'semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.',
-      'image': 'https://robohash.org/nonquamquis.bmp?size=100x100&set=set1'
-    }, {
-      'id': 19,
-      'name': 'Muffin Mix - Chocolate Chip',
-      'provider': 'Borer-Stiedemann',
-      'description': 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor ' +
-      'sit amet, consectetuer adipiscing elit.\n\nProin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in ' +
-      'sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\n\nAenean lectus. ' +
-      'Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.\n\nCurabitur in libero ut massa volutpat convallis. ' +
-      'Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.\n\nPhasellus sit amet erat. ' +
-      'Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.\n\nProin eu mi. Nulla ac enim. In tempor, turpis nec euismod ' +
-      'scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.',
-      'image': 'https://robohash.org/hicfaceremolestias.bmp?size=100x100&set=set1'
-    }, {
-      'id': 20, 'name': 'Raspberries - Frozen',
-      'provider': 'Bernier LLC',
-      'description': 'Phasellus in felis. Donec semper sapien a libero. Nam dui.\n\nProin leo odio, porttitor id, consequat in, ' +
-      'consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.\n\nInteger ac leo. Pellentesque ultrices ' +
-      'mattis odio. Donec vitae nisi.',
-      'image': 'https://robohash.org/ipsumomnisvoluptates.png?size=100x100&set=set1'
+      'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(29).jpg'
     }
 ];
 
@@ -358,7 +253,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 7,
     'provider': 'Consumer Durables es lo maximo',
     'category': 'Ram 2500',
-    'image': 'https://robohash.org/nobisideligendi.bmp?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(31).jpg',
     'description': 'Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem.' +
     'Quisque ut erat.\n\nCurabitur gravida nisi at nibh. In hac habitasse platea dictumst. ' +
     'Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.'
@@ -368,7 +263,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 33,
     'provider': 'Capital Goods',
     'category': 'DeVille',
-    'image': 'https://robohash.org/rerumenimnesciunt.bmp?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(32).jpg',
     'description': 'Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.'
   }, {
     'id': 3,
@@ -376,7 +271,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 27,
     'provider': 'Energy',
     'category': '200',
-    'image': 'https://robohash.org/sintutet.bmp?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(33).jpg',
     'description': 'Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\n\nCras ' +
     'non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget ' +
     'eros elementum pellentesque.'
@@ -386,7 +281,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 48,
     'provider': 'Finance',
     'category': 'Sebring',
-    'image': 'https://robohash.org/quiatquequaerat.jpg?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(34).jpg',
     'description': 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper ' +
     'rutrum, nulla. Nunc purus.\n\nPhasellus in felis. Donec semper sapien a libero. Nam dui.'
   }, {
@@ -395,7 +290,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 9,
     'provider': 'Health Care',
     'category': 'XG350',
-    'image': 'https://robohash.org/utsintvitae.png?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(35).jpg',
     'description': 'Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, ' +
     'interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.'
   }, {
@@ -404,7 +299,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 26,
     'provider': 'Finance',
     'category': 'Solara',
-    'image': 'https://robohash.org/etsuntut.bmp?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(36).jpg',
     'description': 'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.'
   }, {
     'id': 7,
@@ -412,7 +307,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 52,
     'provider': 'Finance',
     'category': 'Durango',
-    'image': 'https://robohash.org/aliquidasperioresut.bmp?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(37).jpg',
     'description': 'In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.'
   }, {
     'id': 8,
@@ -420,7 +315,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 48,
     'provider': 'Health Care',
     'category': 'Versa',
-    'image': 'https://robohash.org/aliquamillorerum.jpg?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(38).jpg',
     'description': 'Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, ' +
     'in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.'
   }, {
@@ -429,7 +324,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 56,
     'provider': 'Finance',
     'category': 'SLK-Class',
-    'image': 'https://robohash.org/dolordistinctiosaepe.bmp?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(39).jpg',
     'description': 'Phasellus in felis. Donec semper sapien a libero. Nam dui.'
   }, {
     'id': 10,
@@ -437,7 +332,7 @@ export const PRODUCT_DATA: Product [] = [
     'price': 30,
     'provider': 'Consumer Services',
     'category': 'Odyssey',
-    'image': 'https://robohash.org/illumutnobis.jpg?size=100x100&set=set1',
+    'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(40).jpg',
     'description': 'Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque ' +
     'libero, convallis eget, eleifend luctus, ultricies eu, nibh.\n\nQuisque id justo sit amet ' +
     'sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ' +
