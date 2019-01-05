@@ -20,7 +20,8 @@ import {
    EditCategoryWorkspaceComponent,
    CashierWorkspaceComponent,
    EditCashierWorkspaceComponent,
-   OrderWorkspaceComponent
+   OrderWorkspaceComponent,
+   ProviderDetailsWorkspaceComponent
   } from './components/dashboards/provider/views';
 
 const routes: Routes = [
@@ -37,11 +38,12 @@ const routes: Routes = [
       { path: 'providers', component: ProviderWorkspaceComponent },
       { path: 'providers/create', component: EditProviderWorkspaceComponent, data: { mode: 'create' }},
       { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'providers/:id/details', component: ProviderDetailsWorkspaceComponent },
+      { path: 'providers/:id/categories', component: CategoryWorkspaceComponent },
+      { path: 'providers/:id/categories/create', component: EditCategoryWorkspaceComponent, data: { mode: 'create' }},
       { path: 'products', component: ProductWorkspaceComponent },
       { path: 'products/create', component: EditProductWorkspaceComponent, data: { mode: 'create' }},
       { path: 'products/:id/edit', component: EditProductWorkspaceComponent, data: { mode: 'edit' }},
-      { path: 'categories', component: CategoryWorkspaceComponent },
-      { path: 'categories/create', component: EditCategoryWorkspaceComponent, data: { mode: 'create' }},
       { path: 'categories/:id/edit', component: EditCategoryWorkspaceComponent, data: { mode: 'edit' }},
       { path: 'cashiers', component: CashierWorkspaceComponent },
       { path: 'cashiers/create', component: EditCashierWorkspaceComponent, data: { mode: 'create' }},
