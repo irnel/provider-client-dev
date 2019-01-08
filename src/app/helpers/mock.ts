@@ -249,9 +249,9 @@ export const CATEGORY_DATA: Category[] = [
 export const PRODUCT_DATA: Product [] = [
   {
     'id': 1,
-    'name': 'Dodge los mejores de todos los tiempos',
+    'name': 'Dodge',
     'price': 7,
-    'provider': 'Consumer Durables es lo maximo',
+    'provider': 'Consumer Durables',
     'category': 'Ram 2500',
     'image': 'https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(31).jpg',
     'description': 'Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem.' +
