@@ -1,0 +1,48 @@
+<!-- Category Details -->
+<mdb-card class="w-responsive mt-4 center ml-auto mr-auto">
+
+  <!-- Card Header -->
+  <mdb-card-header>
+    <img class="mx-auto d-block rounded" src={{currentCategory.image}} alt="Category image">
+  </mdb-card-header>
+
+  <!--Card content-->
+  <mdb-card-body class="px-lg-5">
+    <div class="float-right mb-2">
+      <div class="dropdown" mdbDropdown>
+        <button mdbDropdownToggle mdbBtn color="primary"
+            class="dropdown-toggle waves-light" mdbWavesEffect>
+
+          Options
+        </button>
+
+        <div class="dropdown-menu">
+          <!-- Add Product -->
+          <a (click)="redirectToEditProduct()" class="dropdown-item">
+            <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Add product
+          </a>
+          <div class="divider dropdown-divider"></div>
+
+          <!-- List Products -->
+          <a (click)="redirectToProductWorkspace()" class="dropdown-item">
+            <i class="fa fa-list-ol left mr-2" aria-hidden="true"></i>List products
+          </a>
+          <div class="divider dropdown-divider"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <mdb-card-text class="mt-4">
+      <h6>Name: {{currentCategory.name}}</h6>
+    </mdb-card-text>
+
+    <!-- Description -->
+    <mdb-card-text class="mt-2">
+      <h6>Description: {{currentProvider.description}}</h6>
+    </mdb-card-text>
+
+  </mdb-card-body>
+
+</mdb-card>
