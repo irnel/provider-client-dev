@@ -31,16 +31,16 @@ export class EditProductWorkspaceComponent implements OnInit {
 
   providers: Provider [] = PROVIDERS_DATA;
   categories: Category [] = CATEGORY_DATA;
-  currentProviders: Provider [];
-  currentCategories: Category [];
+  currentProvider: Provider;
+  currentCategory: Category;
+  provId: number;
+  catId: number;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
-    private readonly toast: SnotifyService,
-    private readonly pageScrollService: PageScrollService,
-    @Inject(DOCUMENT) private document: any
+    private readonly toast: SnotifyService
   ) {
     // Change Form values
     this.route.data.subscribe(data => {
@@ -55,6 +55,12 @@ export class EditProductWorkspaceComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.provId = +this.route.snapshot.params['id'];
+    this.catId = +this.route.snapshot.params['catId'];
+
+    this.currentProvider = this.providers.find(p => p.id === this.provId);
+    this.currentCategory = this.categories.find(c => c.id === this.catId);
+
     this.editForm = this.formBuilder.group({
       name: ['', Validators.compose([
         Validators.required,
@@ -94,24 +100,6 @@ export class EditProductWorkspaceComponent implements OnInit {
       })
     ).subscribe(error => this.nameError = error);
 
-    // provider list
-    this.providerFormControl = this.form.providerName;
-    this.form.providerName.valueChanges.pipe(
-      startWith(''),
-      map(name => {
-        return name ? this.providerFilter(name) : this.providers.slice();
-      })
-    ).subscribe(list => this.currentProviders = list);
-
-    // category list
-    this.categoryFormControl = this.form.categoryName;
-    this.form.categoryName.valueChanges.pipe(
-      startWith(''),
-      map(name => {
-        return name ? this.categoryFilter(name) : this.categories.slice();
-      })
-    ).subscribe(list => this.currentCategories = list);
-
     // validate price
     this.form.price.valueChanges.pipe(
       startWith(''),
@@ -133,22 +121,6 @@ export class EditProductWorkspaceComponent implements OnInit {
 
   get form() { return this.editForm.controls; }
 
-  private providerFilter(value: string) {
-    const filterValue = value.toLowerCase();
-
-    return this.providers.filter(provider =>
-      provider.name.toLowerCase().indexOf(filterValue) === 0
-    );
-  }
-
-  private categoryFilter(value: string) {
-    const filterValue = value.toLowerCase();
-
-    return this.categories.filter(category =>
-      category.name.toLowerCase().indexOf(filterValue) === 0
-    );
-  }
-
   MarkAsDirty() {
     if (this.editForm.invalid) {
       this.form.name.markAsDirty();
@@ -156,64 +128,23 @@ export class EditProductWorkspaceComponent implements OnInit {
       this.form.categoryName.markAsDirty();
       this.form.price.markAsDirty();
 
-      // scroll behavior
-      if (this.form.name.errors || this.form.providerName.errors
-        || this.form.categoryName.errors || this.form.price) {
-
-        this.goToTop();
-      }
-
       return;
     }
   }
 
-  foundMatchValidator() {
-    // search match with input value from provider list
-    const matchProvider = this.currentProviders.find(item => {
-      return item.name === this.form.providerName.value;
-    });
-
-    if (!matchProvider && this.form.providerName.value !== '') {
-      this.showErrorMessage(
-        'Validation error',
-        'Select a provider from the list.', 2500
-      );
-
-      this.goToTop();
-
-      return;
-    }
-
-    // search match with input value from category list
-    const matchCategory = this.currentCategories.find(item => {
-      return item.name === this.form.categoryName.value;
-    });
-
-    if (!matchCategory && this.form.categoryName.value !== '') {
-      this.showErrorMessage(
-        'Validation error',
-        'Select a category from the list.', 2500
-      );
-
-      this.goToTop();
-
-      return;
-    }
-  }
-
-  redirectProductWorkSpace() {
-    this.router.navigate(['/provider-dashboard/workspace/products']);
+  redirectToProductWorkSpace() {
+    this.router.navigate([
+      `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products`
+    ]);
   }
 
   cancel() {
-    this.redirectProductWorkSpace();
+    this.redirectToProductWorkSpace();
   }
 
   editProduct() {
     // Mark the control as dirty
     this.MarkAsDirty();
-    // match value provider
-    this.foundMatchValidator();
 
     if (!this.edit) {
 
@@ -230,11 +161,5 @@ export class EditProductWorkspaceComponent implements OnInit {
       closeOnClick: true,
       pauseOnHover: true
     });
-  }
-
-  // scroll behavior
-  goToTop() {
-    const scroll: PageScrollInstance = PageScrollInstance.simpleInstance(this.document, '#header');
-    this.pageScrollService.start(scroll);
   }
 }

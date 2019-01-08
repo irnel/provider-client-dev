@@ -26,13 +26,26 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
 
   redirectToCategoryWorkspace() {
     this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories`]);
+      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories`
+    ]);
   }
 
-  // redirect to create category path
   redirectToEditCategory() {
     this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories/create`]);
+      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories/create`
+    ]);
+  }
+
+  redirectToCashierWorkspace() {
+    this.router.navigate([
+      `provider-dashboard/workspace/providers/${this.currentProvider.id}/cashiers`
+    ]);
+  }
+
+  redirectToEditCashier() {
+    this.router.navigate([
+      `provider-dashboard/workspace/providers/${this.currentProvider.id}/cashiers/create`
+    ]);
   }
 
 }

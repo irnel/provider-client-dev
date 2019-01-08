@@ -14,7 +14,6 @@
   <mdb-card-body class="px-lg-5">
 
     <form [formGroup]="editForm">
-
       <!-- Name -->
       <div class="md-form form-sm mt-2">
         <input mdbInputDirective type="text" class="form-control"
@@ -23,54 +22,6 @@
           [errorMessage]="nameError">
 
         <label for="formName">Name</label>
-      </div>
-
-      <!-- Provider -->
-      <div class="md-form form-sm">
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Provider" aria-label="Provider"
-            [matAutocomplete]="autoCompleteProv" formControlName="providerName">
-
-            <mat-error *ngIf="providerFormControl.errors">
-              <p *ngIf="providerFormControl.errors.required"> provider is required </p>
-              <p *ngIf="providerFormControl.errors.pattern"> only letters and numbers are allowed </p>
-            </mat-error>
-
-            <mat-autocomplete #autoCompleteProv="matAutocomplete">
-              <mat-option *ngFor="let provider of currentProviders" [value]="provider.name">
-                <img class="option-img" aria-hidden [src]="provider.image" height="40">
-
-                <span>{{provider.name}}</span>
-              </mat-option>
-
-            </mat-autocomplete>
-
-        </mat-form-field>
-
-      </div>
-
-      <!-- Category -->
-      <div class="md-form form-sm">
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Category" aria-label="Category"
-              [matAutocomplete]="autoCompleteCat" formControlName="categoryName">
-
-            <mat-error *ngIf="categoryFormControl.errors">
-              <p *ngIf="categoryFormControl.errors.required"> category is required </p>
-              <p *ngIf="categoryFormControl.errors.pattern"> only letters and numbers are allowed </p>
-            </mat-error>
-
-            <mat-autocomplete #autoCompleteCat="matAutocomplete">
-              <mat-option *ngFor="let category of currentCategories" [value]="category.name">
-                <img class="option-img" aria-hidden [src]="category.image" height="40">
-
-                <span>{{category.name}}</span>
-              </mat-option>
-
-            </mat-autocomplete>
-
-        </mat-form-field>
-
       </div>
 
       <!-- Price -->
@@ -104,7 +55,6 @@
       </div>
 
       <div class="float-right mt-2">
-
         <button mdbBtn
             color="primary"
             class="relative waves-light right" mdbWavesEffect

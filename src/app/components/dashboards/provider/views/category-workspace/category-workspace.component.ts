@@ -1,9 +1,9 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { Config } from '../../../../../infrastructure';
-import { Category, CATEGORY_DATA } from '../../../../../helpers';
+import { Category, Provider, CATEGORY_DATA, PROVIDERS_DATA } from '../../../../../helpers';
 
 @Component({
   selector: 'app-category-workspace',
@@ -21,13 +21,20 @@ export class CategoryWorkspaceComponent implements OnInit {
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
 
+  currentProvider: Provider;
+  providers: Provider [] = PROVIDERS_DATA;
+
   constructor(
+    private route: ActivatedRoute,
     private router: Router
   ) {
     this.dataSource = new MatTableDataSource(this.categories);
   }
 
   ngOnInit() {
+    const providerId = +this.route.snapshot.params['id'];
+    this.currentProvider = this.providers.find(p => p.id === providerId);
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -40,8 +47,16 @@ export class CategoryWorkspaceComponent implements OnInit {
     }
   }
 
-  redirectToEditCategory(id: number) {
-    this.router.navigate([`provider-dashboard/workspace/categories/${id}/edit`]);
+  redirectToEditCategory(catId: number) {
+    this.router.navigate([
+      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories/${catId}/edit`
+    ]);
+  }
+
+  redirectToCategoryDetails(catId: number) {
+    this.router.navigate([
+      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories/${catId}/details`
+    ]);
   }
 
   test() {

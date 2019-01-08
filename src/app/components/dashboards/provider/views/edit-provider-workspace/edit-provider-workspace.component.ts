@@ -32,6 +32,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
 
   regEx: string = Config.regex[0];
   regEx1: string = Config.regex[1];
+  msg: string;
   nameError: string;
   addressError: string;
 
@@ -45,7 +46,6 @@ export class EditProviderWorkspaceComponent implements OnInit {
     private readonly pageScrollService: PageScrollService,
     @Inject(DOCUMENT) private document: any
   ) {
-
     this.route.data.subscribe(data => {
       if (data.mode === 'create') {
         this.title = 'Create Provider';
@@ -194,16 +194,29 @@ export class EditProviderWorkspaceComponent implements OnInit {
     }
   }
 
-  editCategory() {
+  editProvider() {
     // Mark the control as dirty
     this.MarkAsDirty();
 
     // create
     if (!this.edit) {
+      this.msg = 'New provider created';
 
-    } else { // edit
+    } else {
+      this.msg = 'Provider edited';
 
     }
+
+    this.showSuccessMessage(this.msg, 2000);
+    this.redirectToProviderWorkspace();
+  }
+
+  showSuccessMessage(body: string, timeOut: number) {
+    this.toast.success(body, '', {
+      timeout: timeOut,
+      showProgressBar: false,
+
+    });
   }
 
   showErrorMessage(title: string, body: string, timeOut: number) {

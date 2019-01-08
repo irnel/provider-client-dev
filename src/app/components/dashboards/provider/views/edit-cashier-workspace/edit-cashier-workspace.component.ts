@@ -1,7 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
 import { Config } from './../../../../../infrastructure';
@@ -25,8 +24,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
   emailError: string;
 
   providers: Provider[] = PROVIDERS_DATA;
-  filteredProviders: Observable<Provider[]>;
-  currentProviders: Provider[];
+  currentProvider: Provider;
   providerNotFound = false;
 
   constructor(
@@ -50,6 +48,9 @@ export class EditCashierWorkspaceComponent implements OnInit {
     }
 
   ngOnInit() {
+    const providerId = +this.route.snapshot.params['id'];
+    this.currentProvider = this.providers.find(p => p.id === providerId);
+
     this.editForm = this.formBuilder.group({
       name: ['', Validators.compose([
         Validators.required,
@@ -82,15 +83,6 @@ export class EditCashierWorkspaceComponent implements OnInit {
       })
     ).subscribe(error => this.nameError = error );
 
-    // provider list
-    this.providerFormControl = this.form.providerName;
-    this.form.providerName.valueChanges.pipe(
-      startWith(''),
-      map(name => {
-        return name ? this.elementFilter(name) : this.providers.slice();
-      })
-    ).subscribe(list => this.currentProviders = list);
-
     // validate email
     this.form.email.valueChanges.pipe(
       startWith(''),
@@ -121,24 +113,10 @@ export class EditCashierWorkspaceComponent implements OnInit {
     }
   }
 
-  foundMatchValidator() {
-    // search match with input value from provider list
-    const foundMatch = this.currentProviders.find(item => {
-      return item.name === this.form.providerName.value;
-    });
-
-    if (!foundMatch && this.form.providerName.value !== '') {
-      this.showErrorMessage(
-        'Validation error',
-        'Select a cashier from the list.', 2500
-      );
-
-      return;
-    }
-  }
-
   private redirectToCashierWorkspace() {
-    this.router.navigate(['/provider-dashboard/workspace/cashiers']);
+    this.router.navigate([
+      `/provider-dashboard/workspace/providers/${this.currentProvider.id}/cashiers`
+    ]);
   }
 
   cancel() {
@@ -148,8 +126,6 @@ export class EditCashierWorkspaceComponent implements OnInit {
   editCashier() {
     // Mark the control as dirty
     this.MarkAsDirty();
-    // match value provider
-    this.foundMatchValidator();
 
     if (!this.edit) {
 

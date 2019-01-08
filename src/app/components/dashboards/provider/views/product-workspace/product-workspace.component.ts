@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
-import { Product, PRODUCT_DATA } from '../../../../../helpers';
-import { Config } from '../../../../../infrastructure/config';
+import { Product, Category, Provider, PRODUCT_DATA, CATEGORY_DATA, PROVIDERS_DATA } from '../../../../../helpers';
+import { Config } from '../../../../../infrastructure';
 
 @Component({
   selector: 'app-product-workspace',
@@ -19,17 +19,28 @@ export class ProductWorkspaceComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  products = PRODUCT_DATA;
+  providers: Provider [] = PROVIDERS_DATA;
+  categories: Category [] = CATEGORY_DATA;
+  products: Product [] = PRODUCT_DATA;
+  currentProduct: Product;
+
+  provId: number;
+  catId: number;
+
   maxChar = Config.maxChar;
   pageSizeOptions = Config.pageSizeOptions;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router
   ) {
     this.dataSource = new MatTableDataSource(this.products);
   }
 
   ngOnInit() {
+    this.provId = +this.route.snapshot.params['id'];
+    this.catId = +this.route.snapshot.params['catId'];
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -42,7 +53,15 @@ export class ProductWorkspaceComponent implements OnInit {
     }
   }
 
-  redirectToEditProduct(id: number) {
-    this.router.navigate([`provider-dashboard/workspace/products/${id}/edit`]);
+  redirectToEditProduct(prodId: number) {
+    this.router.navigate([
+      `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products/${prodId}/edit`
+    ]);
+  }
+
+  redirectToProductDetails(prodId: number) {
+    this.router.navigate([
+      `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products/${prodId}/details`
+    ]);
   }
 }

@@ -90,7 +90,6 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   MarkAsDirty() {
     if (this.editForm.invalid) {
       this.form.name.markAsDirty();
-      this.form.providerName.markAsDirty();
 
       return;
     }
