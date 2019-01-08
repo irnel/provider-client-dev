@@ -5,9 +5,6 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-
-import { AuthGuard } from './guards';
-
 import { HomeProviderComponent } from './components/dashboards/provider/home-provider/home-provider.component';
 
 import {
@@ -21,8 +18,12 @@ import {
    CashierWorkspaceComponent,
    EditCashierWorkspaceComponent,
    OrderWorkspaceComponent,
-   ProviderDetailsWorkspaceComponent
+   ProviderDetailsWorkspaceComponent,
+   CategoryDetailsWorkspaceComponent,
+   ProductDetailsWorkspaceComponent
   } from './components/dashboards/provider/views';
+
+  import { AuthGuard } from './guards';
 
 const routes: Routes = [
 
@@ -41,13 +42,15 @@ const routes: Routes = [
       { path: 'providers/:id/details', component: ProviderDetailsWorkspaceComponent },
       { path: 'providers/:id/categories', component: CategoryWorkspaceComponent },
       { path: 'providers/:id/categories/create', component: EditCategoryWorkspaceComponent, data: { mode: 'create' }},
-      { path: 'products', component: ProductWorkspaceComponent },
-      { path: 'products/create', component: EditProductWorkspaceComponent, data: { mode: 'create' }},
-      { path: 'products/:id/edit', component: EditProductWorkspaceComponent, data: { mode: 'edit' }},
-      { path: 'categories/:id/edit', component: EditCategoryWorkspaceComponent, data: { mode: 'edit' }},
-      { path: 'cashiers', component: CashierWorkspaceComponent },
-      { path: 'cashiers/create', component: EditCashierWorkspaceComponent, data: { mode: 'create' }},
-      { path: 'cashiers/:id/edit', component: EditCashierWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'providers/:id/categories/:catId/edit', component: EditCategoryWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'providers/:id/categories/:catId/details', component: CategoryDetailsWorkspaceComponent },
+      { path: 'providers/:id/cashiers', component: CashierWorkspaceComponent },
+      { path: 'providers/:id/cashiers/create', component: EditCashierWorkspaceComponent, data: { mode: 'create' }},
+      { path: 'providers/:id/cashiers/:cashId/edit', component: EditCashierWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'providers/:id/categories/:catId/products', component: ProductWorkspaceComponent },
+      { path: 'providers/:id/categories/:catId/products/create', component: EditProductWorkspaceComponent, data: { mode: 'create' }},
+      { path: 'providers/:id/categories/:catId/products/:prodId/edit', component: EditProductWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'providers/:id/categories/:catId/products/:prodId/details', component: ProductDetailsWorkspaceComponent },
       { path: 'orders', component: OrderWorkspaceComponent },
 
       // redirect to workspace home by default
