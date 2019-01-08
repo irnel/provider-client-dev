@@ -24,7 +24,9 @@ import {
   EditCategoryWorkspaceComponent,
   EditProductWorkspaceComponent,
   EditCashierWorkspaceComponent,
-  ProviderDetailsWorkspaceComponent
+  ProviderDetailsWorkspaceComponent,
+  CategoryDetailsWorkspaceComponent,
+  ProductDetailsWorkspaceComponent
 } from './index';
 
 @NgModule({
@@ -54,7 +56,9 @@ import {
     EditCategoryWorkspaceComponent,
     EditProductWorkspaceComponent,
     EditCashierWorkspaceComponent,
-    ProviderDetailsWorkspaceComponent
+    ProviderDetailsWorkspaceComponent,
+    CategoryDetailsWorkspaceComponent,
+    ProductDetailsWorkspaceComponent
   ],
   exports: [
     StatsCardComponent,
@@ -70,7 +74,9 @@ import {
     EditProviderWorkspaceComponent,
     EditProductWorkspaceComponent,
     EditCashierWorkspaceComponent,
-    ProviderDetailsWorkspaceComponent
+    ProviderDetailsWorkspaceComponent,
+    CategoryDetailsWorkspaceComponent,
+    ProductDetailsWorkspaceComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,
