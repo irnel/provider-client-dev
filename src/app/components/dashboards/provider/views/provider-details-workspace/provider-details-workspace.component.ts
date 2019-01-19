@@ -24,6 +24,10 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
     this.currentProvider = this.providers.find(p => p.id === providerId);
   }
 
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
+  }
+
   redirectToCategoryWorkspace() {
     this.router.navigate([
       `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories`

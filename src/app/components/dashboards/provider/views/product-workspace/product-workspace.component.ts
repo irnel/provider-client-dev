@@ -53,6 +53,10 @@ export class ProductWorkspaceComponent implements OnInit {
     }
   }
 
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
+  }
+
   redirectToEditProduct(prodId: number) {
     this.router.navigate([
       `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products/${prodId}/edit`

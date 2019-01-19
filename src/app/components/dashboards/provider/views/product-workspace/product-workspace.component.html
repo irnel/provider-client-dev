@@ -1,9 +1,41 @@
 <!-- Workspace Product -->
 <div class="mt-4">
 
-  <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-  </mat-form-field>
+  <!-- Heading -->
+  <mdb-card class="mb-2">
+    <!--Card content-->
+    <div class="container">
+      <div class="row">
+        <!-- Breadcrumbs navigation -->
+        <div class="col">
+          <h6 class="pt-5">
+            <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+            <a routerLink="/provider-dashboard/workspace/home">Home</a>
+            <span> / </span>
+            <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+            <span> / </span>
+            <a routerLink="/provider-dashboard/workspace/providers/{{provId}}/categories">Categories</a>
+            <span> / </span>
+            <span>Products</span>
+          </h6>
+        </div>
+
+        <!-- Filter data -->
+        <div class="col-sm-5">
+          <div class="md-form form-sm">
+              <i class="fa fa-search prefix" aria-hidden="true"></i>
+              <input mdbInputDirective
+                  type="text" id="formFilter" class="form-control"
+                  (keyup)="applyFilter($event.target.value)">
+
+              <label for="formFilter">Filter</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mdb-card>
+  <!-- Heading -->
 
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
@@ -11,7 +43,10 @@
        <!-- Column Image -->
        <ng-container matColumnDef="image">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Image </th>
-          <td mat-cell *matCellDef="let product" style="width: 10%;">
+          <td mat-cell *matCellDef="let product"
+              style="width: 10%;"
+              (dblclick)="redirectToProductDetails(product.id)">
+
             <img src="{{product.image}}" alt="provider" class="img-thumbnail mt-2 mb-2 mr-4">
           </td>
 
@@ -20,7 +55,7 @@
       <!-- Column Name -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-        <td mat-cell *matCellDef="let product">
+        <td mat-cell *matCellDef="let product" (dblclick)="redirectToProductDetails(product.id)">
           <p class="ml-2">{{product.name}}</p>
         </td>
       </ng-container>
@@ -28,7 +63,7 @@
       <!-- Column Provider -->
       <ng-container matColumnDef="provider">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Provider </th>
-        <td mat-cell *matCellDef="let product">
+        <td mat-cell *matCellDef="let product" (dblclick)="redirectToProductDetails(product.id)">
           <p class="ml-2">{{product.provider}}</p>
         </td>
       </ng-container>
@@ -36,7 +71,7 @@
       <!-- Column product-->
       <ng-container matColumnDef="category">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
-        <td mat-cell *matCellDef="let product">
+        <td mat-cell *matCellDef="let product" (dblclick)="redirectToProductDetails(product.id)">
           <p class="ml-2">{{product.category}}</p>
         </td>
       </ng-container>
@@ -44,7 +79,7 @@
       <!-- Column Price -->
       <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
-        <td mat-cell *matCellDef="let product">
+        <td mat-cell *matCellDef="let product" (dblclick)="redirectToProductDetails(product.id)">
           <p class="ml-2">{{product.price}}</p>
         </td>
       </ng-container>
@@ -52,7 +87,7 @@
       <!-- Column Description -->
       <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
-          <td mat-cell *matCellDef="let product">
+          <td mat-cell *matCellDef="let product" (dblclick)="redirectToProductDetails(product.id)">
 
             <p *ngIf="product.description.length <= maxChar" class="ml-2">{{product.description}}</p>
 
@@ -84,7 +119,7 @@
         <!-- Column Operation -->
         <ng-container matColumnDef="operation">
           <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-          <td mat-cell *matCellDef="let product">
+          <td mat-cell *matCellDef="let product" (dblclick)="redirectToProductDetails(product.id)">
             <!-- Options -->
             <div class="block-options">
               <!-- Option Detail -->

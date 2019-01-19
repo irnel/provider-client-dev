@@ -47,6 +47,10 @@ export class CategoryWorkspaceComponent implements OnInit {
     }
   }
 
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
+  }
+
   redirectToEditCategory(catId: number) {
     this.router.navigate([
       `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories/${catId}/edit`

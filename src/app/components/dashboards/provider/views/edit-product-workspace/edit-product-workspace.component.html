@@ -1,90 +1,106 @@
 <!-- Edit Product -->
-<mdb-card id="header" class="w-responsive mt-4 center ml-auto mr-auto">
+<div class="w-responsive mt-3 center ml-auto mr-auto">
 
-  <!-- Card Header -->
-  <mdb-card-header class="white-text text-center">
-    <h4>
-      <span class="badge badge-primary waves-light ml-2">
-        <strong> {{title}} </strong>
-      </span>
-    </h4>
-  </mdb-card-header>
+  <mdb-card id="header">
+    <!-- Card Header -->
+    <mdb-card-header class="text-center">
+      <h3 class="mt-1">
+        <span class="badge badge-primary waves-light ml-2">
+          <strong> {{title}} </strong>
+        </span>
+      </h3>
 
-  <!--Card content-->
-  <mdb-card-body class="px-lg-5">
+      <h6 class="pt-1">
+        <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+        <a routerLink="/provider-dashboard/workspace/home">Home</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers/{{provId}}/categories">Categories</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers/{{provId}}/categories/{{catId}}/products">Products</a>
+        <span> / </span>
+        <span class="text-capitalize">{{mode}}</span>
+      </h6>
+    </mdb-card-header>
 
-    <form [formGroup]="editForm">
-      <!-- Name -->
-      <div class="md-form form-sm mt-2">
-        <input mdbInputDirective type="text" class="form-control"
-          id="formName" formControlName="name"
-          [validateSuccess]="false"
-          [errorMessage]="nameError">
+    <!--Card content-->
+    <mdb-card-body class="px-lg-5">
 
-        <label for="formName">Name</label>
-      </div>
+      <form [formGroup]="editForm">
+        <!-- Name -->
+        <div class="md-form form-sm mt-2">
+          <input mdbInputDirective type="text" class="form-control"
+            id="formName" formControlName="name"
+            [validateSuccess]="false"
+            [errorMessage]="nameError">
 
-      <!-- Price -->
-      <div class="md-form form-sm mt-2">
-        <input mdbInputDirective type="number" class="form-control"
-          id="formPrice" formControlName="price"
-          [errorMessage]="priceError"
-          [validateSuccess]="false">
+          <label for="formName">Name</label>
+        </div>
 
-        <label for="formPrice">Price</label>
-      </div>
-
-      <!-- Image -->
-      <div class="md-form form-sm mt-2">
-        <input mdbInputDirective type="file" class="form-control"
-            id="formImage" formControlName="image"
-            data-error="Name is required"
+        <!-- Price -->
+        <div class="md-form form-sm mt-2">
+          <input mdbInputDirective type="number" class="form-control"
+            id="formPrice" formControlName="price"
+            [errorMessage]="priceError"
             [validateSuccess]="false">
 
-      </div>
+          <label for="formPrice">Price</label>
+        </div>
 
-      <!-- Description -->
-      <div class="md-form form-sm mt-2">
-        <textarea class="md-textarea md-textarea-auto form-control"
-            id="formDescription" formControlName="description"
-            mdbInputDirective type="text"
-            [validateSuccess]="false"
-            data-error="character not allowed"></textarea>
+        <!-- Image -->
+        <div class="md-form form-sm mt-2">
+          <input mdbInputDirective type="file" class="form-control"
+              id="formImage" formControlName="image"
+              data-error="Name is required"
+              [validateSuccess]="false">
 
-        <label for="formDescription">Description</label>
-      </div>
+        </div>
 
-      <div class="float-right mt-2">
-        <button mdbBtn
-            color="primary"
-            class="relative waves-light right" mdbWavesEffect
-            (click)="editProduct()">
+        <!-- Description -->
+        <div class="md-form form-sm mt-2">
+          <textarea class="md-textarea md-textarea-auto form-control"
+              id="formDescription" formControlName="description"
+              mdbInputDirective type="text"
+              [validateSuccess]="false"
+              data-error="character not allowed"></textarea>
 
-          <!-- Create Mode -->
-          <div *ngIf="!edit" >
-            <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Create
-          </div>
+          <label for="formDescription">Description</label>
+        </div>
 
-          <!-- Edit Mode -->
-          <div *ngIf="edit">
-            <i class="fa fa-floppy-o left mr-2" aria-hidden="true"></i>Save
-          </div>
+        <div class="float-right mt-2">
+          <button mdbBtn
+              color="primary"
+              class="relative waves-light right" mdbWavesEffect
+              (click)="editProduct()">
 
-        </button>
+            <!-- Create Mode -->
+            <div *ngIf="!edit" >
+              <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Create
+            </div>
 
-        <!-- Button Cancel -->
-        <button mdbBtn
-            outline="true" color="primary"
-            aria-label="Close" mdbWavesEffect
-            (click)="cancel()">
+            <!-- Edit Mode -->
+            <div *ngIf="edit">
+              <i class="fa fa-floppy-o left mr-2" aria-hidden="true"></i>Save
+            </div>
 
-          <i class="fa fa-ban left mr-2" aria-hidden="true"></i>Cancel
-        </button>
+          </button>
 
-      </div>
+          <!-- Button Cancel -->
+          <button mdbBtn
+              outline="true" color="primary"
+              aria-label="Close" mdbWavesEffect
+              (click)="cancel()">
 
-    </form>
+            <i class="fa fa-ban left mr-2" aria-hidden="true"></i>Cancel
+          </button>
 
-  </mdb-card-body>
+        </div>
 
-</mdb-card>
+      </form>
+
+    </mdb-card-body>
+
+  </mdb-card>
+
+</div>

@@ -32,6 +32,10 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
     this.currentCategory = this.categories.find(c => c.id === this.catId);
   }
 
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
+  }
+
   redirectToProductWorkspace() {
     this.router.navigate([
       `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products`

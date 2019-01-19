@@ -26,4 +26,8 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
     this.currentProduct = this.products.find(p => p.id === prodId);
   }
 
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
+  }
+
 }

@@ -35,6 +35,7 @@ export class EditProductWorkspaceComponent implements OnInit {
   currentCategory: Category;
   provId: number;
   catId: number;
+  mode: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,6 +45,8 @@ export class EditProductWorkspaceComponent implements OnInit {
   ) {
     // Change Form values
     this.route.data.subscribe(data => {
+      this.mode = data.mode;
+
       if (data.mode === 'edit') {
         this.edit = true;
         this.title = 'Edit Product';
@@ -130,6 +133,10 @@ export class EditProductWorkspaceComponent implements OnInit {
 
       return;
     }
+  }
+
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
   }
 
   redirectToProductWorkSpace() {

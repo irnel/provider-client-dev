@@ -35,6 +35,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
   msg: string;
   nameError: string;
   addressError: string;
+  mode: string;
 
   constructor(
     private router: Router,
@@ -47,6 +48,8 @@ export class EditProviderWorkspaceComponent implements OnInit {
     @Inject(DOCUMENT) private document: any
   ) {
     this.route.data.subscribe(data => {
+      this.mode = data.mode;
+
       if (data.mode === 'create') {
         this.title = 'Create Provider';
         this.edit = false;
@@ -159,7 +162,11 @@ export class EditProviderWorkspaceComponent implements OnInit {
     }
   }
 
-  private redirectToProviderWorkspace() {
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
+  }
+
+  redirectToProviderWorkspace() {
     this.router.navigate(['/provider-dashboard/workspace/providers']);
   }
 

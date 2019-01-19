@@ -31,6 +31,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
 
   providers: Provider[] = PROVIDERS_DATA;
   currentProvider: Provider;
+  mode: string;
 
   constructor(
     private router: Router,
@@ -40,6 +41,8 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   ) {
     // Change Form values
     this.route.data.subscribe(data => {
+      this.mode = data.mode;
+
       if (data.mode === 'edit') {
         this.edit = true;
         this.title = 'Edit Category';
@@ -93,6 +96,10 @@ export class EditCategoryWorkspaceComponent implements OnInit {
 
       return;
     }
+  }
+
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
   }
 
   redirectToCategoryWorkspace() {

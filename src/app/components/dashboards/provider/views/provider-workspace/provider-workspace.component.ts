@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { Config } from '../../../../../infrastructure';
 import { Provider, PROVIDERS_DATA } from '../../../../../helpers';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-provider-workspace',
@@ -21,6 +22,7 @@ export class ProviderWorkspaceComponent implements OnInit {
   providers = PROVIDERS_DATA;
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
+  value = '';
 
   constructor(
     private router: Router
@@ -31,6 +33,10 @@ export class ProviderWorkspaceComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
   }
 
   // redirect to edit provider

@@ -26,6 +26,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
   providers: Provider[] = PROVIDERS_DATA;
   currentProvider: Provider;
   providerNotFound = false;
+  mode: string;
 
   constructor(
     private router: Router,
@@ -35,6 +36,8 @@ export class EditCashierWorkspaceComponent implements OnInit {
     ) {
       // Change Form values
     this.route.data.subscribe(data => {
+      this.mode = data.mode;
+
       if (data.mode === 'edit') {
         this.edit = true;
         this.title = 'Edit Cashier';
@@ -113,7 +116,11 @@ export class EditCashierWorkspaceComponent implements OnInit {
     }
   }
 
-  private redirectToCashierWorkspace() {
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
+  }
+
+  redirectToCashierWorkspace() {
     this.router.navigate([
       `/provider-dashboard/workspace/providers/${this.currentProvider.id}/cashiers`
     ]);

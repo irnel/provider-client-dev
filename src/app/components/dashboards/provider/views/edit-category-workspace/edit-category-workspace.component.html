@@ -1,13 +1,25 @@
 <!-- Edit Category -->
-<mdb-card id="header" class="w-responsive mt-4 center ml-auto mr-auto">
+<mdb-card id="header" class="w-responsive mt-3 center ml-auto mr-auto">
 
-  <!--Card Header-->
-  <mdb-card-header class="white-text text-center">
-    <h4>
+  <!-- Card Header -->
+  <mdb-card-header class="text-center">
+    <h3 class="mt-1">
       <span class="badge badge-primary waves-light ml-2">
         <strong> {{title}} </strong>
       </span>
-    </h4>
+    </h3>
+
+    <h6 class="pt-1">
+      <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+      <a routerLink="/provider-dashboard/workspace/home">Home</a>
+      <span> / </span>
+      <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+      <span> / </span>
+      <a routerLink="/provider-dashboard/workspace/providers/{{currentProvider.id}}/categories">Categories</a>
+      <span> / </span>
+      <span class="text-capitalize">{{mode}}</span>
+    </h6>
+
   </mdb-card-header>
 
   <!--Card content-->

@@ -47,6 +47,10 @@ export class CashierWorkspaceComponent implements OnInit {
     }
   }
 
+  redirectToHome() {
+    this.router.navigate(['provider-dashboard/workspace/home']);
+  }
+
   redirectToEditCashier(id: number) {
     this.router.navigate([
       `provider-dashboard/workspace/providers/${this.currentProvider.id}/cashiers/${id}/edit`
