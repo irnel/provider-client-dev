@@ -15,6 +15,9 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
   products: Product [] = PRODUCT_DATA;
 
   currentProduct: Product;
+  provId: number;
+  catId: number;
+  prodId: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,12 +25,22 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const prodId = +this.route.snapshot.params['prodId'];
-    this.currentProduct = this.products.find(p => p.id === prodId);
+    this.provId = +this.route.snapshot.params['id'];
+    this.catId = +this.route.snapshot.params['catId'];
+    this.prodId = +this.route.snapshot.params['prodId'];
+    this.currentProduct = this.products.find(p => p.id === this.prodId);
   }
 
   redirectToHome() {
     this.router.navigate(['provider-dashboard/workspace/home']);
   }
+
+
+
+
+
+
+
+
 
 }
