@@ -19,12 +19,13 @@
         <!-- Filter data -->
         <div class="col-sm-5">
           <div class="md-form form-sm">
-              <i class="fa fa-search prefix" aria-hidden="true"></i>
-              <input mdbInputDirective
-                  type="text" id="formFilter" class="form-control"
-                  (keyup)="applyFilter($event.target.value)">
+            <i class="fa fa-search prefix" aria-hidden="true"></i>
 
-              <label for="formFilter">Filter</label>
+            <input mdbInputDirective
+                type="text" id="formFilter" class="form-control"
+                (keyup)="applyFilter($event.target.value)">
+
+            <label for="formFilter">Filter</label>
           </div>
         </div>
       </div>
