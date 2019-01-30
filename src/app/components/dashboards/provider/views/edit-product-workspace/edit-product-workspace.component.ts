@@ -8,7 +8,7 @@ import { SnotifyService } from 'ng-snotify';
 import { PageScrollService, PageScrollInstance } from 'ngx-page-scroll';
 
 import { Config } from './../../../../../infrastructure';
-import { Provider, PROVIDERS_DATA, Category, CATEGORY_DATA } from '../../../../../helpers';
+import { Provider, PROVIDERS_DATA, Category, CATEGORY_DATA, FileInfo } from '../../../../../helpers';
 
 @Component({
   selector: 'app-edit-product-workspace',
@@ -29,6 +29,7 @@ export class EditProductWorkspaceComponent implements OnInit {
   nameError: string;
   priceError: string;
 
+  selectedFiles: FileInfo [] = [];
   providers: Provider [] = PROVIDERS_DATA;
   categories: Category [] = CATEGORY_DATA;
   currentProvider: Provider;
@@ -81,7 +82,6 @@ export class EditProductWorkspaceComponent implements OnInit {
         Validators.required,
         Validators.pattern(this.regEx2)]
       )],
-      image: ['', Validators.nullValidator],
       description: ['', Validators.pattern(this.regEx1)]
     });
 
@@ -168,5 +168,10 @@ export class EditProductWorkspaceComponent implements OnInit {
       closeOnClick: true,
       pauseOnHover: true
     });
+  }
+
+  // receive files from file-input-component
+  onSelectedFiles(files: FileInfo []) {
+    this.selectedFiles = files;
   }
 }

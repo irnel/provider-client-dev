@@ -8,11 +8,8 @@ import { startWith, map } from 'rxjs/operators';
 
 import { SnotifyService } from 'ng-snotify';
 import { PageScrollInstance, PageScrollService } from 'ngx-page-scroll';
-import { Provider, Category, PROVIDERS_DATA } from './../../../../../helpers';
+import { Provider, Category, PROVIDERS_DATA, FileInfo } from './../../../../../helpers';
 import { Config } from './../../../../../infrastructure';
-import { stringify } from 'querystring';
-
-
 
 @Component({
   selector: 'app-edit-category-workspace',
@@ -30,6 +27,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   regEx1: string = Config.regex[1];
 
   providers: Provider[] = PROVIDERS_DATA;
+  selectedFiles: FileInfo [] = [];
   currentProvider: Provider;
   mode: string;
 
@@ -66,7 +64,6 @@ export class EditCategoryWorkspaceComponent implements OnInit {
         Validators.required,
         Validators.pattern(this.regEx)]
       )],
-      image: ['', Validators.nullValidator],
       description: ['',  Validators.pattern(this.regEx1)]
     });
 
@@ -143,5 +140,10 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       closeOnClick: true,
       pauseOnHover: true
     });
+  }
+
+  // receive files from file-input-component
+  onSelectedFiles(files: FileInfo []) {
+    this.selectedFiles = files;
   }
 }

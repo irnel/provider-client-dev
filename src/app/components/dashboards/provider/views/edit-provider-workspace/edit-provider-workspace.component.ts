@@ -11,8 +11,8 @@ import { SnotifyService } from 'ng-snotify';
 import { PageScrollService, PageScrollInstance } from 'ngx-page-scroll';
 
 import { Config } from '../../../../../infrastructure';
+import { FileInfo } from '../../../../../helpers';
 import { Address, Provider } from '../../../../../models';
-
 
 @Component({
   selector: 'app-edit-provider-workspace',
@@ -22,6 +22,7 @@ import { Address, Provider } from '../../../../../models';
 export class EditProviderWorkspaceComponent implements OnInit {
   editForm: FormGroup;
   public zoom: number;
+  public currentProvider: Provider;
   public address: Address;
 
   // HTML values
@@ -30,6 +31,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
   edit: boolean;
   test: string;
 
+  selectedFiles: FileInfo [] = [];
   regEx: string = Config.regex[0];
   regEx1: string = Config.regex[1];
   msg: string;
@@ -242,4 +244,8 @@ export class EditProviderWorkspaceComponent implements OnInit {
     this.pageScrollService.start(scroll);
   }
 
+  // receive files from file-input-component
+  onSelectedFiles(files: FileInfo []) {
+    this.selectedFiles = files;
+  }
 }

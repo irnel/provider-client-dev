@@ -63,18 +63,11 @@
         </agm-map>
       </div>
 
-      <!-- Image -->
-      <div class="md-form form-sm mt-2">
-
-      <input mdbInputDirective type="file" class="form-control"
-          id="formImage"
-          data-error="Name is required"
-          [validateSuccess]="false">
-
-      </div>
+      <!-- File input component -->
+      <app-file-input (filesInfo)="onSelectedFiles($event)"></app-file-input>
 
       <!-- Description -->
-      <div class="md-form form-sm mt-2">
+      <div class="md-form form-sm mt-4">
         <textarea class="md-textarea md-textarea-auto form-control"
             id="formDescription" formControlName="description"
             type="text" [validateSuccess]="false"
@@ -84,7 +77,6 @@
       </div>
 
       <div class="float-right">
-
         <button mdbBtn
             color="primary"
             class="relative waves-light right" mdbWavesEffect
@@ -100,7 +92,6 @@
           <div *ngIf="edit">
             <i class="fa fa-floppy-o left mr-2" aria-hidden="true"></i>Save
           </div>
-
         </button>
 
         <!-- Button Cancel -->
@@ -111,7 +102,6 @@
 
           <i class="fa fa-ban left mr-2" aria-hidden="true"></i>Cancel
         </button>
-
       </div>
 
     </form>

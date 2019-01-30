@@ -48,14 +48,8 @@
           <label for="formPrice">Price</label>
         </div>
 
-        <!-- Image -->
-        <div class="md-form form-sm mt-2">
-          <input mdbInputDirective type="file" class="form-control"
-              id="formImage" formControlName="image"
-              data-error="Name is required"
-              [validateSuccess]="false">
-
-        </div>
+        <!-- File input component -->
+      <app-file-input (filesInfo)="onSelectedFiles($event)"></app-file-input>
 
         <!-- Description -->
         <div class="md-form form-sm mt-2">
