@@ -1,4 +1,4 @@
-export class ImageMetadata {
+export class ImageInfo {
   markAsPrincipal = false;
   url: string;
 }

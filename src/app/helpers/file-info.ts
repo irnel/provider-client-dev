@@ -1,4 +1,4 @@
-export class ImageSnippet {
+export class FileInfo {
   status = 'init';
   pending = false;
   markAsPrincipal = false;
