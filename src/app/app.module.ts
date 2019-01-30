@@ -9,13 +9,11 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AgmCoreModule } from '@agm/core';
 import { SnotifyModule, ToastDefaults, SnotifyService } from 'ng-snotify';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Home Provider Module
 import { HomeProviderModule } from './components/dashboards/provider/home-provider/home-provider.module';
-
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
