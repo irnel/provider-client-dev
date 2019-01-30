@@ -1,0 +1,68 @@
+<!-- File Input Component -->
+<div class="md-form md-form">
+  <div *ngIf="selectedFiles.length > 0" class="container-fluid border rounded mt-2 mb-2 block-options">
+    <!-- Show Cards -->
+    <mdb-card class="w-25 h-50 mt-2 mb-2 mr-2" *ngFor="let image of selectedFiles">
+      <!--Card image-->
+      <mdb-card-img src="{{image.src}}" alt="Provider image"></mdb-card-img>
+
+      <!--Card content-->
+      <mdb-card-body class="mt-0">
+        <div style="line-height: 0.75em;">
+          <!-- Image Name -->
+          <mdb-card-text class="text-center">
+            <small>{{image.file.name}}</small>
+          </mdb-card-text>
+
+          <!-- Image Size -->
+          <mdb-card-text class="text-center">
+            <small>({{(image.file.size/1024).toPrecision(4)}} KB)</small>
+          </mdb-card-text>
+        </div>
+
+        <div class="text-center">
+          <!-- principal -->
+          <a type="button"
+              mdbTooltip="Mark as principal"
+              placement="top"
+              class="px-1 icons-sm"
+              (click)="markAsPrincipal(image)">
+
+            <i *ngIf="!image.markAsPrincipal" class="fa fa-star-o" aria-hidden="true"></i>
+            <i *ngIf="image.markAsPrincipal" class="fa fa-star" aria-hidden="true"></i>
+          </a>
+          <!-- upload -->
+          <a type="button"
+              mdbTooltip="Upload"
+              placement="top"
+              class="px-1 icons-sm">
+
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+          </a>
+          <!-- remove -->
+          <a type="button"
+              mdbTooltip="Remove"
+              placement="top"
+              class="px-1 icons-sm"
+              (click)="removeImage(image)">
+
+            <i class="fa fa-trash"> </i>
+          </a>
+        </div>
+
+      </mdb-card-body>
+    </mdb-card>
+  </div>
+
+  <!-- Input control -->
+  <input #fileInput type="file" accept="image/*" style="display: none;"
+      (change)="onSelectFile($event)">
+
+  <button mdbBtn type="file"
+      outline="true" color="primary"
+      aria-label="Close" mdbWavesEffect
+      (click)="fileInput.click()">
+
+    <i class="fa fa-picture-o mr-2" aria-hidden="true"></i>Select images ...
+  </button>
+</div>
