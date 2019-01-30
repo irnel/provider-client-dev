@@ -28,6 +28,7 @@ import {
   CategoryDetailsWorkspaceComponent,
   ProductDetailsWorkspaceComponent
 } from './index';
+import { FileInputComponent } from './file-input/file-input.component';
 
 @NgModule({
   imports: [
@@ -58,7 +59,8 @@ import {
     EditCashierWorkspaceComponent,
     ProviderDetailsWorkspaceComponent,
     CategoryDetailsWorkspaceComponent,
-    ProductDetailsWorkspaceComponent
+    ProductDetailsWorkspaceComponent,
+    FileInputComponent
   ],
   exports: [
     StatsCardComponent,
@@ -76,7 +78,8 @@ import {
     EditCashierWorkspaceComponent,
     ProviderDetailsWorkspaceComponent,
     CategoryDetailsWorkspaceComponent,
-    ProductDetailsWorkspaceComponent
+    ProductDetailsWorkspaceComponent,
+    FileInputComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

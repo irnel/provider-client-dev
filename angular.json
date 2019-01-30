@@ -35,9 +35,11 @@
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.js",
+              "node_modules/hammerjs/hammer.min.js",
               "node_modules/easy-pie-chart/dist/easypiechart.js",
               "node_modules/screenfull/dist/screenfull.js",
-              "node_modules/hammerjs/hammer.min.js"
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/popper.js/dist/umd/popper.min.js"
             ]
           },
           "configurations": {
@@ -96,13 +98,21 @@
               "node_modules/angular-bootstrap-md/scss/bootstrap/bootstrap.scss",
               "node_modules/angular-bootstrap-md/scss/mdb-free.scss",
               "src/styles.scss",
-              "node_modules/angular-calendar/scss/angular-calendar.scss"
+              "node_modules/angular-calendar/scss/angular-calendar.scss",
+              "node_modules/bootstrap-fileinput/scss/fileinput.scss"
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.js",
               "node_modules/easy-pie-chart/dist/easypiechart.js",
               "node_modules/screenfull/dist/screenfull.js",
-              "node_modules/hammerjs/hammer.min.js"
+              "node_modules/hammerjs/hammer.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap-fileinput/js/plugins/piexif.min.js",
+              "node_modules/bootstrap-fileinput/js/plugins/sortable.min.js",
+              "node_modules/bootstrap-fileinput/js/plugins/purify.min.js",
+              "node_modules/bootstrap-fileinput/js/fileinput.min.js",
+              "node_modules/bootstrap-fileinput/themes/fa/theme.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ],
             "assets": [
               "src/favicon.ico",
