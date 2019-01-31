@@ -5,7 +5,7 @@ export class Provider {
     public name: string,
     public description: string,
     public address: Address,
-    public images?: ImageInfo[],
+    public url?: string,
     public userId?: string,
     public id?: string
   ) {}
