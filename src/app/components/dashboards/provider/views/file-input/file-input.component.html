@@ -25,28 +25,22 @@
           <a type="button"
               mdbTooltip="Mark as principal"
               placement="top"
-              class="px-1 icons-sm"
+              class="px-2 icons-sm"
+              mdbWavesEffect
               (click)="markAsPrincipal(image)">
 
             <i *ngIf="!image.markAsPrincipal" class="fa fa-star-o" aria-hidden="true"></i>
             <i *ngIf="image.markAsPrincipal" class="fa fa-star" aria-hidden="true"></i>
-          </a>
-          <!-- upload -->
-          <a type="button"
-              mdbTooltip="Upload"
-              placement="top"
-              class="px-1 icons-sm">
-
-            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
           </a>
           <!-- remove -->
           <a type="button"
               mdbTooltip="Remove"
               placement="top"
               class="px-1 icons-sm"
+              mdbWavesEffect
               (click)="removeImage(image)">
 
-            <i class="fa fa-trash"> </i>
+            <i class="fa fa-trash" aria-hidden="true"> </i>
           </a>
         </div>
 
@@ -54,15 +48,42 @@
     </mdb-card>
   </div>
 
+  <!-- Alert message -->
+  <div #alert *ngIf="showError"
+      class="alert alert-danger"
+      alert-dismissible fade show role="alert"
+      (click)="closeAlert()">
+
+    <a type="button" class="close" aria-label="Close" mdbWavesEffect>
+      <i class="fa fa-times"></i>
+    </a>
+
+    <p *ngIf="extensionError">
+      Invalid extension for file <strong>{{fileName}}</strong>.
+      Only <strong>"jpg, jpeg, gif, png"</strong> files are supported.
+    </p>
+
+    <p *ngIf="sizeError">
+      Invalid size for file <strong>{{fileName}}</strong>.
+      Only <strong>"2048 KB"</strong> per file are supported.
+    </p>
+
+    <p *ngIf="maxAllowed">
+      Maximum number of images allowed is <strong>5</strong>.
+    </p>
+  </div>
+
   <!-- Input control -->
-  <input #fileInput type="file" accept="image/*" style="display: none;"
+  <input #fileInput type="file" accept="image/*" multiple style="display: none;"
       (change)="onSelectFile($event)">
 
-  <button mdbBtn type="file"
+  <!-- Btn Select files -->
+  <button mdbBtn
       outline="true" color="primary"
       aria-label="Close" mdbWavesEffect
       (click)="fileInput.click()">
 
-    <i class="fa fa-picture-o mr-2" aria-hidden="true"></i>Select images ...
+    <i class="fa fa-picture-o mr-2" aria-hidden="true"></i>Select files ...
   </button>
+
 </div>
