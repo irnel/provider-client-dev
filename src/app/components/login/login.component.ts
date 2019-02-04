@@ -8,6 +8,7 @@ import { AuthService } from '../../services';
 import { Roles } from './../../helpers/enum-roles';
 import { SnotifyService } from 'ng-snotify';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit {
         if (rol === Roles.Admin) {
           // redirect to admin dashboard
         } else if (rol === Roles.Provider) {
-          this.router.navigate(['/prov-dashboard/workspace']);
+          this.router.navigate(['/provider-dashboard/workspace']);
         } else {
           // redirect to cashier dashboard
         }
@@ -82,14 +83,13 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authService.login(this.form.email.value, this.form.password.value)
-      .pipe(first())
-      .subscribe(
-        () => {
+    this.authService.login(
+      this.form.email.value,
+      this.form.password.value, true).subscribe(validLogin => {
+        if (validLogin) {
           this.router.navigate([this.returnUrl]);
-        },
-        error => {
-          this.toast.error(error, 'Validation Error', {
+        } else {
+          this.toast.error('Incorrect username and password.', '', {
             backdrop: 0.2,
             closeOnClick: true,
             pauseOnHover: true,
@@ -99,6 +99,10 @@ export class LoginComponent implements OnInit {
 
           this.loading = false;
         }
-      );
+      });
+  }
+
+  loginWithGoogle() {
+    this.authService.loginWithGoogle();
   }
 }

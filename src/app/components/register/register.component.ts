@@ -2,11 +2,13 @@ import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
-import { first, startWith, map } from 'rxjs/operators';
+import { startWith, map } from 'rxjs/operators';
 
 import { SnotifyService } from 'ng-snotify';
-import { AuthService, UserService } from './../../services';
-import { Config } from './../../infrastructure';
+import { UserService, AuthService } from '../../services';
+import { Config } from '../../infrastructure';
+import { User } from '../../models';
+import { Roles } from '../../helpers/enum-roles';
 
 @Component({
   selector: 'app-register',
@@ -18,17 +20,18 @@ export class RegisterComponent implements OnInit {
   loading = false;
   submitted = false;
 
-  regEx = Config.regex[0];
+  regExName = Config.regex[0]; // pattern for names
   firstNameError: string;
   lastNameError: string;
   emailError: string;
+  existEmail = false;
 
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private readonly toast: SnotifyService,
+    private readonly userService: UserService,
     private readonly authService: AuthService,
-    private readonly userService: UserService
+    private readonly toast: SnotifyService
   ) {
 
     // redirect to home if already logged in
@@ -41,11 +44,11 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.compose([
         Validators.required,
-        Validators.pattern(this.regEx)]
+        Validators.pattern(this.regExName)]
       )],
       lastName: ['', Validators.compose([
         Validators.required,
-        Validators.pattern(this.regEx)]
+        Validators.pattern(this.regExName)]
       )],
       email: ['', Validators.compose([
         Validators.required,
@@ -97,6 +100,7 @@ export class RegisterComponent implements OnInit {
       startWith(''),
       map(() => {
         let error = '';
+
         if (this.form.email.hasError('required')) {
           error = 'email is required';
         }
@@ -118,6 +122,7 @@ export class RegisterComponent implements OnInit {
   }
 
   createAccount() {
+    this.loading = true;
     // Mark the control as dirty
     if (this.registerForm.invalid) {
       this.form.firstName.markAsDirty();
@@ -131,24 +136,36 @@ export class RegisterComponent implements OnInit {
           'Passwords do not match', 'Validation error', 1500);
       }
 
+      this.loading = false;
       return;
     }
 
-    this.loading = true;
-    this.userService.createAccount(
-      this.form.firstName.value,
-      this.form.lastName.value,
-      this.form.email.value,
-      this.form.password.value
-    ).pipe(first()).subscribe(
-      () => {
-        this.router.navigate(['/auth/login']);
-      },
-      error => {
-        this.showErrorMessage(error, '', 2000);
+    this.userService.isEmailTaken(this.form.email.value).subscribe(exist => {
+      // if not exist exist email, create account
+      if (!exist) {
+        const user: User = {
+          firstName: this.form.firstName.value,
+          lastName: this.form.lastName.value,
+          email: this.form.email.value,
+          password: this.form.password.value,
+          roles: [Roles.Provider],
+          emailVerified: false,
+          token: ''
+        };
+
+        this.userService.createAccount(user).then(() => {
+          this.showSuccessMessage('user created', '', 1500);
+          this.router.navigate(['/auth/login']);
+        }).catch(error => {
+          this.showErrorMessage(error, '', 1500);
+        });
+      } else {
+        this.showErrorMessage('Email already in use.', '', 1500);
         this.loading = false;
+
+        return;
       }
-    );
+    });
   }
 
   showSuccessMessage(message: string, title: string, time: number) {

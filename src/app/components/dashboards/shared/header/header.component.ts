@@ -12,8 +12,6 @@ import { User } from './../../../../models';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: User;
-  private currentSubscription: Subscription;
-
   @Output() public sidenavToggle = new EventEmitter();
 
   constructor(
@@ -21,7 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private readonly authService: AuthService
   ) {
 
-    this.currentSubscription = this.authService.currentUser.subscribe(user => {
+    this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
     });
    }
@@ -30,7 +28,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.currentSubscription.unsubscribe();
   }
 
   public logOut() {
