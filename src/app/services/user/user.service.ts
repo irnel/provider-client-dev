@@ -1,35 +1,91 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 import { User } from '../../models';
-import { Roles } from './../../helpers/enum-roles';
+import { Observable } from 'rxjs';
+import { map, every, first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private usersCollection: AngularFirestoreCollection<User>;
+  private userDocument: AngularFirestoreDocument<User>;
+  users: Observable<User[]>;
+  userModel: User;
 
-  constructor(private readonly http: HttpClient) { }
-
-  getAll() {
-    return this.http.get<User[]>(`/users`);
+  constructor(private readonly firestore: AngularFirestore) {
+    this.usersCollection = this.firestore.collection('users');
   }
 
-  getById(id: number) {
-    return this.http.get(`/users/${id}`);
+  // return all documents with metadata
+  getAllUsers() {
+    this.users = this.usersCollection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as User;
+        data.id = a.payload.doc.id;
+
+        return data;
+      }))
+    );
+
+    return this.users;
   }
 
-  createAccount(firstName: string, lastName: string, email: string, password: string) {
-    return this.http.post(
-      `/users/register`,
-      new User(firstName, lastName, email, password, [Roles.Provider]));
+
+  getUserById(id) {
+    this.userDocument = this.firestore.doc(`users/${id}`);
+
+    return this.userDocument;
   }
 
-  update(user: User) {
-    return this.http.put(`/users/${user.id}`, user);
+  getUserByEmail(email: string) {
+    const collection = this.firestore.collection(
+      'users', query => query.where('email', '==', email).limit(1));
+
+    return collection.get().pipe(
+      map(query => query.docs.map(doc => {
+        const user = doc.data() as User;
+        user.id = doc.id;
+
+        return user;
+      })),
+      map(users => users.length > 0 ? users[0] : null)
+    );
   }
 
-  delete(id: number) {
-    return this.http.delete(`/users/${id}`);
+  isEmailTaken(email: string) {
+    return this.getUserByEmail(email).pipe(
+      map(user => user ? true : false)
+    );
   }
+
+  getUserWithEmailAndPassword(email: string, password: string) {
+    const collection = this.firestore.collection('users', query =>
+      query.where('email', '==', email)
+           .where('password', '==', password)
+           .limit(1));
+
+    return collection.get().pipe(
+      map(query => query.docs.map(doc => {
+        const user = doc.data() as User;
+        user.id = doc.id;
+
+        return user;
+      })),
+      map(users => users.length > 0 ? users[0] : null)
+    );
+  }
+
+  createAccount(user: User) {
+    return this.usersCollection.add(user);
+  }
+
+  // update(user: User) {
+  //   return this.http.put(`/users/${user.id}`, user);
+  // }
+
+  // delete(id: number) {
+  //   return this.http.delete(`/users/${id}`);
+  // }
 }
