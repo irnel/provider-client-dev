@@ -6,8 +6,8 @@ export class User {
     public email: string,
     public password: string,
     public roles?: Array<string>,
-    public id?: number,
-    public token?: string
+    public id?: string,
+    public token?: string,
+    public emailVerified?: Boolean
   ) {}
-
 }
