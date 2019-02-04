@@ -11,6 +11,11 @@ import { SnotifyModule, ToastDefaults, SnotifyService } from 'ng-snotify';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+
+import { environment } from '../environments/environment';
 
 // Home Provider Module
 import { HomeProviderModule } from './components/dashboards/provider/home-provider/home-provider.module';
@@ -38,6 +43,9 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     SnotifyModule,
     NgxPageScrollModule,
     MDBBootstrapModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4',
       libraries: ['places']

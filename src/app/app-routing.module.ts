@@ -29,11 +29,11 @@ const routes: Routes = [
 
   // Auth routing
   { path: 'auth/login', component: LoginComponent },
-  { path: 'auth/register', component: RegisterComponent },
+  { path: 'auth/register-user', component: RegisterComponent },
   { path: 'auth/forgot-password', component: ForgotPasswordComponent },
 
   // Provider Dashboard
-  { path: 'provider-dashboard/workspace', component: HomeProviderComponent, canActivate: [AuthGuard],
+  { path: 'provider-dashboard/workspace', component: HomeProviderComponent,
     children: [
       { path: 'home', component: HomeWorkspaceComponent },
       { path: 'providers', component: ProviderWorkspaceComponent },
@@ -58,7 +58,7 @@ const routes: Routes = [
     ]
   },
 
-   // Default redirect
+  //  Default redirect
   { path: '', redirectTo: 'provider-dashboard/workspace', pathMatch: 'full' },
 
   // otherwise NOT FOUND
