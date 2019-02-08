@@ -23,7 +23,7 @@ export class UserService {
     this.users = this.usersCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as User;
-        data.id = a.payload.doc.id;
+        data.uid = a.payload.doc.id;
 
         return data;
       }))
@@ -33,8 +33,8 @@ export class UserService {
   }
 
 
-  getUserById(id) {
-    this.userDocument = this.firestore.doc(`users/${id}`);
+  getUserById(uid) {
+    this.userDocument = this.firestore.doc(`users/${uid}`);
 
     return this.userDocument;
   }
@@ -46,7 +46,7 @@ export class UserService {
     return collection.get().pipe(
       map(query => query.docs.map(doc => {
         const user = doc.data() as User;
-        user.id = doc.id;
+        user.uid = doc.id;
 
         return user;
       })),
@@ -69,7 +69,7 @@ export class UserService {
     return collection.get().pipe(
       map(query => query.docs.map(doc => {
         const user = doc.data() as User;
-        user.id = doc.id;
+        user.uid = doc.id;
 
         return user;
       })),
