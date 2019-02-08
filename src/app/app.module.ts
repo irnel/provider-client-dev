@@ -22,15 +22,13 @@ import { HomeProviderModule } from './components/dashboards/provider/home-provid
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    NotFoundComponent,
-    ForgotPasswordComponent
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
