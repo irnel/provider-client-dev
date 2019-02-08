@@ -1,13 +1,11 @@
-export class User {
-
-  constructor (
-    public firstName: string,
-    public lastName: string,
-    public email: string,
-    public password: string,
-    public roles?: Array<string>,
-    public id?: string,
-    public token?: string,
-    public emailVerified?: Boolean
-  ) {}
+export interface User {
+  displayName: string;
+  email: string;
+  phoneNumber: string;
+  password?: string;    // if user sign in with provider don't need password
+  photoURL?: string;
+  emailVerified?: boolean;
+  refreshToken?: string;
+  roles?: Array<string>;
+  uid?: string;
 }
