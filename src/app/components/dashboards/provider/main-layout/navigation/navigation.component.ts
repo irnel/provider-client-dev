@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { AuthService } from './../../../../../services';
@@ -13,8 +13,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit, OnDestroy {
-  private currentSubscription: Subscription;
+export class NavigationComponent implements OnInit {
   currentUser: User;
   clicked: boolean;
 
@@ -32,25 +31,18 @@ export class NavigationComponent implements OnInit, OnDestroy {
   ) {
     this.clicked = this.clicked === undefined ? false : true;
 
-    this.currentSubscription = this.authService.currentUser.subscribe(user => {
-      this.currentUser = user;
-    });
+    this.currentUser = this.authService.currentUserValue;
   }
 
   ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this.currentSubscription.unsubscribe();
   }
 
   setClicked(val: boolean): void {
     this.clicked = val;
   }
 
-  logOut() {
-    this.authService.logout();
-    this.router.navigate(['/auth/login']);
+  SignOut() {
+    this.authService.SignOut();
   }
 
 }

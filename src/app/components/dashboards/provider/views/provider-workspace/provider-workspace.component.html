@@ -157,7 +157,6 @@
 
                     <!-- Body -->
                     <div class="modal-body">
-
                       <div class="row">
                         <div class="col-3">
                           <img src="{{provider.image}}" alt="provider" class="img-thumbnail">
@@ -176,8 +175,7 @@
                     <!-- Footer -->
                     <div class="modal-footer flex-center">
                       <!-- Button Delete -->
-                      <button mdbBtn
-                          color="primary" rounded=" true"
+                      <button mdbBtn color="danger"
                           class="relative waves-light" mdbWavesEffect>
 
                         <i class="fa fa-trash-o left mr-2" aria-hidden="true"></i>Delete
@@ -185,7 +183,7 @@
 
                       <!-- Button Cancel -->
                       <button mdbBtn (click)="frame.hide()"
-                          type="submit" outline="true" color="primary"
+                          type="submit" outline="true" color="danger" data-dismiss="modal"
                           aria-label="Close" mdbWavesEffect>
 
                         <i class="fa fa-ban left mr-2" aria-hidden="true"></i>Cancel

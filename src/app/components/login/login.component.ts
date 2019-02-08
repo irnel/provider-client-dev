@@ -1,13 +1,11 @@
-import { first, startWith, map } from 'rxjs/operators';
+import { first, startWith, map, catchError } from 'rxjs/operators';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AuthService } from '../../services';
+import { AuthService, NotificationService } from '../../services';
 import { Roles } from './../../helpers/enum-roles';
-import { SnotifyService } from 'ng-snotify';
-
 
 @Component({
   selector: 'app-login',
@@ -16,27 +14,34 @@ import { SnotifyService } from 'ng-snotify';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  resetPasswordForm: FormGroup;
+  clicked = false;
   loading = false;
+  googleLoading = false;
+  sending = false;
   returnUrl: string;
   emailError: string;
+  resetEmailError: string;
+
+  @ViewChild('frame') frame: ElementRef;
 
   constructor(
     private router: Router,
+    private ngZone: NgZone,
+    private render: Renderer2,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private readonly toast: SnotifyService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly notificationService: NotificationService
   ) {
 
-    const user = this.authService.currentUserValue;
-
     // redirect to specific dashboard if already logged in
-    if (user) {
-      user.roles.forEach(rol => {
+    if (this.authService.currentUserValue) {
+      this.authService.currentUserValue.roles.forEach(rol => {
         if (rol === Roles.Admin) {
           // redirect to admin dashboard
         } else if (rol === Roles.Provider) {
-          this.router.navigate(['/provider-dashboard/workspace']);
+          this.router.navigate(['/provider-dashboard/workspace/home']);
         } else {
           // redirect to cashier dashboard
         }
@@ -48,6 +53,10 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+    });
+
+    this.resetPasswordForm = this.formBuilder.group({
+      resetEmail: ['', Validators.compose([Validators.required, Validators.email])]
     });
 
     // get return url from route parameters or default to '/'
@@ -69,9 +78,33 @@ export class LoginComponent implements OnInit {
         return error;
       })
     ).subscribe(error => this.emailError = error);
+
+    // validate email for reset password
+    this.formReset.resetEmail.valueChanges.pipe(
+      startWith(''),
+      map(() => {
+        let error = '';
+        if (this.formReset.resetEmail.hasError('required')) {
+          error = 'email is required';
+        }
+
+        if (this.formReset.resetEmail.hasError('email')) {
+          error = 'invalid email';
+        }
+
+        return error;
+      })
+    ).subscribe(error => this.resetEmailError = error);
+
   }
 
-  get form() { return this.loginForm.controls; }
+  get form() {
+    return this.loginForm.controls;
+  }
+
+  get formReset() {
+    return this.resetPasswordForm.controls;
+  }
 
   login() {
     // Mark the control as dirty
@@ -82,27 +115,58 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.clicked = true;
     this.loading = true;
-    this.authService.login(
-      this.form.email.value,
-      this.form.password.value, true).subscribe(validLogin => {
-        if (validLogin) {
-          this.router.navigate([this.returnUrl]);
-        } else {
-          this.toast.error('Incorrect username and password.', '', {
-            backdrop: 0.2,
-            closeOnClick: true,
-            pauseOnHover: true,
-            showProgressBar: false,
-            timeout: 2500
-          });
 
-          this.loading = false;
-        }
+    this.authService.SignIn(this.form.email.value, this.form.password.value)
+      .then(() => {
+        this.loading = false;
+        this.clicked = false;
+
+        this.ngZone.run(() => {
+          this.router.navigate([this.returnUrl]);
+        });
+      })
+      .catch(error => {
+        this.notificationService.ErrorMessage(error.message, '', 2000);
       });
   }
 
   loginWithGoogle() {
-    this.authService.loginWithGoogle();
+    this.clicked = true;
+    this.googleLoading = true;
+    this.authService.GoogleAuth().then(user => {
+      this.clicked = false;
+      this.googleLoading = false;
+
+      if (user) {
+        this.ngZone.run(() => {
+          this.ngZone.run(() => {
+            this.router.navigate(['provider-dashboard/workspace/home']);
+          });
+        });
+      }
+    });
+  }
+
+  forgotPassword() {
+    if (this.resetPasswordForm.invalid) {
+      this.resetPasswordForm.controls.resetEmail.markAsDirty();
+
+      return;
+    }
+
+    this.sending = true;
+    const email = this.resetPasswordForm.controls.resetEmail.value;
+    this.authService.ForgotPassword(email).then(() => {
+      this.sending = false;
+      this.render.selectRootElement(this.frame).hide();
+
+      this.notificationService.SuccessMessage(
+        `forgot password sent email to ${email}`, '', 2500);
+    })
+    .catch(error => {
+       this.notificationService.ErrorMessage(error.message, '', 2500);
+    });
   }
 }

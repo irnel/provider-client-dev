@@ -1,9 +1,52 @@
+<!-- Send Notification Email -->
+<div mdbModal #frame="mdbModal" class="modal fade top "
+    id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    [config]="{backdrop: true, ignoreBackdropClick: true}" aria-hidden="true">
+
+  <div class="modal-dialog modal-xs modal-notify modal-info" role="document">
+    <!--Content-->
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <h3 class="heading">Thank You for Registering</h3>
+
+        <button type="button" [disabled]="sending" class="close" data-dismiss="modal"
+            aria-label="Close" (click)="hideModal()">
+
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <p>We have sent a confirmation email to <strong>{{email}}</strong>.</p>
+        <p>Please check your email and click on the link to verify your email address.</p>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer justify-content-center">
+        <button mdbBtn [disabled]="sending" class="bg-success" mdbWavesEffect
+            (click)="sendVerificationMail()">
+          <i class="fa fa-refresh left" aria-hidden="true"></i>Resend email verification
+          <i *ngIf="sending" class="fa fa-spinner fa-pulse fa-lg ml-2" aria-hidden="true"></i>
+        </button>
+
+        <button mdbBtn [disabled]="sending" class="bg-primary" mdbWavesEffect
+            (click)="hideModal()">
+
+          <i class="fa fa-close left" aria-hidden="true"></i>Close
+        </button>
+
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<!-- Register component -->
 <div class="container">
-
   <div class="row">
-
     <div class="col-sm-6 offset-sm-3">
-
       <!-- Material form Register -->
       <mdb-card class="mt-4">
 
@@ -17,50 +60,32 @@
         <!--Card content-->
         <mdb-card-body class="px-lg-5 mt-0">
 
-          <form [formGroup]="registerForm" class="tc-custom">
+          <form [formGroup]="registerForm">
+            <!-- Full Name  -->
+            <div class="md-form form-sm mt-0">
+                <i class="fa fa-user prefix" aria-hidden="true"></i>
+              <input mdbInputDirective type="text" class="form-control"
+                id="formFullName" formControlName="fullName"
+                [validateSuccess]="false"
+                [errorMessage]="fullNameError">
 
-            <div class="form-row">
-              <!-- First Name -->
-              <div class="col">
-                <div class="md-form form-sm mt-0">
-                  <i class="fa fa-user prefix" aria-hidden="true"></i>
-                  <input mdbInputDirective type="text" class="form-control"
-                    id="formFirstName" formControlName="firstName"
-                    [errorMessage]="firstNameError"
-                    [validateSuccess]="false" >
-
-                  <label for="formFirstName">First name</label>
-                </div>
-              </div>
-
-              <!-- Last Name -->
-              <div class="col">
-                <div class="md-form form-sm mt-0">
-                  <input mdbInputDirective type="text" class="form-control"
-                    id="formLastName" formControlName="lastName"
-                    [errorMessage]="lastNameError"
-                    [validateSuccess]="false">
-
-                  <label for="formLastName">Last name</label>
-                </div>
-              </div>
-
+              <label for="formFullName">Full name</label>
             </div>
 
             <!-- Email -->
             <div class="md-form form-sm mt-0">
-                <i class="fa fa-envelope prefix" aria-hidden="true"></i>
+              <i class="fa fa-envelope prefix" aria-hidden="true"></i>
               <input mdbInputDirective type="email" class="form-control"
                 id="formEmail" formControlName="email"
-                [validateSuccess]="false"
-                [errorMessage]="emailError">
+                [errorMessage]="emailError"
+                [validateSuccess]="false">
 
               <label for="formEmail">Email</label>
             </div>
 
             <!-- Password -->
-            <div class="md-form form-sm">
-                <i class="fa fa-lock prefix" aria-hidden="true"></i>
+            <div class="md-form form-sm mt-0">
+              <i class="fa fa-lock prefix" aria-hidden="true"></i>
               <input mdbInputDirective type="password" class="form-control"
                 id="formPassword" data-error="password must be at least 6 character"
                 [validateSuccess]="false" minlength="6" formControlName="password">
@@ -91,7 +116,7 @@
             <div class= "text-center font-small">
               <!-- Login -->
               <p>Already have an account?
-                <a routerLink="/auth/login" routerLinkActive="active">Sign in</a>
+                <a routerLink="/auth/sign-in" routerLinkActive="active">Sign in</a>
               </p>
             </div>
 

@@ -1,14 +1,13 @@
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 
 import { startWith, map } from 'rxjs/operators';
 
-import { SnotifyService } from 'ng-snotify';
-import { UserService, AuthService } from '../../services';
+import { AuthService, NotificationService } from '../../services';
 import { Config } from '../../infrastructure';
-import { User } from '../../models';
 import { Roles } from '../../helpers/enum-roles';
+import { User } from '../../models';
 
 @Component({
   selector: 'app-register',
@@ -18,20 +17,23 @@ import { Roles } from '../../helpers/enum-roles';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
+  sending = false;
   submitted = false;
-
-  regExName = Config.regex[0]; // pattern for names
-  firstNameError: string;
-  lastNameError: string;
+  email: string;
+  fullNameError: string;
   emailError: string;
+  phoneError: string;
   existEmail = false;
+
+  @ViewChild('frame') frame: ElementRef;
+  regExName = Config.regex[0]; // pattern for names
 
   constructor(
     private router: Router,
+    private render: Renderer2,
     private formBuilder: FormBuilder,
-    private readonly userService: UserService,
     private readonly authService: AuthService,
-    private readonly toast: SnotifyService
+    private readonly notificationService: NotificationService
   ) {
 
     // redirect to home if already logged in
@@ -42,11 +44,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      firstName: ['', Validators.compose([
-        Validators.required,
-        Validators.pattern(this.regExName)]
-      )],
-      lastName: ['', Validators.compose([
+      fullName: ['', Validators.compose([
         Validators.required,
         Validators.pattern(this.regExName)]
       )],
@@ -61,39 +59,22 @@ export class RegisterComponent implements OnInit {
       passwordConfirmation: ['', Validators.required]
     }, { validator: this.passwordMatchValidator });
 
-    // validate First Name
-    this.form.firstName.valueChanges.pipe(
+    // validate Full Name
+    this.form.fullName.valueChanges.pipe(
       startWith(''),
       map(() => {
         let error = '';
-        if (this.form.firstName.hasError('required')) {
-          error = 'first name is required';
+        if (this.form.fullName.hasError('required')) {
+          error = 'full name is required';
         }
 
-        if (this.form.firstName.hasError('pattern')) {
+        if (this.form.fullName.hasError('pattern')) {
           error = 'character not allowed';
         }
 
         return error;
       })
-    ).subscribe(error => this.firstNameError = error);
-
-    // validate Last Name
-    this.form.lastName.valueChanges.pipe(
-      startWith(''),
-      map(() => {
-        let error = '';
-        if (this.form.lastName.hasError('required')) {
-          error = 'last name is required';
-        }
-
-        if (this.form.lastName.hasError('pattern')) {
-          error = 'character not allowed';
-        }
-
-        return error;
-      })
-    ).subscribe(error => this.lastNameError = error);
+    ).subscribe(error => this.fullNameError = error);
 
     // validate email
     this.form.email.valueChanges.pipe(
@@ -125,66 +106,54 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     // Mark the control as dirty
     if (this.registerForm.invalid) {
-      this.form.firstName.markAsDirty();
-      this.form.lastName.markAsDirty();
+      this.form.fullName.markAsDirty();
       this.form.email.markAsDirty();
       this.form.password.markAsDirty();
       this.form.passwordConfirmation.markAsDirty();
 
       if (this.registerForm.hasError('passwordMismatch')) {
-        this.showErrorMessage(
-          'Passwords do not match', 'Validation error', 1500);
+        this.notificationService.ErrorMessage('Passwords do not match', '', 2000);
       }
 
       this.loading = false;
       return;
     }
 
-    this.userService.isEmailTaken(this.form.email.value).subscribe(exist => {
-      // if not exist exist email, create account
-      if (!exist) {
-        const user: User = {
-          firstName: this.form.firstName.value,
-          lastName: this.form.lastName.value,
-          email: this.form.email.value,
-          password: this.form.password.value,
-          roles: [Roles.Provider],
-          emailVerified: false,
-          token: ''
-        };
+    this.authService.SignUp({
+      displayName: this.form.fullName.value,
+      email: this.form.email.value,
+      password: this.form.password.value,
+      roles: [Roles.Provider]
+    }).then(user => {
+      this.loading = false;
 
-        this.userService.createAccount(user).then(() => {
-          this.showSuccessMessage('user created', '', 1500);
-          this.router.navigate(['/auth/login']);
-        }).catch(error => {
-          this.showErrorMessage(error, '', 1500);
-        });
-      } else {
-        this.showErrorMessage('Email already in use.', '', 1500);
-        this.loading = false;
-
-        return;
+      if (user) {
+        this.email = (user as User).email;
+        this.showModal();
       }
     });
   }
 
-  showSuccessMessage(message: string, title: string, time: number) {
-    this.toast.success(message, title, {
-      backdrop: 0.2,
-      closeOnClick: true,
-      pauseOnHover: true,
-      showProgressBar: false,
-      timeout: time
+  sendVerificationMail() {
+    this.sending = true;
+    this.authService.SendVerificationMail().then(() => {
+      this.sending = false;
+      this.notificationService.SuccessMessage(
+        `Verification email sent to ${this.email}`, '', 2500);
+    })
+    .catch(error => {
+      this.notificationService.ErrorMessage(error.message, '', 2500);
     });
   }
 
-  showErrorMessage(message: string, title: string, time: number) {
-    this.toast.error(message, title, {
-      backdrop: 0.2,
-      closeOnClick: true,
-      pauseOnHover: true,
-      showProgressBar: false,
-      timeout: time
-    });
+  showModal() {
+    const modal = this.render.selectRootElement(this.frame);
+    modal.show();
+  }
+
+  hideModal() {
+    const modal = this.render.selectRootElement(this.frame);
+    modal.hide();
+    this.router.navigate(['/auth/sign-in']);
   }
 }

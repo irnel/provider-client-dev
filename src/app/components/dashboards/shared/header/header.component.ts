@@ -1,9 +1,10 @@
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, NgZone } from '@angular/core';
+import { SnotifyService } from 'ng-snotify';
 
 import { AuthService } from './../../../../services';
 import { User } from './../../../../models';
+
 
 @Component({
   selector: 'app-header',
@@ -16,12 +17,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private readonly authService: AuthService
+    private ngZone: NgZone,
+    private readonly authService: AuthService,
+    private readonly toast: SnotifyService
   ) {
 
-    this.authService.currentUser.subscribe(user => {
-      this.currentUser = user;
-    });
+    this.currentUser = this.authService.currentUserValue;
    }
 
   ngOnInit() {
@@ -30,9 +31,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  public logOut() {
-    this.authService.logout();
-    this.router.navigate(['/auth/login']);
+  public SignOut() {
+    this.authService.SignOut().then(() => {
+      this.ngZone.run(() => {
+        this.router.navigate(['auth/sign-in']);
+      });
+    })
+    .catch(error => {
+      this.toast.error(error.message, '', {
+        backdrop: 0.2,
+        closeOnClick: true,
+        pauseOnHover: true,
+        showProgressBar: false,
+        timeout: 2500
+      });
+    });
   }
 
   public onToggleSideNav = () => {

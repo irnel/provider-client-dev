@@ -37,7 +37,7 @@
       <!-- My Account -->
       <li class="nav-item dropdown btn-group" dropdown>
         <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-          <i class="fa fa-user mr-1" aria-hidden="true"></i>{{currentUser.firstName}}
+          <i class="fa fa-user mr-1" aria-hidden="true"></i>{{currentUser.email}}
         </a>
 
         <div class="dropdown-menu dropdown-primary dropdown-menu-right" role="menu">
@@ -48,7 +48,7 @@
           </a>
 
           <!-- Menu item Log out  -->
-          <a class="dropdown-item" (click)="logOut()">
+          <a class="dropdown-item" (click)="SignOut()">
             <i class="fa fa-sign-out mr-2" aria-hidden="true"></i>Log out
           </a>
 
