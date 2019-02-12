@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService, NotificationService } from '../../services';
 import { Roles } from './../../helpers/enum-roles';
+import { FirebaseCode } from '../../helpers/firebase-code';
 
 @Component({
   selector: 'app-login',
@@ -128,7 +129,19 @@ export class LoginComponent implements OnInit {
         });
       })
       .catch(error => {
-        this.notificationService.ErrorMessage(error.message, '', 2000);
+        let msg: string;
+        this.loading = false;
+        this.clicked = false;
+
+        if (error.code === FirebaseCode.USER_NOT_FOUND ||
+            error.code === FirebaseCode.WRONG_PASSWORD) {
+
+          msg = 'Invalid username and password.';
+        } else {
+          msg = error.message;
+        }
+
+        this.notificationService.ErrorMessage(msg, '', 2500);
       });
   }
 
@@ -151,16 +164,16 @@ export class LoginComponent implements OnInit {
 
   forgotPassword() {
     if (this.resetPasswordForm.invalid) {
-      this.resetPasswordForm.controls.resetEmail.markAsDirty();
+      this.formReset.resetEmail.markAsDirty();
 
       return;
     }
 
     this.sending = true;
-    const email = this.resetPasswordForm.controls.resetEmail.value;
+    const email = this.formReset.resetEmail.value;
     this.authService.ForgotPassword(email).then(() => {
       this.sending = false;
-      this.render.selectRootElement(this.frame).hide();
+      this.hideModal();
 
       this.notificationService.SuccessMessage(
         `forgot password sent email to ${email}`, '', 2500);
@@ -168,5 +181,18 @@ export class LoginComponent implements OnInit {
     .catch(error => {
        this.notificationService.ErrorMessage(error.message, '', 2500);
     });
+  }
+
+  showModal() {
+    this.formReset.resetEmail.reset('');
+
+    const modal = this.render.selectRootElement(this.frame);
+    modal.show();
+
+  }
+
+  hideModal() {
+    const modal = this.render.selectRootElement(this.frame);
+    modal.hide();
   }
 }

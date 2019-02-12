@@ -11,7 +11,7 @@
         <h3 class="heading">Forgot Password</h3>
 
         <button type="button" [disabled]="sending" class="close" data-dismiss="modal"
-            aria-label="Close" (click)="frame.hide()">
+            aria-label="Close" (click)="hideModal()">
 
           <span aria-hidden="true" class="white-text">×</span>
         </button>
@@ -94,7 +94,7 @@
             <div class="d-flex justify-content-around font-small">
               <div>
                 <!-- Forgot password -->
-                <a (click)="frame.show()" routerLinkActive="active" class="text-primary">
+                <a (click)="showModal()" routerLinkActive="active" class="text-primary">
                   Forgot password?
                 </a>
               </div>

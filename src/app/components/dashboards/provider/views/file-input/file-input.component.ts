@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
 import { FileInfo } from '../../../../../helpers';
 
 @Component({
@@ -9,6 +9,7 @@ import { FileInfo } from '../../../../../helpers';
 export class FileInputComponent implements OnInit {
   @Output() public filesInfo = new EventEmitter<FileInfo []>();
   @ViewChild('alert') alert: ElementRef;
+
   selectedFiles: FileInfo [] = [];
   showError = false;
   fileName = '';
@@ -45,7 +46,7 @@ export class FileInputComponent implements OnInit {
       }
 
       // validate image extension
-      if (!this.isImageExtension(file.name)) {
+      if (!this.isValidExtension(file.type)) {
         this.showError = true;
         this.extensionError = true;
         this.fileName = file.name;
@@ -66,9 +67,9 @@ export class FileInputComponent implements OnInit {
         const index = this.selectedFiles.findIndex(f => f.file.name === file.name);
         if (index === -1) {
           const fileInfo = new FileInfo(eventProgress.target.result, file);
-          fileInfo.pending = true;
           this.selectedFiles.push(fileInfo);
         }
+
       });
 
       reader.readAsDataURL(file);
@@ -83,6 +84,7 @@ export class FileInputComponent implements OnInit {
     this.selectedFiles.forEach(fileInfo => {
       if (fileInfo.markAsPrincipal) {
         fileInfo.markAsPrincipal = false;
+
         return;
       }
     });
@@ -106,10 +108,8 @@ export class FileInputComponent implements OnInit {
   }
 
   // valid image extension "jpg", "jpeg", "gif", "png"
-  isImageExtension(fileName: string) {
-    const regex = new RegExp('(.*?)\.(jpg|jpeg|gif|png)$');
-
-    return regex.test(fileName);
+  isValidExtension(type: string) {
+    return type.split('/')[0] === 'image';
   }
 
   // file size > 2048 kb

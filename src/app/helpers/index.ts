@@ -6,6 +6,7 @@ export * from './key-values';
 export * from './file-info';
 export * from './enum-roles';
 export * from './converter';
+export * from './data-transfer';
 
 export * from './provider';
 export * from './category';

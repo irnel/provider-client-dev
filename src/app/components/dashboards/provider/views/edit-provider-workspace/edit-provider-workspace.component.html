@@ -63,11 +63,8 @@
         </agm-map>
       </div>
 
-      <!-- File input component -->
-      <app-file-input (filesInfo)="onSelectedFiles($event)"></app-file-input>
-
       <!-- Description -->
-      <div class="md-form form-sm mt-4">
+      <div class="md-form form-sm mt-5">
         <textarea class="md-textarea md-textarea-auto form-control"
             id="formDescription" formControlName="description"
             type="text" [validateSuccess]="false"
@@ -76,8 +73,29 @@
         <label for="formDescription">Description</label>
       </div>
 
+      <!-- File input component -->
+      <app-file-input (filesInfo)="onSelectedFiles($event)"></app-file-input>
+
+      <!-- Upload progress -->
+      <div *ngIf="progress.percentage > 0" class="text-center mb-1">
+        <small>Uploading images: {{progress.percentage}}%</small>
+      </div>
+      <div *ngIf="progress.percentage > 0"  class="progress">
+        <div class="progress-bar"
+            role="progressbar"
+            [style.width]="(progress.percentage + '%')"
+            aria-valuenow="{{progress.percentage}}"
+            aria-valuemin="0"
+            aria-valuemax="100">
+
+        </div>
+      </div>
+
+      <hr>
+
       <div class="float-right">
         <button mdbBtn
+            [disabled]="loading"
             color="primary"
             class="relative waves-light right" mdbWavesEffect
             (click)="editProvider()">

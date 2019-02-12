@@ -7,12 +7,14 @@ import { Component, OnInit, ElementRef, ViewChild, NgZone, Inject } from '@angul
 
 import { startWith, map } from 'rxjs/operators';
 import { MapsAPILoader } from '@agm/core';
-import { SnotifyService } from 'ng-snotify';
 import { PageScrollService, PageScrollInstance } from 'ngx-page-scroll';
 
+import { ProviderService, AuthService, NotificationService, FileService } from './../../../../../services';
 import { Config } from '../../../../../infrastructure';
-import { FileInfo } from '../../../../../helpers';
+import { FileInfo, DataTransfer } from '../../../../../helpers';
 import { Address, Provider } from '../../../../../models';
+import { Observable } from 'rxjs';
+import { ImageInfo } from '../../../../../models/image-info';
 
 @Component({
   selector: 'app-edit-provider-workspace',
@@ -32,12 +34,16 @@ export class EditProviderWorkspaceComponent implements OnInit {
   test: string;
 
   selectedFiles: FileInfo [] = [];
+  progress: { percentage: number } = { percentage: 0 };
+  totalFileSize: number;
   regEx: string = Config.regex[0];
   regEx1: string = Config.regex[1];
   msg: string;
   nameError: string;
   addressError: string;
   mode: string;
+  loading = false;
+  cant = 0;
 
   constructor(
     private router: Router,
@@ -45,10 +51,14 @@ export class EditProviderWorkspaceComponent implements OnInit {
     private ngZone: NgZone,
     private formBuilder: FormBuilder,
     private readonly mapsAPILoader: MapsAPILoader,
-    private readonly toast: SnotifyService,
+    private readonly authService: AuthService,
+    private readonly providerService: ProviderService,
+    private readonly fileService: FileService,
+    private readonly notificationService: NotificationService,
     private readonly pageScrollService: PageScrollService,
-    @Inject(DOCUMENT) private document: any
+    @Inject(DOCUMENT) private document: Document
   ) {
+
     this.route.data.subscribe(data => {
       this.mode = data.mode;
 
@@ -74,7 +84,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
         Validators.required,
         Validators.pattern(this.regEx)]
       )],
-      description: ['', Validators.pattern(this.regEx1)]
+      description: ['', Validators.nullValidator]
     });
 
     // validate name
@@ -176,11 +186,12 @@ export class EditProviderWorkspaceComponent implements OnInit {
     this.redirectToProviderWorkspace();
   }
 
-  MarkAsDirty() {
+  editProvider() {
+    // Mark the control as dirty
     if (this.editForm.invalid) {
       this.form.name.markAsDirty();
       this.form.address.markAsDirty();
-
+      this.loading = false;
       // scroll behavior
       if (this.form.name.errors || this.form.address.errors) {
         this.goToTop();
@@ -191,51 +202,55 @@ export class EditProviderWorkspaceComponent implements OnInit {
 
     // validate address
     if (this.address.formattedAddress === '' && this.form.address.value !== '') {
-      this.showErrorMessage(
-        'Validation error',
-        'select a valid address from the list.',
-        2500
-      );
+      this.notificationService.ErrorMessage(
+        'select a valid address from the list.', '', 2500);
 
       this.goToTop();
-
       return;
     }
-  }
 
-  editProvider() {
-    // Mark the control as dirty
-    this.MarkAsDirty();
+    this.loading = true;
 
     // create
     if (!this.edit) {
       this.msg = 'New provider created';
 
+      this.currentProvider = {
+        name:  this.form.name.value,
+        address: this.address,
+        description: this.form.description.value,
+        userId: this.authService.currentUserValue.uid,
+        url: ''
+      };
+
+      this.providerService.create(this.currentProvider).then(provider => {
+        // upload files
+        if (this.selectedFiles.length > 0) {
+          // this.selectedFiles.forEach(fileInfo => {
+          //   fileInfo.modelId = provider.id;
+          //   fileInfo.type = 'providers';
+
+          //   this.fileService.upload(fileInfo, this.progress, cant);
+          // });
+          Promise.all(
+            this.selectedFiles.map(async (fileInfo) => {
+              fileInfo.modelId = provider.id;
+              fileInfo.type = fileInfo.type = 'providers';
+
+              await this.fileService.upload(fileInfo, this.progress, this.cant);
+            })
+          );
+        }
+      })
+      .catch(error => {
+        this.loading = false;
+        this.notificationService.ErrorMessage(error.message, '', 2500);
+      });
+
     } else {
       this.msg = 'Provider edited';
 
     }
-
-    this.showSuccessMessage(this.msg, 2000);
-    this.redirectToProviderWorkspace();
-  }
-
-  showSuccessMessage(body: string, timeOut: number) {
-    this.toast.success(body, '', {
-      timeout: timeOut,
-      showProgressBar: false,
-
-    });
-  }
-
-  showErrorMessage(title: string, body: string, timeOut: number) {
-    this.toast.error(body, title, {
-      timeout: timeOut,
-      backdrop: 0.2,
-      showProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true
-    });
   }
 
   // scroll behavior
@@ -248,4 +263,5 @@ export class EditProviderWorkspaceComponent implements OnInit {
   onSelectedFiles(files: FileInfo []) {
     this.selectedFiles = files;
   }
+
 }

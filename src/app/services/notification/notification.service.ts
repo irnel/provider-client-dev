@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SnotifyService } from 'ng-snotify';
+import { FirebaseError } from 'firebase';
+import { FirebaseCode } from 'src/app/helpers/firebase-code';
 
 @Injectable({
   providedIn: 'root'

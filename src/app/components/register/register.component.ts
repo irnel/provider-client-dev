@@ -8,6 +8,7 @@ import { AuthService, NotificationService } from '../../services';
 import { Config } from '../../infrastructure';
 import { Roles } from '../../helpers/enum-roles';
 import { User } from '../../models';
+import { FirebaseCode } from '../../helpers/firebase-code';
 
 @Component({
   selector: 'app-register',
@@ -126,11 +127,20 @@ export class RegisterComponent implements OnInit {
       roles: [Roles.Provider]
     }).then(user => {
       this.loading = false;
+      this.email = user.email;
 
-      if (user) {
-        this.email = (user as User).email;
-        this.showModal();
+      this.showModal();
+    }).catch(error => {
+      let msg: string;
+      this.loading = false;
+
+      if (error.code === FirebaseCode.EMAIL_ALREADY_IN_USE) {
+        msg = 'The email address is already in use by another account.';
+      } else {
+        msg = error.message;
       }
+
+      this.notificationService.ErrorMessage(msg, '', 2500);
     });
   }
 

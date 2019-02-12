@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
 import { SnotifyService } from 'ng-snotify';
-import { auth } from 'firebase';
+import { auth, firestore } from 'firebase';
 
 import { User } from '../../models';
 import { Converter } from '../../helpers/converter';
 import { Roles } from './../../helpers/enum-roles';
-
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,7 @@ export class AuthService {
     private readonly afAuth: AngularFireAuth,
     private readonly afs: AngularFirestore,
     private readonly toast: SnotifyService,
+    private readonly notificationService: NotificationService,
     private router: Router
   ) {
 
@@ -64,8 +65,6 @@ export class AuthService {
 
         this.SetUserData(user);
         return user;
-      }).catch(error => {
-        this.showErrorMessage(error.message, '', 2500);
       });
   }
 
@@ -75,9 +74,11 @@ export class AuthService {
       .then(credential => {
         const user = Converter.ToUser(credential.user);
         this.currentUserSubject.next(user);
+
+        return user;
       })
       .catch(error => {
-        this.showErrorMessage(error.message, '', 2500);
+        this.notificationService.ErrorMessage(error.message, '', 2500);
       });
   }
 

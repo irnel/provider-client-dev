@@ -1,12 +1,10 @@
-import { Address, ImageInfo } from './index';
+import { Address } from './index';
 
-export class Provider {
-  constructor(
-    public name: string,
-    public description: string,
-    public address: Address,
-    public url?: string,
-    public userId?: string,
-    public id?: string
-  ) {}
+export interface Provider {
+  name: string;
+  address: Address;
+  description?: string;
+  url?: string;
+  userId?: string;
+  id?: string;
 }
