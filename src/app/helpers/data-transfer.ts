@@ -1,5 +1,5 @@
+import { Observable } from 'rxjs';
 export interface DataTransfer {
-  progress: { percentage: number };
-  uploadedFiles: number;
-  totalSize: number;
+  name: string;
+  percentage: Observable<number>;
 }
