@@ -11,11 +11,14 @@ import { Observable } from 'rxjs';
 import { FileInfo, DataTransfer } from '../../helpers';
 import { ImageInfo } from './../../models';
 import * as firebase from 'firebase';
+import { finalize } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
+  downloadUrl: Observable<string>;
+
   storageRef: AngularFireStorageReference;
   uploadTask: AngularFireUploadTask;
 
@@ -25,7 +28,7 @@ export class FileService {
     private readonly notification: NotificationService
     ) { }
 
-  upload(fileInfo: FileInfo, progress: { percentage: number }, cant: number) {
+  upload(fileInfo: FileInfo, progress: { percentage: number }) {
     const basePath = `${fileInfo.type}/${fileInfo.createdAt.getTime()}_${fileInfo.file.name}`;
     this.storageRef = this.storage.ref(basePath);
     this.uploadTask = this.storage.upload(
@@ -36,37 +39,37 @@ export class FileService {
         // in progress
         const snap = snapshot as firebase.storage.UploadTaskSnapshot;
         progress.percentage  = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
-        console.log(progress.percentage);
-        if (snap.bytesTransferred === snap.totalBytes) {
-          cant++;
-          console.log(cant);
-        }
       },
       (error) => {
         // fail upload
-        console.log(error);
         this.notification.ErrorMessage(error.message, '', 2500);
       },
       () => {
         // complete upload
-        this.uploadTask.task.snapshot.ref.getDownloadURL().then(downloadUrl => {
-          fileInfo.url = downloadUrl;
+        this.uploadTask.snapshotChanges().pipe(
+          finalize(() => {
+            this.downloadUrl = this.storageRef.getDownloadURL();
+            this.downloadUrl.subscribe(imageUrl => {
+              const imageInfo: ImageInfo = {
+                name: fileInfo.name,
+                size: fileInfo.size,
+                type: fileInfo.type,
+                modelType: fileInfo.modelType,
+                modelId: fileInfo.modelId,
+                url: imageUrl,
+                createdAt: fileInfo.createdAt,
+                markAsPrincipal: fileInfo.markAsPrincipal
+              };
 
-          const imageInfo: ImageInfo = {
-            createdAt: fileInfo.createdAt,
-            markAsPrincipal: fileInfo.markAsPrincipal,
-            modelId: fileInfo.modelId,
-            type: fileInfo.type,
-            url: fileInfo.url
-          };
-
-          this.addImageInfo(imageInfo);
-        });
+              this.addImageInfo(imageInfo);
+            });
+          })
+        ).subscribe();
       });
   }
 
   // add document to images collection
   addImageInfo(imageInfo: ImageInfo) {
-    this.firestore.collection('filesinfo').add(imageInfo);
+    this.firestore.collection<ImageInfo>('filesinfo').add(imageInfo);
   }
 }

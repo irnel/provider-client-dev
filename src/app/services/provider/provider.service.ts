@@ -14,16 +14,16 @@ export class ProviderService {
   currentProvider: Observable<Provider>;
 
   constructor(
-    private readonly firestore: AngularFirestore,
+    private readonly af: AngularFirestore,
     private readonly notificationService: NotificationService
   ) {
 
-    this.providerCollection = this.firestore.collection('providers');
+    this.providerCollection = this.af.collection<Provider>('providers');
   }
 
-  create(provider: Provider) {
-    return this.providerCollection.add(provider).then(docRef => {
-      return docRef.get().then(snapshot => {
+  async create(provider: Provider) {
+    return await this.providerCollection.add(provider).then(async docRef => {
+      return await docRef.get().then(async snapshot => {
         const providerDoc = snapshot.data() as Provider;
         providerDoc.id = snapshot.id;
 
@@ -33,7 +33,7 @@ export class ProviderService {
   }
 
   update(provider: Provider) {
-    this.providerCollection.doc(
-      `providers/${provider.id}`).update(provider);
+    this.providerDocument = this.af.doc<Provider>(`providers/${provider.id}`);
+    this.providerDocument.set(provider);
   }
 }
