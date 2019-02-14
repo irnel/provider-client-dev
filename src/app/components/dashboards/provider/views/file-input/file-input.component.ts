@@ -70,41 +70,32 @@ export class FileInputComponent implements OnInit {
           this.selectedFiles.push(fileInfo);
         }
 
+        // event send fileInfo data
+        this.filesInfo.emit(this.selectedFiles);
       });
 
       reader.readAsDataURL(file);
     }
+  }
+
+  markAsPrincipal(image: FileInfo) {
+    // find image marked as principal
+    this.selectedFiles.map(f => f.markAsPrincipal = false);
+
+    // mark as principal new image
+    const index = this.selectedFiles.findIndex(f => f.file.name === image.file.name);
+    this.selectedFiles[index].markAsPrincipal = true;
 
     // event send fileInfo data
     this.filesInfo.emit(this.selectedFiles);
   }
 
-  markAsPrincipal(image: FileInfo) {
-    // find image marked as principal
-    this.selectedFiles.forEach(fileInfo => {
-      if (fileInfo.markAsPrincipal) {
-        fileInfo.markAsPrincipal = false;
-
-        return;
-      }
-    });
-
-    // mark as principal new image
-    const fileInfoNew = this.selectedFiles.find(f => f.file.name === image.file.name);
-    fileInfoNew.markAsPrincipal = true;
-  }
-
   removeImage(image: FileInfo) {
     const index = this.selectedFiles.findIndex(f => f.file.name === image.file.name);
-    const fileInfoRemoved = this.selectedFiles.splice(index, 1)[0];
+    this.selectedFiles.splice(index, 1);
 
-    // select default element as principal
-    // if the deleted item was marked as principal
-    if (this.selectedFiles.length > 0 && fileInfoRemoved.markAsPrincipal) {
-      index > 0
-      ? this.selectedFiles[index - 1].markAsPrincipal = true
-      : this.selectedFiles[index].markAsPrincipal = true;
-    }
+    // event send fileInfo data
+    this.filesInfo.emit(this.selectedFiles);
   }
 
   // valid image extension "jpg", "jpeg", "gif", "png"

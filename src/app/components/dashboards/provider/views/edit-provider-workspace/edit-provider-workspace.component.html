@@ -77,17 +77,19 @@
       <app-file-input (filesInfo)="onSelectedFiles($event)"></app-file-input>
 
       <!-- Upload progress -->
-      <div *ngIf="progress.percentage > 0" class="text-center mb-1">
-        <small>Uploading images: {{progress.percentage}}%</small>
+      <div *ngFor="let upload of uploads">
+        <small>Upload of {{upload.name}}: {{upload.percentage | async}}%</small>
       </div>
-      <div *ngIf="progress.percentage > 0"  class="progress">
+      <div *ngIf="allPercentage | async" class="mt-2">
+        <small>Total progress: {{allPercentage | async}}%</small>
+      </div>
+      <div *ngIf="allPercentage | async as total"  class="progress">
         <div class="progress-bar"
             role="progressbar"
-            [style.width]="(progress.percentage + '%')"
-            aria-valuenow="{{progress.percentage}}"
+            [style.width]="(total + '%')"
+            aria-valuenow="{{total}}"
             aria-valuemin="0"
             aria-valuemax="100">
-
         </div>
       </div>
 
@@ -100,15 +102,16 @@
             class="relative waves-light right" mdbWavesEffect
             (click)="editProvider()">
 
-
           <!-- Create Mode -->
           <div *ngIf="!edit" >
-            <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Create
+            <i *ngIf="!loading" class="fa fa-plus left mr-2" aria-hidden="true"></i>Create
+            <i *ngIf="loading" class="fa fa-spinner fa-pulse ml-2" aria-hidden="true"></i>
           </div>
 
           <!-- Edit Mode -->
           <div *ngIf="edit">
-            <i class="fa fa-floppy-o left mr-2" aria-hidden="true"></i>Save
+            <i *ngIf="!loading" class="fa fa-floppy-o left mr-2" aria-hidden="true"></i>Save
+            <i *ngIf="loading" class="fa fa-spinner fa-pulse ml-2" aria-hidden="true"></i>
           </div>
         </button>
 

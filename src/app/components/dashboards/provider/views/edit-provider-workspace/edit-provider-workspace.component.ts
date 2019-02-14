@@ -1,3 +1,4 @@
+
 /// <reference types="@types/googlemaps" />
 
 import { DOCUMENT } from '@angular/common';
@@ -5,16 +6,19 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, ElementRef, ViewChild, NgZone, Inject } from '@angular/core';
 
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, tap } from 'rxjs/operators';
 import { MapsAPILoader } from '@agm/core';
 import { PageScrollService, PageScrollInstance } from 'ngx-page-scroll';
 
 import { ProviderService, AuthService, NotificationService, FileService } from './../../../../../services';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Config } from '../../../../../infrastructure';
 import { FileInfo, DataTransfer } from '../../../../../helpers';
 import { Address, Provider } from '../../../../../models';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { ImageInfo } from '../../../../../models/image-info';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-edit-provider-workspace',
@@ -25,6 +29,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
   editForm: FormGroup;
   public zoom: number;
   public currentProvider: Provider;
+  private currentFileInfo: FileInfo;
   public address: Address;
 
   // HTML values
@@ -34,8 +39,9 @@ export class EditProviderWorkspaceComponent implements OnInit {
   test: string;
 
   selectedFiles: FileInfo [] = [];
-  progress: { percentage: number } = { percentage: 0 };
-  totalFileSize: number;
+  uploads: DataTransfer [] = [];
+  allPercentage: Observable<number>;
+  progressWidth: number;
   regEx: string = Config.regex[0];
   regEx1: string = Config.regex[1];
   msg: string;
@@ -43,7 +49,6 @@ export class EditProviderWorkspaceComponent implements OnInit {
   addressError: string;
   mode: string;
   loading = false;
-  cant = 0;
 
   constructor(
     private router: Router,
@@ -53,6 +58,8 @@ export class EditProviderWorkspaceComponent implements OnInit {
     private readonly mapsAPILoader: MapsAPILoader,
     private readonly authService: AuthService,
     private readonly providerService: ProviderService,
+    private readonly afs: AngularFirestore,
+    private readonly storage: AngularFireStorage,
     private readonly fileService: FileService,
     private readonly notificationService: NotificationService,
     private readonly pageScrollService: PageScrollService,
@@ -169,24 +176,31 @@ export class EditProviderWorkspaceComponent implements OnInit {
         this.address.lat = position.coords.latitude;
         this.address.lng = position.coords.longitude;
         this.zoom = 8;
-
       });
     }
   }
 
   redirectToHome() {
-    this.router.navigate(['provider-dashboard/workspace/home']);
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
   }
 
   redirectToProviderWorkspace() {
-    this.router.navigate(['/provider-dashboard/workspace/providers']);
+    this.ngZone.run(() => {
+      this.router.navigate(['/provider-dashboard/workspace/providers']);
+    });
+
+    this.notificationService.SuccessMessage('provider created', '', 2500);
   }
 
   cancel() {
-    this.redirectToProviderWorkspace();
+    this.ngZone.run(() => {
+      this.router.navigate(['/provider-dashboard/workspace/providers']);
+    });
   }
 
-  editProvider() {
+  async editProvider() {
     // Mark the control as dirty
     if (this.editForm.invalid) {
       this.form.name.markAsDirty();
@@ -214,8 +228,9 @@ export class EditProviderWorkspaceComponent implements OnInit {
     // create
     if (!this.edit) {
       this.msg = 'New provider created';
+      const totalPercentage: Observable<number>[] = [];
 
-      this.currentProvider = {
+      const data: Provider = {
         name:  this.form.name.value,
         address: this.address,
         description: this.form.description.value,
@@ -223,29 +238,75 @@ export class EditProviderWorkspaceComponent implements OnInit {
         url: ''
       };
 
-      this.providerService.create(this.currentProvider).then(provider => {
-        // upload files
-        if (this.selectedFiles.length > 0) {
-          // this.selectedFiles.forEach(fileInfo => {
-          //   fileInfo.modelId = provider.id;
-          //   fileInfo.type = 'providers';
+      // create provider
+      await this.providerService.create(data).then(
+        async (provider) => {
+          this.currentProvider = provider;
+        })
+        .catch(error => {
+          this.notificationService.ErrorMessage(error.message, '', 2500);
+          this.loading = false;
+          return;
+        });
 
-          //   this.fileService.upload(fileInfo, this.progress, cant);
-          // });
-          Promise.all(
-            this.selectedFiles.map(async (fileInfo) => {
-              fileInfo.modelId = provider.id;
-              fileInfo.type = fileInfo.type = 'providers';
+      // redirect to provider workspace if not upload images
+      if (this.selectedFiles.length === 0) {
+        this.redirectToProviderWorkspace();
+      }
 
-              await this.fileService.upload(fileInfo, this.progress, this.cant);
-            })
-          );
-        }
-      })
-      .catch(error => {
-        this.loading = false;
-        this.notificationService.ErrorMessage(error.message, '', 2500);
-      });
+      for (const fileInfo of this.selectedFiles) {
+        fileInfo.modelId = this.currentProvider.id;
+        fileInfo.modelType = 'providers';
+
+        // reference to storage
+        const basePath = `${fileInfo.modelType}/${fileInfo.createdAt.getTime()}_${fileInfo.name}`;
+        const uploadTask = this.storage.upload(
+          basePath, fileInfo.file, {contentType: fileInfo.type});
+
+        const percentage$ = uploadTask.percentageChanges();
+        totalPercentage.push(percentage$);
+
+        // push each upload into array
+        this.uploads.push({
+          name: fileInfo.name,
+          percentage: percentage$
+         });
+
+         uploadTask.then(snapshot => {
+           return snapshot.ref.getDownloadURL().then(url => {
+             return this.afs.collection('filesinfo').add({
+              name: fileInfo.name,
+              size: fileInfo.size,
+              type: fileInfo.type,
+              modelType: fileInfo.modelType,
+              modelId: fileInfo.modelId,
+              url: url,
+              createdAt: fileInfo.createdAt,
+              markAsPrincipal: fileInfo.markAsPrincipal
+             }).then(() => {
+               if (fileInfo.markAsPrincipal) {
+                 this.currentProvider.url = url;
+                 this.providerService.update(this.currentProvider);
+               }
+             });
+           })
+           .catch(error => {
+             this.loading = false;
+             this.notificationService.ErrorMessage(error.message, '', 2500);
+           });
+         });
+      }
+
+      this.allPercentage = combineLatest(totalPercentage).pipe(
+        map(percentages => {
+          let result = 0;
+          for (const percentage of percentages) {
+            result = result + percentage;
+          }
+
+          return Math.round(result / percentages.length);
+        })
+      );
 
     } else {
       this.msg = 'Provider edited';
@@ -261,7 +322,12 @@ export class EditProviderWorkspaceComponent implements OnInit {
 
   // receive files from file-input-component
   onSelectedFiles(files: FileInfo []) {
+    // mark as principal first element
+    const index = files.findIndex(f => f.markAsPrincipal);
+    if (files.length > 0 && index === -1) {
+      files[0].markAsPrincipal = true;
+    }
+
     this.selectedFiles = files;
   }
-
 }
