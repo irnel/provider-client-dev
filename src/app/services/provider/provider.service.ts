@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
@@ -11,14 +12,43 @@ import { NotificationService } from '../notification/notification.service';
 export class ProviderService {
   providerCollection: AngularFirestoreCollection<Provider>;
   providerDocument: AngularFirestoreDocument<Provider>;
-  currentProvider: Observable<Provider>;
+  providers: Observable<Provider[]>;
+  provider: Observable<Provider>;
 
   constructor(
-    private readonly af: AngularFirestore,
+    private readonly afs: AngularFirestore,
     private readonly notificationService: NotificationService
   ) {
 
-    this.providerCollection = this.af.collection<Provider>('providers');
+    this.providerCollection = this.afs.collection('providers');
+  }
+
+  getAllProviderByUserId(userId) {
+    const collection = this.afs.collection(
+      'providers', query => query.where('userId', '==', userId));
+
+    return collection.snapshotChanges().pipe(
+      map(actions => actions.map(
+        action => {
+          const provider = action.payload.doc.data() as Provider;
+          provider.id = action.payload.doc.id;
+
+          return provider;
+        })
+      )
+    );
+  }
+
+  getProviderById(providerId) {
+    return this.providerCollection.doc(providerId).snapshotChanges()
+      .pipe(
+        map(snapshot => {
+          const provider = snapshot.payload.data() as Provider;
+          provider.id = snapshot.payload.id;
+
+          return provider;
+        })
+      );
   }
 
   async create(provider: Provider) {
@@ -33,7 +63,11 @@ export class ProviderService {
   }
 
   update(provider: Provider) {
-    this.providerDocument = this.af.doc<Provider>(`providers/${provider.id}`);
+    this.providerDocument = this.providerCollection.doc(provider.id);
     this.providerDocument.set(provider);
+  }
+
+  delete(id) {
+    return this.providerCollection.doc(id).delete();
   }
 }

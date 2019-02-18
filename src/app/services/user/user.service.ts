@@ -14,8 +14,8 @@ export class UserService {
   users: Observable<User[]>;
   userModel: User;
 
-  constructor(private readonly firestore: AngularFirestore) {
-    this.usersCollection = this.firestore.collection('users');
+  constructor(private readonly af: AngularFirestore) {
+    this.usersCollection = this.af.collection('users');
   }
 
   // return all documents with metadata
@@ -34,13 +34,13 @@ export class UserService {
 
 
   getUserById(uid) {
-    this.userDocument = this.firestore.doc(`users/${uid}`);
+    this.userDocument = this.af.doc(`users/${uid}`);
 
     return this.userDocument;
   }
 
   getUserByEmail(email: string) {
-    const collection = this.firestore.collection(
+    const collection = this.af.collection(
       'users', query => query.where('email', '==', email).limit(1));
 
     return collection.get().pipe(
@@ -61,7 +61,7 @@ export class UserService {
   }
 
   getUserWithEmailAndPassword(email: string, password: string) {
-    const collection = this.firestore.collection('users', query =>
+    const collection = this.af.collection('users', query =>
       query.where('email', '==', email)
            .where('password', '==', password)
            .limit(1));
