@@ -1,10 +1,6 @@
-export class Address {
-
-  constructor(
-    public formattedAddress: string,
-    public lat: number,
-    public lng: number,
-    public number?: string
-  ) {}
-
+export interface Address {
+  formattedAddress: string;
+  lat: number;
+  lng: number;
+  number?: string;
 }
