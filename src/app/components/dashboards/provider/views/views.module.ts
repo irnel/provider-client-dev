@@ -7,6 +7,7 @@ import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/cor
 
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MaterialModule } from './../../../material/material.module';
+import { SharedModule } from '../../shared/shared.module';
 import { AgmCoreModule } from '@agm/core';
 
 import {
@@ -30,6 +31,7 @@ import {
 } from './index';
 import { FileInputComponent } from './file-input/file-input.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -38,9 +40,12 @@ import { FileInputComponent } from './file-input/file-input.component';
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    SharedModule,
     MaterialModule,
     MDBBootstrapModule.forRoot(),
-    AgmCoreModule.forRoot({ apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4' })
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4'
+    })
   ],
   declarations: [
     StatsCardComponent,
