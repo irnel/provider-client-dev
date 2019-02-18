@@ -1,14 +1,17 @@
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DOCUMENT } from '@angular/platform-browser';
 
-import { startWith, map } from 'rxjs/operators';
-import { SnotifyService } from 'ng-snotify';
+import { startWith, map, tap } from 'rxjs/operators';
 import { PageScrollService, PageScrollInstance } from 'ngx-page-scroll';
 
 import { Config } from './../../../../../infrastructure';
-import { Provider, PROVIDERS_DATA, Category, CATEGORY_DATA, FileInfo } from '../../../../../helpers';
+import { FileInfo } from '../../../../../helpers';
+import { Product, Category } from '../../../../../models';
+import { CategoryService, ProductService, NotificationService } from '../../../../../services';
+import { Observable, Observer } from 'rxjs';
+import { FileService } from '../../../../../services/file/file.service';
 
 @Component({
   selector: 'app-edit-product-workspace',
@@ -17,9 +20,6 @@ import { Provider, PROVIDERS_DATA, Category, CATEGORY_DATA, FileInfo } from '../
 })
 export class EditProductWorkspaceComponent implements OnInit {
   editForm: FormGroup;
-  nameFormControl: any;
-  providerFormControl: any;
-  categoryFormControl: any;
   title: string;
 
   regEx = Config.regex[0];
@@ -30,51 +30,29 @@ export class EditProductWorkspaceComponent implements OnInit {
   priceError: string;
 
   selectedFiles: FileInfo [] = [];
-  providers: Provider [] = PROVIDERS_DATA;
-  categories: Category [] = CATEGORY_DATA;
-  currentProvider: Provider;
-  currentCategory: Category;
-  provId: number;
-  catId: number;
+  allPercentage: Observable<number>;
+  observer$: Observable<any>;
+  product: Product;
+  category: Category;
+  providerId: string;
+  categoryId: string;
   mode: string;
+  loading = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
-    private readonly toast: SnotifyService
-  ) {
-    // Change Form values
-    this.route.data.subscribe(data => {
-      this.mode = data.mode;
-
-      if (data.mode === 'edit') {
-        this.edit = true;
-        this.title = 'Edit Product';
-      } else {
-        this.edit = false;
-        this.title = 'Create Product';
-      }
-    });
-  }
+    private ngZone: NgZone,
+    private readonly categoryService: CategoryService,
+    private readonly productService: ProductService,
+    private readonly notification: NotificationService,
+    private readonly fileService: FileService
+  ) {}
 
   ngOnInit() {
-    this.provId = +this.route.snapshot.params['id'];
-    this.catId = +this.route.snapshot.params['catId'];
-
-    this.currentProvider = this.providers.find(p => p.id === this.provId);
-    this.currentCategory = this.categories.find(c => c.id === this.catId);
-
     this.editForm = this.formBuilder.group({
       name: ['', Validators.compose([
-        Validators.required,
-        Validators.pattern(this.regEx)]
-      )],
-      providerName: ['', Validators.compose([
-        Validators.required,
-        Validators.pattern(this.regEx)]
-      )],
-      categoryName: ['', Validators.compose([
         Validators.required,
         Validators.pattern(this.regEx)]
       )],
@@ -82,11 +60,38 @@ export class EditProductWorkspaceComponent implements OnInit {
         Validators.required,
         Validators.pattern(this.regEx2)]
       )],
-      description: ['', Validators.pattern(this.regEx1)]
+      description: ['', Validators.nullValidator]
+    });
+
+    // Change Form values
+    this.route.data.subscribe(data => {
+      this.providerId = this.route.snapshot.params['id'];
+      this.categoryId = this.route.snapshot.params['catId'];
+      this.mode = data.mode;
+
+      if (data.mode === 'edit') {
+        this.edit = true;
+        this.title = 'Edit Product';
+
+        const productId = this.route.snapshot.params['prodId'];
+        this.observer$ = this.productService.getProductById(productId)
+          .pipe(
+            tap(product => {
+              this.product = product;
+              this.editForm.patchValue(product);
+            })
+          );
+
+      } else {
+        this.edit = false;
+        this.title = 'Create Product';
+
+        this.observer$ = this.categoryService.getCategoryById(this.categoryId)
+          .pipe(tap(category => this.category = category));
+      }
     });
 
     // validate name
-    this.nameFormControl = this.form.name;
     this.form.name.valueChanges.pipe(
       startWith(''),
       map(() => {
@@ -124,54 +129,105 @@ export class EditProductWorkspaceComponent implements OnInit {
 
   get form() { return this.editForm.controls; }
 
-  MarkAsDirty() {
-    if (this.editForm.invalid) {
-      this.form.name.markAsDirty();
-      this.form.providerName.markAsDirty();
-      this.form.categoryName.markAsDirty();
-      this.form.price.markAsDirty();
-
-      return;
-    }
+  redirectToHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
   }
 
-  redirectToHome() {
-    this.router.navigate(['provider-dashboard/workspace/home']);
+  redirectToProviderWorkspace() {
+    this.ngZone.run(() => {
+      this.router.navigate([`provider-dashboard/workspace/providers`]);
+    });
+  }
+
+  redirectToCategoryWorkspace() {
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${this.providerId}/categories`
+      ]);
+    });
   }
 
   redirectToProductWorkSpace() {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/` +
+        `${this.providerId}/categories/${this.categoryId}/products`
+      ]);
+    });
   }
 
   cancel() {
     this.redirectToProductWorkSpace();
   }
 
-  editProduct() {
+  async editProduct() {
+    this.loading = true;
     // Mark the control as dirty
-    this.MarkAsDirty();
+    if (this.editForm.invalid) {
+      this.form.name.markAsDirty();
+      this.form.price.markAsDirty();
+
+      this.loading = false;
+
+      return;
+    }
 
     if (!this.edit) {
+      const data: Product = {
+        name: this.form.name.value,
+        price: this.form.price.value,
+        description: this.form.description.value,
+        categoryName: this.category.name,
+        providerName: this.category.providerName,
+        categoryId: this.category.id,
+        providerId: this.category.providerId,
+        url: ''
+      };
+
+      // create product
+      await this.productService.create(data).then(async product => {
+        this.product = product;
+      }).catch(error => {
+        this.notification.ErrorMessage(error.message, '', 2500);
+        this.loading = false;
+
+        return;
+      });
+
+      // redirect to provider workspace if not upload images
+      if (this.selectedFiles.length === 0) {
+        this.redirectToProductWorkSpace();
+      }
+
+      this.allPercentage = this.fileService.upload(this.selectedFiles, this.product);
+      // complete operation
+      this.allPercentage.subscribe(progress => {
+        if (progress === 100) {
+          this.redirectToProductWorkSpace();
+        }
+      });
 
     } else {
 
     }
   }
 
-  showErrorMessage(title: string, body: string, timeOut: number) {
-    this.toast.error(body, title, {
-      timeout: timeOut,
-      backdrop: 0.2,
-      showProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true
-    });
-  }
-
   // receive files from file-input-component
   onSelectedFiles(files: FileInfo []) {
+    let principal = false;
+
+    files.forEach(f => {
+      f.modelType = 'products';
+      f.markAsPrincipal ? principal = true : principal = false;
+    });
+
+    // mark as principal first element
+    if (!principal) {
+      files[0].markAsPrincipal = true;
+    }
+
     this.selectedFiles = files;
   }
 }

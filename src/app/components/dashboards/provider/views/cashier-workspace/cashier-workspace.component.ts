@@ -1,9 +1,13 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
 import { Config } from '../../../../../infrastructure';
-import { Cashier, Provider, CASHIER_DATA, PROVIDERS_DATA } from '../../../../../helpers';
+import { Provider, Cashier } from '../../../../../models';
+import {  } from 'src/app/services';
+import { CashierService, NotificationService } from '../../../../../services';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 
 @Component({
@@ -18,25 +22,31 @@ export class CashierWorkspaceComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  cashiers = CASHIER_DATA;
   pageSizeOptions: number[] = Config.pageSizeOptions;
-
-  providers: Provider [] = PROVIDERS_DATA;
-  currentProvider: Provider;
+  observer$: Observable<any>;
+  cashiers: Cashier [] = [];
+  providerId: string;
+  deleting = false;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
-  ) {
-    this.dataSource = new MatTableDataSource(this.cashiers);
-  }
+    private router: Router,
+    private ngZone: NgZone,
+    private readonly cashierService: CashierService,
+    private readonly notification: NotificationService
+  ) {}
 
   ngOnInit() {
-    const providerId = +this.route.snapshot.params['id'];
-    this.currentProvider = this.providers.find(p => p.id === providerId);
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.providerId = this.route.snapshot.params['id'];
+    this.observer$ = this.cashierService.getAllCashiersByProviderId(this.providerId)
+    .pipe(
+      tap(cashiers => {
+        this.cashiers = cashiers;
+        this.dataSource = new MatTableDataSource(this.cashiers);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      })
+    );
   }
 
   applyFilter(filterValue: string) {
@@ -48,13 +58,28 @@ export class CashierWorkspaceComponent implements OnInit {
   }
 
   redirectToHome() {
-    this.router.navigate(['provider-dashboard/workspace/home']);
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
   }
 
   redirectToEditCashier(id: number) {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.currentProvider.id}/cashiers/${id}/edit`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${this.providerId}/cashiers/${id}/edit`
+      ]);
+    });
   }
 
+  deleteCashier(id) {
+    this.deleting = true;
+    this.cashierService.delete(id).then(() => {
+      this.notification.SuccessMessage('cashier removed', '', 2500);
+      this.deleting = false;
+    })
+    .catch(error => {
+      this.notification.ErrorMessage(error.message, '', 2500);
+      this.deleting = false;
+    });
+  }
 }

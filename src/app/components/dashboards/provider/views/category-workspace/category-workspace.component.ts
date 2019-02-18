@@ -1,9 +1,12 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 
 import { Config } from '../../../../../infrastructure';
-import { Category, Provider, CATEGORY_DATA, PROVIDERS_DATA } from '../../../../../helpers';
+import { Category } from '../../../../../models';
+import { CategoryService, NotificationService } from '../../../../../services';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-category-workspace',
@@ -16,27 +19,35 @@ export class CategoryWorkspaceComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('frame') frame: ElementRef;
 
-  categories = CATEGORY_DATA;
+  categories: Category [];
+  observer$: Observable<any>;
+  providerId: string;
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
-
-  currentProvider: Provider;
-  providers: Provider [] = PROVIDERS_DATA;
+  waiting = true;
+  deleting = false;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
-  ) {
-    this.dataSource = new MatTableDataSource(this.categories);
-  }
+    private router: Router,
+    private ngZone: NgZone,
+    private categoryService: CategoryService,
+    private notification: NotificationService
+  ) {}
 
   ngOnInit() {
-    const providerId = +this.route.snapshot.params['id'];
-    this.currentProvider = this.providers.find(p => p.id === providerId);
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.providerId = this.route.snapshot.params['id'];
+    this.observer$ = this.categoryService.getAllCategoriesByProviderId(this.providerId)
+      .pipe(
+        tap(categories => {
+          this.categories = categories;
+          this.dataSource = new MatTableDataSource(this.categories);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        })
+      );
   }
 
   applyFilter(filterValue: string) {
@@ -48,23 +59,37 @@ export class CategoryWorkspaceComponent implements OnInit {
   }
 
   redirectToHome() {
-    this.router.navigate(['provider-dashboard/workspace/home']);
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
+
   }
 
   redirectToEditCategory(catId: number) {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories/${catId}/edit`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${this.providerId}/categories/${catId}/edit`
+      ]);
+    });
   }
 
   redirectToCategoryDetails(catId: number) {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories/${catId}/details`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${this.providerId}/categories/${catId}/details`
+      ]);
+    });
   }
 
-  test() {
-    console.log('click');
+  deleteCategory(id) {
+    this.deleting = true;
+    this.categoryService.delete(id).then(() => {
+      this.notification.SuccessMessage('removed category', '', 2500);
+      this.deleting = false;
+    })
+    .catch(error => {
+      this.notification.ErrorMessage(error.message, '', 2500);
+      this.deleting = false;
+    });
   }
-
 }

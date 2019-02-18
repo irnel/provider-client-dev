@@ -1,9 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, Renderer2, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
-import { Product, Category, Provider, PRODUCT_DATA, CATEGORY_DATA, PROVIDERS_DATA } from '../../../../../helpers';
+import { Product } from '../../../../../models';
 import { Config } from '../../../../../infrastructure';
+import { ProductService, NotificationService } from '../../../../../services';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-workspace',
@@ -18,31 +21,37 @@ export class ProductWorkspaceComponent implements OnInit {
   dataSource: MatTableDataSource<Product>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('frame') frame: ElementRef;
 
-  providers: Provider [] = PROVIDERS_DATA;
-  categories: Category [] = CATEGORY_DATA;
-  products: Product [] = PRODUCT_DATA;
-  currentProduct: Product;
-
-  provId: number;
-  catId: number;
-
+  products: Product [] = [];
+  observer$: Observable<any>;
   maxChar = Config.maxChar;
   pageSizeOptions = Config.pageSizeOptions;
+  providerId: string;
+  categoryId: string;
+  deleting = false;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
-  ) {
-    this.dataSource = new MatTableDataSource(this.products);
-  }
+    private router: Router,
+    private ngZone: NgZone,
+    private readonly productService: ProductService,
+    private readonly notification: NotificationService
+  ) {}
 
   ngOnInit() {
-    this.provId = +this.route.snapshot.params['id'];
-    this.catId = +this.route.snapshot.params['catId'];
+    this.providerId = this.route.snapshot.params['id'];
+    this.categoryId = this.route.snapshot.params['catId'];
 
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.observer$ = this.productService.getAllProductsByCategoryId(this.categoryId)
+    .pipe(
+      tap(products => {
+        this.products = products;
+        this.dataSource = new MatTableDataSource(this.products);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      })
+    );
   }
 
   applyFilter(filterValue: string) {
@@ -54,18 +63,38 @@ export class ProductWorkspaceComponent implements OnInit {
   }
 
   redirectToHome() {
-    this.router.navigate(['provider-dashboard/workspace/home']);
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
   }
 
-  redirectToEditProduct(prodId: number) {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products/${prodId}/edit`
-    ]);
+  redirectToEditProduct(productId) {
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/` +
+        `${this.providerId}/categories/${this.categoryId}/products/${productId}/edit`
+      ]);
+    });
   }
 
-  redirectToProductDetails(prodId: number) {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products/${prodId}/details`
-    ]);
+  redirectToProductDetails(productId) {
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/` +
+        `${this.providerId}/categories/${this.categoryId}/products/${productId}/details`
+      ]);
+    });
+  }
+
+  deleteProduct(id) {
+    this.deleting = true;
+    this.productService.delete(id).then(() => {
+      this.notification.SuccessMessage('removed provider', '', 2500);
+      this.deleting = false;
+    })
+    .catch(error => {
+      this.notification.ErrorMessage(error.message, '', 2500);
+      this.deleting = false;
+    });
   }
 }

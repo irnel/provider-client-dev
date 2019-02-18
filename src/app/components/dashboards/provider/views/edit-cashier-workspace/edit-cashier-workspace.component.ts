@@ -1,12 +1,13 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
-import { startWith, map } from 'rxjs/operators';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { startWith, map, tap } from 'rxjs/operators';
 
 import { Config } from './../../../../../infrastructure';
-import { Provider, PROVIDERS_DATA } from '../../../../../helpers';
-import { SnotifyService } from 'ng-snotify';
-
+import { Provider, Cashier } from '../../../../../models';
+import { ProviderService, CashierService, NotificationService } from '../../../../../services';
+import { Roles } from '../../../../../helpers';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-edit-cashier-workspace',
@@ -15,7 +16,6 @@ import { SnotifyService } from 'ng-snotify';
 })
 export class EditCashierWorkspaceComponent implements OnInit {
   editForm: FormGroup;
-  providerFormControl: any;
   title: string;
   edit: boolean;
 
@@ -23,43 +23,27 @@ export class EditCashierWorkspaceComponent implements OnInit {
   nameError: string;
   emailError: string;
 
-  providers: Provider[] = PROVIDERS_DATA;
-  currentProvider: Provider;
-  providerNotFound = false;
+  observer$: Observable<any>;
+  provider: Provider;
+  providerId: string; // to navigation
+  cashier: Cashier;
+  waiting = true;
+  loading = false;
   mode: string;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private readonly toast: SnotifyService
-    ) {
-      // Change Form values
-    this.route.data.subscribe(data => {
-      this.mode = data.mode;
-
-      if (data.mode === 'edit') {
-        this.edit = true;
-        this.title = 'Edit Cashier';
-
-      } else {
-        this.edit = false;
-        this.title = 'Create Cashier';
-
-      }
-    });
-    }
+    private ngZone: NgZone,
+    private readonly providerService: ProviderService,
+    private readonly cashierService: CashierService,
+    private readonly notification: NotificationService
+    ) {}
 
   ngOnInit() {
-    const providerId = +this.route.snapshot.params['id'];
-    this.currentProvider = this.providers.find(p => p.id === providerId);
-
     this.editForm = this.formBuilder.group({
       name: ['', Validators.compose([
-        Validators.required,
-        Validators.pattern(this.regEx)]
-      )],
-      providerName: ['', Validators.compose([
         Validators.required,
         Validators.pattern(this.regEx)]
       )],
@@ -67,6 +51,35 @@ export class EditCashierWorkspaceComponent implements OnInit {
         Validators.required,
         Validators.email]
       )]
+    });
+
+     // Change Form values
+     this.route.data.subscribe(data => {
+      this.providerId = this.route.snapshot.params['id'];
+      this.mode = data.mode;
+
+      if (data.mode === 'edit') {
+        this.edit = true;
+        this.title = 'Edit Cashier';
+
+        // update form if mode is edit
+        const cashierId = this.route.snapshot.params['cashierId'];
+        this.observer$ = this.cashierService.getCashierById(cashierId).pipe(
+          tap(cashier => {
+            this.cashier = cashier;
+            this.editForm.patchValue(cashier);
+          })
+        );
+
+      } else {
+        // mode create
+        this.edit = false;
+        this.title = 'Create Cashier';
+
+        this.observer$ = this.providerService.getProviderById(this.providerId)
+          .pipe(tap(provider => this.provider = provider)
+        );
+      }
     });
 
     // validate name
@@ -106,24 +119,18 @@ export class EditCashierWorkspaceComponent implements OnInit {
 
   get form() { return this.editForm.controls; }
 
-  MarkAsDirty() {
-    if (this.editForm.invalid) {
-      this.form.name.markAsDirty();
-      this.form.providerName.markAsDirty();
-      this.form.email.markAsDirty();
-
-      return;
-    }
-  }
-
   redirectToHome() {
-    this.router.navigate(['provider-dashboard/workspace/home']);
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
   }
 
   redirectToCashierWorkspace() {
-    this.router.navigate([
-      `/provider-dashboard/workspace/providers/${this.currentProvider.id}/cashiers`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `/provider-dashboard/workspace/providers/${this.providerId}/cashiers`
+      ]);
+    });
   }
 
   cancel() {
@@ -131,31 +138,37 @@ export class EditCashierWorkspaceComponent implements OnInit {
   }
 
   editCashier() {
+    this.loading = true;
     // Mark the control as dirty
-    this.MarkAsDirty();
+    if (this.editForm.invalid) {
+      this.form.name.markAsDirty();
+      this.form.email.markAsDirty();
+      this.loading = false;
+
+      return;
+    }
 
     if (!this.edit) {
+      const data: Cashier = {
+        name: this.form.name.value,
+        email: this.form.email.value,
+        providerName: this.provider.name,
+        providerId: this.provider.id,
+        role: [Roles.Cashier]
+      };
+
+      // create cashier
+      this.cashierService.create(data).then(() => {
+        this.notification.SuccessMessage('cashier created', '', 2500);
+        this.redirectToCashierWorkspace();
+      })
+      .catch(error => {
+        this.loading = false;
+        this.notification.ErrorMessage(error.message, '', 2500);
+      });
 
     } else {
 
     }
-  }
-
-  private elementFilter(value: string): Provider[] {
-    const filterValue = value.toLowerCase();
-
-    return this.providers.filter(provider =>
-      provider.name.toLowerCase().indexOf(filterValue) === 0
-    );
-  }
-
-  showErrorMessage(title: string, body: string, timeOut: number) {
-    this.toast.error(body, title, {
-      timeout: timeOut,
-      backdrop: 0.2,
-      showProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true
-    });
   }
 }

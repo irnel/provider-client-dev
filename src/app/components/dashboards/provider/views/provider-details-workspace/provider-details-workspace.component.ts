@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Provider, PROVIDERS_DATA } from '../../../../../helpers';
+import { Provider } from '../../../../../models';
+import { ProviderService, NotificationService } from '../../../../../services';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-provider-details-workspace',
@@ -9,47 +12,59 @@ import { Provider, PROVIDERS_DATA } from '../../../../../helpers';
   styleUrls: ['./provider-details-workspace.component.scss']
 })
 export class ProviderDetailsWorkspaceComponent implements OnInit {
-  currentProvider: Provider;
-  providers: Provider [] = PROVIDERS_DATA;
+  provider: Provider;
+  providerId: string;
+  observer$: Observable<any>;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
-    private router: Router
-  ) {
-
-  }
+    private ngZone: NgZone,
+    private readonly providerService: ProviderService,
+    private readonly notification: NotificationService
+  ) {}
 
   ngOnInit() {
-    const providerId = +this.route.snapshot.params['id'];
-    this.currentProvider = this.providers.find(p => p.id === providerId);
+    this.providerId = this.route.snapshot.params['id'];
+    this.observer$ = this.providerService.getProviderById(this.providerId)
+      .pipe(tap(provider => this.provider = provider));
   }
 
   redirectToHome() {
-    this.router.navigate(['provider-dashboard/workspace/home']);
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
   }
 
   redirectToCategoryWorkspace() {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${this.providerId}/categories`
+      ]);
+    });
   }
 
   redirectToEditCategory() {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.currentProvider.id}/categories/create`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${this.providerId}/categories/create`
+      ]);
+    });
   }
 
   redirectToCashierWorkspace() {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.currentProvider.id}/cashiers`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${this.providerId}/cashiers`
+      ]);
+    });
   }
 
   redirectToEditCashier() {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.currentProvider.id}/cashiers/create`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${this.providerId}/cashiers/create`
+      ]);
+    });
   }
-
 }

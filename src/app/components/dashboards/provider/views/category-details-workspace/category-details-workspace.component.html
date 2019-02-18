@@ -1,5 +1,5 @@
 <!-- Category Details -->
-<div class="w-responsive mt-3 center ml-auto mr-auto">
+<div *ngIf="observer$ | async; else progress" class="w-responsive mt-3 mb-3 center ml-auto mr-auto">
   <!-- Breadcrumbs navigation -->
   <mdb-card>
     <h6 class="pt-2 text-center">
@@ -8,7 +8,7 @@
       <span> / </span>
       <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
       <span> / </span>
-      <a routerLink="/provider-dashboard/workspace/providers/{{provId}}/categories">Categories</a>
+      <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">Categories</a>
       <span> / </span>
       <span>Details</span>
     </h6>
@@ -17,49 +17,41 @@
   <!-- Category content -->
   <mdb-card class="mt-2">
     <!-- Card Header -->
-    <mdb-card-header>
-      <img class="mx-auto d-block rounded" src={{currentCategory.image}} alt="Category image">
-    </mdb-card-header>
+    <img class="card-img-top" src={{category.url}}
+      alt="Provider image" title="{{category.name}}">
 
     <!--Card content-->
     <mdb-card-body class="px-lg-5">
-      <div class="float-right mb-2">
-        <div class="dropdown" mdbDropdown>
-          <button mdbDropdownToggle mdbBtn color="primary"
-              class="dropdown-toggle waves-light" mdbWavesEffect>
-
-            Options
-          </button>
-
-          <div class="dropdown-menu">
-            <!-- Add Product -->
-            <a (click)="redirectToEditProduct()" class="dropdown-item">
-              <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Add product
-            </a>
-            <div class="divider dropdown-divider"></div>
-
-            <!-- List Products -->
-            <a (click)="redirectToProductWorkspace()" class="dropdown-item">
-              <i class="fa fa-list-ol left mr-2" aria-hidden="true"></i>List products
-            </a>
-            <div class="divider dropdown-divider"></div>
-
-          </div>
-        </div>
-      </div>
-
       <!-- Name -->
       <mdb-card-text class="mt-4">
-        <h6>Name: {{currentCategory.name}}</h6>
+        <h6>Name: {{category.name}}</h6>
       </mdb-card-text>
 
       <!-- Description -->
       <mdb-card-text class="mt-2">
-        <h6>Description: {{currentProvider.description}}</h6>
+        <h6>Description: {{category.description}}</h6>
       </mdb-card-text>
 
     </mdb-card-body>
 
+    <mdb-card-footer>
+      <h4 class="text-center">
+        <!-- Add Product -->
+        <a (click)="redirectToEditProduct()">
+          <mdb-badge class="mr-2" color="pink">Add product</mdb-badge>
+        </a>
+
+        <!-- List Products -->
+        <a (click)="redirectToProductWorkspace()">
+          <mdb-badge class="mr-2 mt-2" color="purple darken-2">List products</mdb-badge>
+        </a>
+      </h4>
+    </mdb-card-footer>
+
   </mdb-card>
 
 </div>
+
+<ng-template #progress>
+  <app-circle-progress></app-circle-progress>
+</ng-template>

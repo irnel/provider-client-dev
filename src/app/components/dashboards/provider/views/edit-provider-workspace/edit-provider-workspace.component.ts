@@ -11,14 +11,10 @@ import { MapsAPILoader } from '@agm/core';
 import { PageScrollService, PageScrollInstance } from 'ngx-page-scroll';
 
 import { ProviderService, AuthService, NotificationService, FileService } from './../../../../../services';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { Config } from '../../../../../infrastructure';
-import { FileInfo, DataTransfer } from '../../../../../helpers';
+import { FileInfo } from '../../../../../helpers';
 import { Address, Provider } from '../../../../../models';
-import { Observable, combineLatest } from 'rxjs';
-import { ImageInfo } from '../../../../../models/image-info';
-import * as firebase from 'firebase';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-edit-provider-workspace',
@@ -28,8 +24,7 @@ import * as firebase from 'firebase';
 export class EditProviderWorkspaceComponent implements OnInit {
   editForm: FormGroup;
   public zoom: number;
-  public currentProvider: Provider;
-  private currentFileInfo: FileInfo;
+  public provider: Provider;
   public address: Address;
 
   // HTML values
@@ -39,9 +34,8 @@ export class EditProviderWorkspaceComponent implements OnInit {
   test: string;
 
   selectedFiles: FileInfo [] = [];
-  uploads: DataTransfer [] = [];
   allPercentage: Observable<number>;
-  progressWidth: number;
+  observer$: Observable<any>;
   regEx: string = Config.regex[0];
   regEx1: string = Config.regex[1];
   msg: string;
@@ -49,6 +43,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
   addressError: string;
   mode: string;
   loading = false;
+  waiting = true;
 
   constructor(
     private router: Router,
@@ -58,28 +53,11 @@ export class EditProviderWorkspaceComponent implements OnInit {
     private readonly mapsAPILoader: MapsAPILoader,
     private readonly authService: AuthService,
     private readonly providerService: ProviderService,
-    private readonly afs: AngularFirestore,
-    private readonly storage: AngularFireStorage,
     private readonly fileService: FileService,
-    private readonly notificationService: NotificationService,
+    private readonly notification: NotificationService,
     private readonly pageScrollService: PageScrollService,
     @Inject(DOCUMENT) private document: Document
-  ) {
-
-    this.route.data.subscribe(data => {
-      this.mode = data.mode;
-
-      if (data.mode === 'create') {
-        this.title = 'Create Provider';
-        this.edit = false;
-
-      } else {
-        this.title = 'Edit Provider';
-        this.edit = true;
-
-      }
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.editForm = this.formBuilder.group({
@@ -92,6 +70,35 @@ export class EditProviderWorkspaceComponent implements OnInit {
         Validators.pattern(this.regEx)]
       )],
       description: ['', Validators.nullValidator]
+    });
+
+    this.route.data.subscribe(data => {
+      this.mode = data.mode;
+
+      if (data.mode === 'create') {
+        this.title = 'Create Provider';
+        this.edit = false;
+
+
+      } else {
+        // Todo: see location in the map for edit mode
+        this.title = 'Edit Provider';
+        this.edit = true;
+
+        const providerId = this.route.snapshot.params['id'];
+        // this.observer$ = this.providerService.getProviderById(providerId)
+        //   .pipe(
+        //     tap(provider => {
+        //       this.provider = provider;
+        //       this.editForm.patchValue({
+        //         name: this.provider.name,
+        //         address: this.provider.address.formattedAddress,
+        //         description: this.provider.description
+        //       });
+        //     })
+        //   );
+
+      }
     });
 
     // validate name
@@ -191,7 +198,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
       this.router.navigate(['/provider-dashboard/workspace/providers']);
     });
 
-    this.notificationService.SuccessMessage('provider created', '', 2500);
+    this.notification.SuccessMessage('provider created', '', 2500);
   }
 
   cancel() {
@@ -201,6 +208,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
   }
 
   async editProvider() {
+    this.loading = true;
     // Mark the control as dirty
     if (this.editForm.invalid) {
       this.form.name.markAsDirty();
@@ -216,20 +224,16 @@ export class EditProviderWorkspaceComponent implements OnInit {
 
     // validate address
     if (this.address.formattedAddress === '' && this.form.address.value !== '') {
-      this.notificationService.ErrorMessage(
+      this.notification.ErrorMessage(
         'select a valid address from the list.', '', 2500);
 
+      this.loading = false;
       this.goToTop();
       return;
     }
 
-    this.loading = true;
-
     // create
     if (!this.edit) {
-      this.msg = 'New provider created';
-      const totalPercentage: Observable<number>[] = [];
-
       const data: Provider = {
         name:  this.form.name.value,
         address: this.address,
@@ -241,11 +245,12 @@ export class EditProviderWorkspaceComponent implements OnInit {
       // create provider
       await this.providerService.create(data).then(
         async (provider) => {
-          this.currentProvider = provider;
+          this.provider = provider;
         })
         .catch(error => {
-          this.notificationService.ErrorMessage(error.message, '', 2500);
+          this.notification.ErrorMessage(error.message, '', 2500);
           this.loading = false;
+
           return;
         });
 
@@ -254,59 +259,13 @@ export class EditProviderWorkspaceComponent implements OnInit {
         this.redirectToProviderWorkspace();
       }
 
-      for (const fileInfo of this.selectedFiles) {
-        fileInfo.modelId = this.currentProvider.id;
-        fileInfo.modelType = 'providers';
-
-        // reference to storage
-        const basePath = `${fileInfo.modelType}/${fileInfo.createdAt.getTime()}_${fileInfo.name}`;
-        const uploadTask = this.storage.upload(
-          basePath, fileInfo.file, {contentType: fileInfo.type});
-
-        const percentage$ = uploadTask.percentageChanges();
-        totalPercentage.push(percentage$);
-
-        // push each upload into array
-        this.uploads.push({
-          name: fileInfo.name,
-          percentage: percentage$
-         });
-
-         uploadTask.then(snapshot => {
-           return snapshot.ref.getDownloadURL().then(url => {
-             return this.afs.collection('filesinfo').add({
-              name: fileInfo.name,
-              size: fileInfo.size,
-              type: fileInfo.type,
-              modelType: fileInfo.modelType,
-              modelId: fileInfo.modelId,
-              url: url,
-              createdAt: fileInfo.createdAt,
-              markAsPrincipal: fileInfo.markAsPrincipal
-             }).then(() => {
-               if (fileInfo.markAsPrincipal) {
-                 this.currentProvider.url = url;
-                 this.providerService.update(this.currentProvider);
-               }
-             });
-           })
-           .catch(error => {
-             this.loading = false;
-             this.notificationService.ErrorMessage(error.message, '', 2500);
-           });
-         });
-      }
-
-      this.allPercentage = combineLatest(totalPercentage).pipe(
-        map(percentages => {
-          let result = 0;
-          for (const percentage of percentages) {
-            result = result + percentage;
-          }
-
-          return Math.round(result / percentages.length);
-        })
-      );
+      this.allPercentage = this.fileService.upload(this.selectedFiles, this.provider);
+      // complete operation
+      this.allPercentage.subscribe(progress => {
+        if (progress === 100) {
+          this.redirectToProviderWorkspace();
+        }
+      });
 
     } else {
       this.msg = 'Provider edited';
@@ -322,9 +281,15 @@ export class EditProviderWorkspaceComponent implements OnInit {
 
   // receive files from file-input-component
   onSelectedFiles(files: FileInfo []) {
+    let principal = false;
+
+    files.forEach(f => {
+      f.modelType = 'providers';
+      f.markAsPrincipal ? principal = true : principal = false;
+    });
+
     // mark as principal first element
-    const index = files.findIndex(f => f.markAsPrincipal);
-    if (files.length > 0 && index === -1) {
+    if (!principal) {
       files[0].markAsPrincipal = true;
     }
 

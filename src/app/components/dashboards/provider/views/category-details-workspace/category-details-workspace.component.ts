@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Provider, Category, PROVIDERS_DATA, CATEGORY_DATA } from '../../../../../helpers';
+import { Provider, Category } from '../../../../../models';
+import { CategoryService, NotificationService } from './../../../../../services';
+import { tap } from 'rxjs/operators';
 
 
 @Component({
@@ -10,42 +13,50 @@ import { Provider, Category, PROVIDERS_DATA, CATEGORY_DATA } from '../../../../.
   styleUrls: ['./category-details-workspace.component.scss']
 })
 export class CategoryDetailsWorkspaceComponent implements OnInit {
-
-  providers: Provider [] = PROVIDERS_DATA;
-  categories: Category [] = CATEGORY_DATA;
-
-  currentProvider: Provider;
-  currentCategory: Category;
-  provId: number;
-  catId: number;
+  providerId: string;
+  categoryId: string;
+  category: Category;
+  observer$: Observable<any>;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone,
+    private readonly categoryService: CategoryService,
+    private readonly notification: NotificationService
   ) { }
 
   ngOnInit() {
-    this.provId = +this.route.snapshot.params['id'];
-    this.catId = +this.route.snapshot.params['catId'];
-
-    this.currentProvider = this.providers.find(p => p.id === this.provId);
-    this.currentCategory = this.categories.find(c => c.id === this.catId);
+    this.providerId = this.route.snapshot.params['id'];
+    this.categoryId = this.route.snapshot.params['catId'];
+    this.observer$ = this.categoryService.getCategoryById(this.categoryId)
+      .pipe(
+        tap(category => {
+          this.category = category;
+        })
+      );
   }
 
   redirectToHome() {
-    this.router.navigate(['provider-dashboard/workspace/home']);
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
   }
 
   redirectToProductWorkspace() {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/` +
+        `${this.providerId}/categories/${this.categoryId}/products`
+      ]);
+    });
   }
 
   redirectToEditProduct() {
-    this.router.navigate([
-      `provider-dashboard/workspace/providers/${this.provId}/categories/${this.catId}/products/create`
-    ]);
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${this.providerId}/categories/${this.category.id}/products/create`
+      ]);
+    });
   }
-
 }

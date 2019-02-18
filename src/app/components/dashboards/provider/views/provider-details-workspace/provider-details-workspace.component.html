@@ -1,6 +1,5 @@
 <!-- Provider Details -->
-<div class="w-responsive mt-3 ml-auto mr-auto">
-
+<div *ngIf="observer$ | async; else progress" class="w-responsive mt-3 mb-3 ml-auto mr-auto">
   <mdb-card>
     <h6 class="pt-2 text-center">
       <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
@@ -15,65 +14,60 @@
 
   <!-- Provider content -->
   <mdb-card class="mt-2">
-  <!-- Card Header -->
-  <mdb-card-header>
-    <img class="mx-auto d-block rounded" src={{currentProvider.image}} alt="Provider image">
-  </mdb-card-header>
+    <!-- Image -->
+
+    <img class="card-img-top" src={{provider.url}}
+        alt="Provider image" title="{{provider.name}}">
 
     <!--Card content-->
     <mdb-card-body class="px-lg-5">
-      <div class="float-right mb-2">
-        <div class="dropdown" mdbDropdown>
-          <button mdbDropdownToggle mdbBtn color="primary"
-              class="dropdown-toggle waves-light" mdbWavesEffect>
-
-            Options
-          </button>
-
-          <div class="dropdown-menu">
-            <!-- Add Category -->
-            <a (click)="redirectToEditCategory()" class="dropdown-item">
-              <i class="fa fa-plus left mr-2" aria-hidden="true"></i>Add category
-            </a>
-            <div class="divider dropdown-divider"></div>
-
-            <!-- List Categories -->
-            <a (click)="redirectToCategoryWorkspace()" class="dropdown-item">
-              <i class="fa fa-list-ol left mr-2" aria-hidden="true"></i>List categories
-            </a>
-            <div class="divider dropdown-divider"></div>
-
-            <!-- Add Cashier -->
-            <a (click)="redirectToEditCashier()" class="dropdown-item">
-              <i class="fa fa-plus left mr-2" aria-hidden="true"></i> Add cashier
-            </a>
-            <div class="divider dropdown-divider"></div>
-
-            <!-- List Cashiers -->
-            <a (click)="redirectToCashierWorkspace()" class="dropdown-item">
-              <i class="fa fa-list-ol left mr-2" aria-hidden="true"></i>List cashiers
-            </a>
-          </div>
-        </div>
-      </div>
 
       <!-- Name -->
       <mdb-card-text class="mt-4">
-        <h6>Name: {{currentProvider.name}}</h6>
+        <h6>Name: {{provider.name}}</h6>
       </mdb-card-text>
 
       <!-- Address -->
       <mdb-card-text class="mt-2">
-        <h6>Address: {{currentProvider.address}}</h6>
+        <h6>Address: {{provider.address.formattedAddress}}</h6>
       </mdb-card-text>
 
       <!-- Description -->
       <mdb-card-text class="mt-2">
-        <h6>Description: {{currentProvider.description}}</h6>
+        <h6>Description: {{provider.description}}</h6>
       </mdb-card-text>
 
     </mdb-card-body>
 
+    <mdb-card-footer>
+      <h4 class="text-center">
+        <!-- Add category -->
+        <a (click)="redirectToEditCategory()">
+          <mdb-badge class="mr-2" color="red">Add category</mdb-badge>
+        </a>
+
+        <!-- List categories -->
+        <a (click)="redirectToCategoryWorkspace()">
+          <mdb-badge class="mr-2 mt-2" color="cyan">List categories</mdb-badge>
+        </a>
+
+        <!-- Add cashier -->
+        <a (click)="redirectToEditCashier()">
+          <mdb-badge class="mr-2 mt-2" color="amber darken-2">Add cashier</mdb-badge>
+        </a>
+
+        <!-- List cashiers -->
+        <a (click)="redirectToCashierWorkspace()">
+          <mdb-badge class="mr-2 mt-2" color="pink">List cashiers</mdb-badge>
+        </a>
+      </h4>
+
+    </mdb-card-footer>
+
   </mdb-card>
 
 </div>
+
+<ng-template #progress>
+  <app-circle-progress></app-circle-progress>
+</ng-template>

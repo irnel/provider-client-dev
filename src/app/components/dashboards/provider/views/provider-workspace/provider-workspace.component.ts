@@ -1,10 +1,12 @@
 import { Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, Renderer2, ElementRef } from '@angular/core';
 
 import { Config } from '../../../../../infrastructure';
-import { Provider, PROVIDERS_DATA } from '../../../../../helpers';
-import { FormGroup } from '@angular/forms';
+import { ProviderService, AuthService, NotificationService } from '../../../../../services';
+import { Provider } from '../../../../../models';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-provider-workspace',
@@ -12,41 +14,59 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./provider-workspace.component.scss']
 })
 export class ProviderWorkspaceComponent implements OnInit {
-
   columnsToDisplay: string [] = ['image', 'name', 'address', 'description', 'operation'];
   dataSource: MatTableDataSource<Provider>;
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('frame') frame: ElementRef;
 
-  providers = PROVIDERS_DATA;
+  providers: Provider [];
+  observer$: Observable<any>;
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
-  value = '';
+  deleting = false;
 
   constructor(
-    private router: Router
-  ) {
-    this.dataSource = new MatTableDataSource(this.providers);
-  }
+    private ngZone: NgZone,
+    private router: Router,
+    private readonly authService: AuthService,
+    private readonly providerService: ProviderService,
+    private readonly notification: NotificationService
+  ) {}
 
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    const userId = this.authService.currentUserValue.uid;
+    this.observer$ = this.providerService.getAllProviderByUserId(userId)
+      .pipe(
+        tap(providers => {
+          this.providers = providers;
+          this.dataSource = new MatTableDataSource(providers);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        })
+    );
   }
 
   redirectToHome() {
-    this.router.navigate(['provider-dashboard/workspace/home']);
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
   }
 
   // redirect to edit provider
-  redirectToEditProvider(id: number) {
-    this.router.navigate([`provider-dashboard/workspace/providers/${id}/edit`]);
+  redirectToEditProvider(id: string) {
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${id}/edit`]);
+    });
   }
 
   // redirect to provider details
-  redirectToProviderDetails(id: number) {
-    this.router.navigate([`provider-dashboard/workspace/providers/${id}/details`]);
+  redirectToProviderDetails(id: string) {
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/${id}/details`]);
+    });
   }
 
   // apply filter to data table
@@ -56,5 +76,17 @@ export class ProviderWorkspaceComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.paginator.firstPage();
     }
+  }
+
+  deleteProvider(id) {
+    this.deleting = true;
+    this.providerService.delete(id).then(() => {
+      this.notification.SuccessMessage('removed provider', '', 2500);
+      this.deleting = false;
+    })
+    .catch(error => {
+      this.notification.ErrorMessage(error.message, '', 2500);
+      this.deleting = false;
+    });
   }
 }

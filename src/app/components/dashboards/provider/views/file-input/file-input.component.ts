@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
 import { FileInfo } from '../../../../../helpers';
 
@@ -8,6 +9,8 @@ import { FileInfo } from '../../../../../helpers';
 })
 export class FileInputComponent implements OnInit {
   @Output() public filesInfo = new EventEmitter<FileInfo []>();
+  @Input() onProgress: Observable<number>;
+  @Input() uploading: Boolean;
   @ViewChild('alert') alert: ElementRef;
 
   selectedFiles: FileInfo [] = [];
