@@ -8,7 +8,6 @@ import { map } from 'rxjs/operators';
 })
 export class ProductService {
   productCollection: AngularFirestoreCollection<Product>;
-  productDocument: AngularFirestoreDocument<Product>;
 
   constructor(private afs: AngularFirestore) {
     this.productCollection = this.afs.collection('products');
@@ -51,6 +50,10 @@ export class ProductService {
         return productDoc;
       });
     });
+  }
+
+  update(product: Product) {
+    return this.productCollection.doc(product.id).update(product);
   }
 
   delete(id) {

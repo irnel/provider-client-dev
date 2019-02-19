@@ -11,7 +11,6 @@ import { NotificationService } from '../notification/notification.service';
 })
 export class ProviderService {
   providerCollection: AngularFirestoreCollection<Provider>;
-  providerDocument: AngularFirestoreDocument<Provider>;
   providers: Observable<Provider[]>;
   provider: Observable<Provider>;
 
@@ -63,8 +62,7 @@ export class ProviderService {
   }
 
   update(provider: Provider) {
-    this.providerDocument = this.providerCollection.doc(provider.id);
-    this.providerDocument.set(provider);
+    return this.providerCollection.doc(provider.id).update(provider);
   }
 
   delete(id) {

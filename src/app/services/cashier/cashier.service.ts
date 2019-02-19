@@ -8,7 +8,6 @@ import { map } from 'rxjs/operators';
 })
 export class CashierService {
   cashierCollection: AngularFirestoreCollection<Cashier>;
-  cashierDocument: AngularFirestoreDocument<Cashier>;
 
   constructor(private afs: AngularFirestore) {
     this.cashierCollection = this.afs.collection('cashiers');
@@ -50,6 +49,10 @@ export class CashierService {
         return cashier;
       });
     });
+  }
+
+  update(cashier: Cashier) {
+    return this.cashierCollection.doc(cashier.id).update(cashier);
   }
 
   delete(id) {

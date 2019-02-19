@@ -9,7 +9,6 @@ import { map } from 'rxjs/operators';
 })
 export class CategoryService {
   categoriesCollection: AngularFirestoreCollection<Category>;
-  categoryDocument: AngularFirestoreDocument<Category>;
 
   constructor(private readonly afs: AngularFirestore) {
     this.categoriesCollection = this.afs.collection('categories');
@@ -55,8 +54,7 @@ export class CategoryService {
   }
 
   update(category: Category) {
-    this.categoryDocument = this.categoriesCollection.doc(category.id);
-    this.categoryDocument.set(category);
+    return this.categoriesCollection.doc(category.id).update(category);
   }
 
   delete(id) {
