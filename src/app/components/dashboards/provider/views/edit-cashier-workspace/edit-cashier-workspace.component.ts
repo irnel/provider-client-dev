@@ -18,6 +18,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
   editForm: FormGroup;
   title: string;
   edit: boolean;
+  msg: string;
 
   regEx = Config.regex[0];
   nameError: string;
@@ -126,6 +127,8 @@ export class EditCashierWorkspaceComponent implements OnInit {
   }
 
   redirectToCashierWorkspace() {
+    this.notification.SuccessMessage(this.msg, '', 2500);
+
     this.ngZone.run(() => {
       this.router.navigate([
         `/provider-dashboard/workspace/providers/${this.providerId}/cashiers`
@@ -134,7 +137,11 @@ export class EditCashierWorkspaceComponent implements OnInit {
   }
 
   cancel() {
-    this.redirectToCashierWorkspace();
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `/provider-dashboard/workspace/providers/${this.providerId}/cashiers`
+      ]);
+    });
   }
 
   editCashier() {
@@ -149,6 +156,8 @@ export class EditCashierWorkspaceComponent implements OnInit {
     }
 
     if (!this.edit) {
+      this.msg = 'New cashier created';
+
       const data: Cashier = {
         name: this.form.name.value,
         email: this.form.email.value,
@@ -159,16 +168,26 @@ export class EditCashierWorkspaceComponent implements OnInit {
 
       // create cashier
       this.cashierService.create(data).then(() => {
-        this.notification.SuccessMessage('cashier created', '', 2500);
         this.redirectToCashierWorkspace();
       })
       .catch(error => {
-        this.loading = false;
         this.notification.ErrorMessage(error.message, '', 2500);
+        this.loading = false;
       });
 
     } else {
+      this.msg = 'cashier edited';
 
+      this.cashier.name = this.form.name.value;
+      this.cashier.email = this.form.email.value;
+
+      this.cashierService.update(this.cashier).then(() => {
+        this.redirectToCashierWorkspace();
+      })
+      .catch(error => {
+        this.notification.ErrorMessage(error.message, '', 2500);
+        this.loading = false;
+      });
     }
   }
 }

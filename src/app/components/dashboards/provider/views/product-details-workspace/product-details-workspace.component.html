@@ -8,9 +8,9 @@
       <span> / </span>
       <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
       <span> / </span>
-      <a routerLink="/provider-dashboard/workspace/providers/{{product.providerId}}/categories">Categories</a>
+      <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">Categories</a>
       <span> / </span>
-      <a routerLink="/provider-dashboard/workspace/providers/{{product.providerId}}/categories/{{product.categoryId}}/products">Products</a>
+      <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/products">Products</a>
       <span> / </span>
       <span>Details</span>
     </h6>
@@ -23,30 +23,37 @@
 
     <!--Card content-->
     <mdb-card-body class="px-lg-5">
+
       <!-- Name -->
-      <mdb-card-text class="mt-4">
-        <h6>Name: {{product.name}}</h6>
-      </mdb-card-text>
-
-      <!-- Provider  -->
-      <mdb-card-text class="mt-2">
-        <h6>Provider: {{product.providerName}}</h6>
-      </mdb-card-text>
-
-      <!-- Category  -->
-      <mdb-card-text class="mt-2">
-        <h6>Category: {{product.categoryName}}</h6>
-      </mdb-card-text>
+      <h5 class="mt-2">
+        <strong>
+          <p class="dark-grey-text">Name: {{product.name}}</p>
+        </strong>
+      </h5>
 
       <!-- Price -->
-      <mdb-card-text class="mt-2">
-        <h6>Price: {{product.price}}</h6>
-      </mdb-card-text>
+      <h6 class="mt-1">
+        <strong>
+          <p class="font-weight-bold blue-text">Price: {{product.price}}$</p>
+        </strong>
+      </h6>
 
       <!-- Description -->
-      <mdb-card-text class="mt-2">
-        <h6>Description: {{product.description}}</h6>
-      </mdb-card-text>
+      <h6 *ngIf="product.description.length > 0" class="mt-1">
+        Description: {{product.description}}
+      </h6>
+
+      <div class="block-options mt-3">
+        <!-- Provider -->
+        <a  routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
+          <h5><span class="badge badge-pill indigo mr-2">{{product.providerName}}</span></h5>
+        </a>
+
+        <!-- Category -->
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">
+          <h5><span class="badge badge-pill purple darken-2">{{product.categoryName}}</span></h5>
+        </a>
+      </div>
 
     </mdb-card-body>
 

@@ -14,7 +14,7 @@ import { ProviderService, AuthService, NotificationService, FileService } from '
 import { Config } from '../../../../../infrastructure';
 import { FileInfo } from '../../../../../helpers';
 import { Address, Provider } from '../../../../../models';
-import { Observable } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 
 @Component({
   selector: 'app-edit-provider-workspace',
@@ -79,25 +79,42 @@ export class EditProviderWorkspaceComponent implements OnInit {
         this.title = 'Create Provider';
         this.edit = false;
 
+        // initialize observable with interval
+        // to hide progress interface
+        this.observer$ = interval(1);
+
+        // google maps values
+        this.zoom = 4;
+        this.address = {
+          lat: 39.8282,
+          lng: -98.5795,
+          number: '',
+          formattedAddress: ''
+        };
+
+        // set current position
+        this.setCurrentPosition();
 
       } else {
-        // Todo: see location in the map for edit mode
         this.title = 'Edit Provider';
         this.edit = true;
 
         const providerId = this.route.snapshot.params['id'];
-        // this.observer$ = this.providerService.getProviderById(providerId)
-        //   .pipe(
-        //     tap(provider => {
-        //       this.provider = provider;
-        //       this.editForm.patchValue({
-        //         name: this.provider.name,
-        //         address: this.provider.address.formattedAddress,
-        //         description: this.provider.description
-        //       });
-        //     })
-        //   );
-
+        this.observer$ = this.providerService.getProviderById(providerId)
+          .pipe(
+            tap(provider => {
+              this.provider = provider;
+              // google maps values
+              this.address = this.provider.address;
+              this.zoom = 12;
+              // updated Form Control values
+              this.editForm.patchValue({
+                name: this.provider.name,
+                address: this.provider.address.formattedAddress,
+                description: this.provider.description
+              });
+            })
+          );
       }
     });
 
@@ -134,18 +151,6 @@ export class EditProviderWorkspaceComponent implements OnInit {
         return error;
       })
     ).subscribe(error => this.addressError = error);
-
-    // google maps values
-    this.zoom = 4;
-    this.address = {
-      lat: 39.8282,
-      lng: -98.5795,
-      number: '',
-      formattedAddress: ''
-    };
-
-     // set current position
-     this.setCurrentPosition();
 
     // load Places Autocomplete
     this.mapsAPILoader.load().then(() => {
@@ -194,11 +199,11 @@ export class EditProviderWorkspaceComponent implements OnInit {
   }
 
   redirectToProviderWorkspace() {
+    this.notification.SuccessMessage(this.msg, '', 2500);
+
     this.ngZone.run(() => {
       this.router.navigate(['/provider-dashboard/workspace/providers']);
     });
-
-    this.notification.SuccessMessage('provider created', '', 2500);
   }
 
   cancel() {
@@ -229,6 +234,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
 
       this.loading = false;
       this.goToTop();
+
       return;
     }
 
@@ -270,6 +276,20 @@ export class EditProviderWorkspaceComponent implements OnInit {
     } else {
       this.msg = 'Provider edited';
 
+      // updated provider attributes
+      this.provider.name = this.form.name.value;
+      this.provider.address = this.address;
+      this.provider.description = this.form.description.value;
+
+      this.providerService.update(this.provider).then(() => {
+        this.redirectToProviderWorkspace();
+      })
+      .catch(error => {
+        this.notification.ErrorMessage(error.message, '', 2500);
+        this.loading = false;
+
+        return;
+      });
     }
   }
 

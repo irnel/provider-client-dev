@@ -116,12 +116,12 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   }
 
   redirectToCategoryWorkspace() {
+    this.notification.SuccessMessage(this.msg, '', 2500);
+
     this.ngZone.run(() => {
       this.router.navigate([
         `provider-dashboard/workspace/providers/${this.providerId}/categories`]);
     });
-
-    this.notification.SuccessMessage('New category created', '', 2500);
   }
 
   cancel() {
@@ -142,6 +142,8 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     }
 
     if (!this.edit) {
+      this.msg = 'New category created';
+
       const data: Category = {
         name: this.form.name.value,
         description: this.form.description.value,
@@ -177,6 +179,19 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     } else {
       this.msg = 'Category edited';
 
+      // updated category attributes
+      this.category.name = this.form.name.value;
+      this.category.description = this.form.description.value;
+
+      this.categoryService.update(this.category).then(() => {
+        this.redirectToCategoryWorkspace();
+      })
+      .catch(error => {
+        this.notification.ErrorMessage(error.message, '', 2500);
+        this.loading = false;
+
+        return;
+      });
     }
 
   }

@@ -23,14 +23,24 @@
     <!--Card content-->
     <mdb-card-body class="px-lg-5">
       <!-- Name -->
-      <mdb-card-text class="mt-4">
-        <h6>Name: {{category.name}}</h6>
-      </mdb-card-text>
+      <h5 class="mt-2">
+        <strong>
+          <p class="dark-grey-text">Name: {{category.name}}</p>
+        </strong>
+      </h5>
 
       <!-- Description -->
-      <mdb-card-text class="mt-2">
-        <h6>Description: {{category.description}}</h6>
-      </mdb-card-text>
+      <h6 *ngIf="category.description.length > 0" class="mt-1">
+        Description: {{category.description}}
+      </h6>
+
+      <!-- Provider -->
+      <h5 class="mt-1 mb-2">
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
+          <span class="badge badge-pill indigo mr-2">{{category.providerName}}</span>
+        </a>
+      </h5>
+
 
     </mdb-card-body>
 

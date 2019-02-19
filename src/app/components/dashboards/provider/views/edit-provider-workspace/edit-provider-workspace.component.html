@@ -1,5 +1,5 @@
 <!-- Edit Provider -->
-<mdb-card id="header" class="w-responsive mt-3 mb-3 center ml-auto mr-auto">
+<mdb-card *ngIf="observer$ | async; else progress" id="header" class="w-responsive mt-3 mb-3 center ml-auto mr-auto">
   <!-- Card Header -->
   <mdb-card-header class="text-center">
     <h3 class="mt-1">

@@ -21,6 +21,7 @@ import { FileService } from '../../../../../services/file/file.service';
 export class EditProductWorkspaceComponent implements OnInit {
   editForm: FormGroup;
   title: string;
+  msg: string;
 
   regEx = Config.regex[0];
   regEx1 = Config.regex[1];
@@ -150,6 +151,8 @@ export class EditProductWorkspaceComponent implements OnInit {
   }
 
   redirectToProductWorkSpace() {
+    this.notification.SuccessMessage(this.msg, '', 2500);
+
     this.ngZone.run(() => {
       this.router.navigate([
         `provider-dashboard/workspace/providers/` +
@@ -159,7 +162,12 @@ export class EditProductWorkspaceComponent implements OnInit {
   }
 
   cancel() {
-    this.redirectToProductWorkSpace();
+    this.ngZone.run(() => {
+      this.router.navigate([
+        `provider-dashboard/workspace/providers/` +
+        `${this.providerId}/categories/${this.categoryId}/products`
+      ]);
+    });
   }
 
   async editProduct() {
@@ -175,6 +183,8 @@ export class EditProductWorkspaceComponent implements OnInit {
     }
 
     if (!this.edit) {
+      this.msg = 'New product created';
+
       const data: Product = {
         name: this.form.name.value,
         price: this.form.price.value,
@@ -210,7 +220,21 @@ export class EditProductWorkspaceComponent implements OnInit {
       });
 
     } else {
+      this.msg = 'product edited';
 
+      this.product.name = this.form.name.value;
+      this.product.price = this.form.price.value;
+      this.product.description = this.form.description.value;
+
+      this.productService.update(this.product).then(() => {
+        this.redirectToProductWorkSpace();
+      })
+      .catch(error => {
+        this.notification.ErrorMessage(error.message, '', 2500);
+        this.loading = false;
+
+        return;
+      });
     }
   }
 

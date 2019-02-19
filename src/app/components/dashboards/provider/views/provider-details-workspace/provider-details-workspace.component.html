@@ -23,42 +23,50 @@
     <mdb-card-body class="px-lg-5">
 
       <!-- Name -->
-      <mdb-card-text class="mt-4">
-        <h6>Name: {{provider.name}}</h6>
-      </mdb-card-text>
+      <h5 class="mt-2">
+        <strong>
+          <p class="dark-grey-text">Name: {{provider.name}}</p>
+        </strong>
+      </h5>
 
       <!-- Address -->
-      <mdb-card-text class="mt-2">
-        <h6>Address: {{provider.address.formattedAddress}}</h6>
-      </mdb-card-text>
+      <div class="block-options mt-1 mb-1">
+        <i class="fa fa-map-marker mr-2" aria-hidden="true"></i>
+        <h6>{{provider.address.formattedAddress}}</h6>
+      </div>
 
       <!-- Description -->
-      <mdb-card-text class="mt-2">
-        <h6>Description: {{provider.description}}</h6>
-      </mdb-card-text>
+      <h6 *ngIf="provider.description.length > 0" class="mt-1">
+        Description: {{provider.description}}
+      </h6>
 
     </mdb-card-body>
 
     <mdb-card-footer>
       <h4 class="text-center">
         <!-- Add category -->
-        <a (click)="redirectToEditCategory()">
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/create">
           <mdb-badge class="mr-2" color="red">Add category</mdb-badge>
         </a>
 
         <!-- List categories -->
-        <a (click)="redirectToCategoryWorkspace()">
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">
           <mdb-badge class="mr-2 mt-2" color="cyan">List categories</mdb-badge>
         </a>
 
         <!-- Add cashier -->
-        <a (click)="redirectToEditCashier()">
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/cashiers/create">
           <mdb-badge class="mr-2 mt-2" color="amber darken-2">Add cashier</mdb-badge>
         </a>
 
         <!-- List cashiers -->
-        <a (click)="redirectToCashierWorkspace()">
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/cashiers">
           <mdb-badge class="mr-2 mt-2" color="pink">List cashiers</mdb-badge>
+        </a>
+
+        <!-- List cashiers -->
+        <a href="">
+          <mdb-badge class="mr-2 mt-2" color="purple darken-2">List orders</mdb-badge>
         </a>
       </h4>
 
