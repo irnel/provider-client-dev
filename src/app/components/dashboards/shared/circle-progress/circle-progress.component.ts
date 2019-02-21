@@ -7,8 +7,9 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CircleProgressComponent implements OnInit {
 
-  @Input() waiting: Boolean;
+  @Input() failed: Boolean;
 
+  // todo: add image to error
   constructor() { }
 
   ngOnInit() {

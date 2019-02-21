@@ -15,6 +15,7 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
   provider: Provider;
   providerId: string;
   observer$: Observable<any>;
+  failed = false;
 
   constructor(
     private router: Router,
@@ -26,8 +27,17 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
 
   ngOnInit() {
     this.providerId = this.route.snapshot.params['id'];
-    this.observer$ = this.providerService.getProviderById(this.providerId)
-      .pipe(tap(provider => this.provider = provider));
+    this.observer$ = this.providerService.getProviderById(this.providerId);
+    this.observer$.subscribe(
+      provider => {
+        this.provider = provider;
+        this.failed = false;
+      },
+      error => {
+        this.failed = true;
+        this.notification.ErrorMessage(error.message, '', 2500);
+      }
+    );
   }
 
   redirectToHome() {

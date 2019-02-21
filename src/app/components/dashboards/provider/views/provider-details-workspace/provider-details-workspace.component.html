@@ -1,6 +1,7 @@
 <!-- Provider Details -->
-<div *ngIf="observer$ | async; else progress" class="w-responsive mt-3 mb-3 ml-auto mr-auto">
-  <mdb-card>
+<div *ngIf="true" class="w-responsive mt-3 mb-3 ml-auto">
+  <!-- navigation -->
+  <mdb-card class="w-responsive">
     <h6 class="pt-2 text-center">
       <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
       <a routerLink="/provider-dashboard/workspace/home">Home</a>
@@ -9,73 +10,53 @@
       <span> / </span>
       <span>Details</span>
     </h6>
-
   </mdb-card>
 
-  <!-- Provider content -->
-  <mdb-card class="mt-2">
-    <!-- Image -->
-
-    <img class="card-img-top" src={{provider.url}}
-        alt="Provider image" title="{{provider.name}}">
-
-    <!--Card content-->
-    <mdb-card-body class="px-lg-5">
-
-      <!-- Name -->
-      <h5 class="mt-2">
-        <strong>
-          <p class="dark-grey-text">Name: {{provider.name}}</p>
-        </strong>
-      </h5>
-
-      <!-- Address -->
-      <div class="block-options mt-1 mb-1">
-        <i class="fa fa-map-marker mr-2" aria-hidden="true"></i>
-        <h6>{{provider.address.formattedAddress}}</h6>
+  <!-- Image with Provider details -->
+  <div class="w-responsive h-75 card card-image-top" style="background-image: url('https://mdbootstrap.com/img/Photos/Horizontal/City/6-col/img%20(47).jpg');">
+    <div class="h-100 text-white text-center d-flex align-items-center rgba-black-strong px-3">
+      <div>
+        <h3 class="card-title pt-2"><strong>This is card title</strong></h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat fugiat, laboriosam, voluptatem,
+          optio vero odio nam sit officia accusamus minus error nisi architecto nulla ipsum dignissimos.
+          Odit sed qui, dolorum!.</p>
       </div>
+    </div>
+  </div>
 
-      <!-- Description -->
-      <h6 *ngIf="provider.description.length > 0" class="mt-1">
-        Description: {{provider.description}}
-      </h6>
-
-    </mdb-card-body>
-
+  <!-- provider options -->
+  <mdb-card class="w-responsive">
     <mdb-card-footer>
-      <h4 class="text-center">
-        <!-- Add category -->
-        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/create">
-          <mdb-badge class="mr-2" color="red">Add category</mdb-badge>
-        </a>
-
+      <h4 class="text-center mb-3">
         <!-- List categories -->
         <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">
-          <mdb-badge class="mr-2 mt-2" color="cyan">List categories</mdb-badge>
-        </a>
-
-        <!-- Add cashier -->
-        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/cashiers/create">
-          <mdb-badge class="mr-2 mt-2" color="amber darken-2">Add cashier</mdb-badge>
+          <mdb-badge class="mr-4 mt-3" color="cyan">List categories</mdb-badge>
         </a>
 
         <!-- List cashiers -->
         <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/cashiers">
-          <mdb-badge class="mr-2 mt-2" color="pink">List cashiers</mdb-badge>
+          <mdb-badge class="mr-4 mt-3" color="pink">List cashiers</mdb-badge>
         </a>
 
         <!-- List cashiers -->
         <a href="">
-          <mdb-badge class="mr-2 mt-2" color="purple darken-2">List orders</mdb-badge>
+          <mdb-badge class="mr-4 mt-3" color="purple darken-2">List orders</mdb-badge>
+        </a>
+
+        <!-- Add category -->
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/create">
+          <mdb-badge class="mr-4 mt-3" color="red">Add category</mdb-badge>
+        </a>
+
+        <!-- Add cashier -->
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/cashiers/create">
+          <mdb-badge class="mr-4 mt-3" color="amber darken-2">Add cashier</mdb-badge>
         </a>
       </h4>
 
     </mdb-card-footer>
-
   </mdb-card>
 
-</div>
-
 <ng-template #progress>
-  <app-circle-progress></app-circle-progress>
+  <app-circle-progress [failed]="failed"></app-circle-progress>
 </ng-template>
