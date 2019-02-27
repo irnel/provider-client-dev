@@ -1,13 +1,13 @@
-import { Observable } from 'rxjs';
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
 import { FileInfo } from '../../../../../helpers';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-file-input',
-  templateUrl: './file-input.component.html',
-  styleUrls: ['./file-input.component.scss']
+  selector: 'app-gallery',
+  templateUrl: './gallery.component.html',
+  styleUrls: ['./gallery.component.scss']
 })
-export class FileInputComponent implements OnInit {
+export class GalleryComponent implements OnInit {
   @Output() public filesInfo = new EventEmitter<FileInfo []>();
   @Input() onProgress: Observable<number>;
   @Input() uploading: Boolean;
@@ -19,34 +19,16 @@ export class FileInputComponent implements OnInit {
   errorMsg = '';
   extensionError = false;
   sizeError = false;
-  maxAllowed = false;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  closeAlert() {
-    this.alert.nativeElement.classList.remove('show');
-    this.showError = false;
-    this.extensionError = false;
-    this.sizeError = false;
-    this.maxAllowed = false;
-    this.fileName = '';
-  }
-
   onSelectFile(event) {
     // multiple files
     for (const file of event.target.files) {
       const reader = new FileReader();
-
-      // validate max number of image allowed
-      if (this.selectedFiles.length + event.target.files.length > 5) {
-        this.showError = true;
-        this.maxAllowed = true;
-
-        return;
-      }
 
       // validate image extension
       if (!this.isValidExtension(file.type)) {
@@ -57,7 +39,7 @@ export class FileInputComponent implements OnInit {
         return;
       }
 
-      // validate image size
+      // // validate image size
       if (!this.isValidImageSize(file.size)) {
         this.showError = true;
         this.sizeError = true;
@@ -109,5 +91,13 @@ export class FileInputComponent implements OnInit {
   // file size > 2048 kb
   isValidImageSize(size: number) {
     return (size / 1024) <= 2048;
+  }
+
+  closeAlert() {
+    this.alert.nativeElement.classList.remove('show');
+    this.showError = false;
+    this.extensionError = false;
+    this.sizeError = false;
+    this.fileName = '';
   }
 }

@@ -240,6 +240,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
 
     // create
     if (!this.edit) {
+      this.msg = 'Provider created';
       const data: Provider = {
         name:  this.form.name.value,
         address: this.address,

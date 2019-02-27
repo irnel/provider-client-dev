@@ -30,6 +30,7 @@ export class ProductWorkspaceComponent implements OnInit {
   providerId: string;
   categoryId: string;
   deleting = false;
+  state = 'waiting';
 
   constructor(
     private route: ActivatedRoute,
@@ -43,14 +44,19 @@ export class ProductWorkspaceComponent implements OnInit {
     this.providerId = this.route.snapshot.params['id'];
     this.categoryId = this.route.snapshot.params['catId'];
 
-    this.observer$ = this.productService.getAllProductsByCategoryId(this.categoryId)
-    .pipe(
-      tap(products => {
+    this.observer$ = this.productService.getAllProductsByCategoryId(this.categoryId);
+    this.observer$.subscribe(
+      products => {
         this.products = products;
         this.dataSource = new MatTableDataSource(this.products);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-      })
+        this.state = 'finished';
+      },
+      error => {
+        this.state = 'failed';
+        this.notification.ErrorMessage(error.message, '', 2500);
+      }
     );
   }
 

@@ -16,12 +16,14 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
   observer$: Observable<any>;
   providerId: string;
   categoryId: string;
+  state = 'waiting';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ngZone: NgZone,
-    private readonly productService: ProductService
+    private readonly productService: ProductService,
+    private readonly notification: NotificationService
   ) { }
 
   ngOnInit() {
@@ -29,8 +31,17 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
     this.categoryId = this.route.snapshot.params['catId'];
     const productId = this.route.snapshot.params['prodId'];
 
-    this.observer$ = this.productService.getProductById(productId)
-      .pipe(tap(product => this.product = product));
+    this.observer$ = this.productService.getProductById(productId);
+    this.observer$.subscribe(
+      product => {
+        this.product = product;
+        this.state = 'finished';
+      },
+      error => {
+        this.state = 'failed';
+        this.notification.ErrorMessage(error.message, '', 2500);
+      }
+    );
   }
 
   redirectToHome() {

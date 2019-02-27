@@ -17,6 +17,7 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
   categoryId: string;
   category: Category;
   observer$: Observable<any>;
+  state = 'waiting';
 
   constructor(
     private route: ActivatedRoute,
@@ -29,12 +30,17 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
   ngOnInit() {
     this.providerId = this.route.snapshot.params['id'];
     this.categoryId = this.route.snapshot.params['catId'];
-    this.observer$ = this.categoryService.getCategoryById(this.categoryId)
-      .pipe(
-        tap(category => {
-          this.category = category;
-        })
-      );
+    this.observer$ = this.categoryService.getCategoryById(this.categoryId);
+    this.observer$.subscribe(
+      category => {
+        this.category = category;
+        this.state = 'waiting';
+      },
+      error => {
+        this.state = 'failed';
+        this.notification.ErrorMessage(error.message, '', 2500);
+      }
+    );
   }
 
   redirectToHome() {

@@ -16,51 +16,36 @@
     </h6>
   </mdb-card>
 
-  <mdb-card class="mt-2">
-    <!-- Card Header -->
-    <img class="card-img-top" src={{product.url}}
-        alt="Provider image" title="{{product.name}}">
+  <mdb-card>
+    <div class="view">
+      <img class="card-img-top h-75" src="{{product.url}}" alt="provider image">
+      <div class="mask text-white text-center rgba-black-light py-4 px-3">
+        <!-- Name -->
+        <h3 class="card-title pt-2"><strong>{{product.name}}</strong></h3>
+        <!-- Price -->
+        <h2 class="mt-1"><strong>{{product.price}}$</strong></h2>
+        <!-- Description -->
+        <p *ngIf="product.description.length > 0">{{product.description}}</p>
+        <div class="block-options mt-3">
+          <!-- Provider -->
+          <a  routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
+            <h5><span class="badge badge-pill indigo mr-2">{{product.providerName}}</span></h5>
+          </a>
+  
+          <!-- Category -->
+          <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">
+            <h5><span class="badge badge-pill purple darken-2">{{product.categoryName}}</span></h5>
+          </a>
+        </div>
 
-    <!--Card content-->
-    <mdb-card-body class="px-lg-5">
-
-      <!-- Name -->
-      <h5 class="mt-2">
-        <strong>
-          <p class="dark-grey-text">Name: {{product.name}}</p>
-        </strong>
-      </h5>
-
-      <!-- Price -->
-      <h6 class="mt-1">
-        <strong>
-          <p class="font-weight-bold blue-text">Price: {{product.price}}$</p>
-        </strong>
-      </h6>
-
-      <!-- Description -->
-      <h6 *ngIf="product.description.length > 0" class="mt-1">
-        Description: {{product.description}}
-      </h6>
-
-      <div class="block-options mt-3">
-        <!-- Provider -->
-        <a  routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
-          <h5><span class="badge badge-pill indigo mr-2">{{product.providerName}}</span></h5>
-        </a>
-
-        <!-- Category -->
-        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">
-          <h5><span class="badge badge-pill purple darken-2">{{product.categoryName}}</span></h5>
-        </a>
       </div>
 
-    </mdb-card-body>
+    </div>
 
   </mdb-card>
-
+  
 </div>
 
 <ng-template #progress>
-  <app-circle-progress></app-circle-progress>
+  <app-circle-progress [state]="state" ></app-circle-progress>
 </ng-template>

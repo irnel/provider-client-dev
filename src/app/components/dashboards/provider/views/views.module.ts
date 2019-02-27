@@ -27,10 +27,9 @@ import {
   EditCashierWorkspaceComponent,
   ProviderDetailsWorkspaceComponent,
   CategoryDetailsWorkspaceComponent,
-  ProductDetailsWorkspaceComponent
+  ProductDetailsWorkspaceComponent,
+  GalleryComponent
 } from './index';
-import { FileInputComponent } from './file-input/file-input.component';
-
 
 @NgModule({
   imports: [
@@ -65,7 +64,7 @@ import { FileInputComponent } from './file-input/file-input.component';
     ProviderDetailsWorkspaceComponent,
     CategoryDetailsWorkspaceComponent,
     ProductDetailsWorkspaceComponent,
-    FileInputComponent
+    GalleryComponent
   ],
   exports: [
     StatsCardComponent,
@@ -84,7 +83,7 @@ import { FileInputComponent } from './file-input/file-input.component';
     ProviderDetailsWorkspaceComponent,
     CategoryDetailsWorkspaceComponent,
     ProductDetailsWorkspaceComponent,
-    FileInputComponent
+    GalleryComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

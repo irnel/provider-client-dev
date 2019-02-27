@@ -111,7 +111,7 @@
                   class="waves-light ml-3"
                   (click)="redirectToProviderDetails(provider.id)">
 
-                <i class="fa fa-info-circle prefix" aria-hidden="true"></i>
+                <i class="fa fa-info-circle prefix" style="color: #37474F" aria-hidden="true"></i>
               </a>
               <!-- Option Edit -->
               <a type="button"
@@ -120,7 +120,7 @@
                   class="waves-light mr-3 ml-3"
                   (click)="redirectToEditProvider(provider.id)">
 
-                <i class="fa fa-pencil prefix" aria-hidden="true"></i>
+                <i class="fa fa-pencil prefix" style="color: #37474F" aria-hidden="true"></i>
               </a>
               <!-- Option Delete -->
               <a type="button"
@@ -129,7 +129,7 @@
                   class="relative waves-light"
                   (click)="frame.toggle()">
 
-                <i class="fa fa-trash prefix" aria-hidden="true"></i>
+                <i class="fa fa-trash prefix" style="color: #37474F" aria-hidden="true"></i>
               </a>
 
               <!-- Modal Form Delete -->
@@ -214,5 +214,5 @@
 </div>
 
 <ng-template #progress>
-  <app-circle-progress></app-circle-progress>
+  <app-circle-progress [state]="state"></app-circle-progress>
 </ng-template>

@@ -1,10 +1,10 @@
 <!-- progress bar circle -->
-<div *ngIf="!failed" class="waiting-container">
-  <i class="fa fa-spinner fa-pulse fa-5x mr-5" style="color: #2962ff"></i>
+<div *ngIf="state === 'waiting'" class="waiting-container">
+  <i class="fa fa-spinner fa-pulse fa-5x mr-5" style="color: #4285F4"></i>
   <h5 class="text-center mt-3">Loading data ...</h5>
 </div>
 
 <!-- add image to error -->
-<div *ngIf="failed" class="failed-container">
+<div *ngIf="state === 'failed'" class="failed-container">
   <h5 class="text-center mt-3">Failed to load data ...</h5>
 </div>

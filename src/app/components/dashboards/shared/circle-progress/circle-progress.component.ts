@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-circle-progress',
@@ -7,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CircleProgressComponent implements OnInit {
 
-  @Input() failed: Boolean;
+  @Input() state: string;
 
   // todo: add image to error
   constructor() { }

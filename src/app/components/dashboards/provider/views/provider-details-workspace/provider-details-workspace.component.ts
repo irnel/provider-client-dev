@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Provider } from '../../../../../models';
 import { ProviderService, NotificationService } from '../../../../../services';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-provider-details-workspace',
@@ -15,7 +14,7 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
   provider: Provider;
   providerId: string;
   observer$: Observable<any>;
-  failed = false;
+  state = 'waiting';
 
   constructor(
     private router: Router,
@@ -31,10 +30,10 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
     this.observer$.subscribe(
       provider => {
         this.provider = provider;
-        this.failed = false;
+        this.state = 'finished';
       },
       error => {
-        this.failed = true;
+        this.state = 'failed';
         this.notification.ErrorMessage(error.message, '', 2500);
       }
     );

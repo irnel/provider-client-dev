@@ -27,6 +27,7 @@ export class CashierWorkspaceComponent implements OnInit {
   cashiers: Cashier [] = [];
   providerId: string;
   deleting = false;
+  state = 'waiting';
 
   constructor(
     private route: ActivatedRoute,
@@ -38,14 +39,19 @@ export class CashierWorkspaceComponent implements OnInit {
 
   ngOnInit() {
     this.providerId = this.route.snapshot.params['id'];
-    this.observer$ = this.cashierService.getAllCashiersByProviderId(this.providerId)
-    .pipe(
-      tap(cashiers => {
+    this.observer$ = this.cashierService.getAllCashiersByProviderId(this.providerId);
+    this.observer$.subscribe(
+      cashiers => {
         this.cashiers = cashiers;
         this.dataSource = new MatTableDataSource(this.cashiers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-      })
+        this.state = 'finished';
+      },
+      error => {
+        this.state = 'failed';
+        this.notification.ErrorMessage(error.message, '', 2500);
+      }
     );
   }
 

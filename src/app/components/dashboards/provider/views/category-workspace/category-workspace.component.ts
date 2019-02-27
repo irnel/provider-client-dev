@@ -26,7 +26,7 @@ export class CategoryWorkspaceComponent implements OnInit {
   providerId: string;
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
-  waiting = true;
+  state = 'waiting';
   deleting = false;
 
   constructor(
@@ -39,15 +39,20 @@ export class CategoryWorkspaceComponent implements OnInit {
 
   ngOnInit() {
     this.providerId = this.route.snapshot.params['id'];
-    this.observer$ = this.categoryService.getAllCategoriesByProviderId(this.providerId)
-      .pipe(
-        tap(categories => {
-          this.categories = categories;
-          this.dataSource = new MatTableDataSource(this.categories);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        })
-      );
+    this.observer$ = this.categoryService.getAllCategoriesByProviderId(this.providerId);
+    this.observer$.subscribe(
+      categories => {
+        this.categories = categories;
+        this.dataSource = new MatTableDataSource(this.categories);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.state = 'finished';
+      },
+      error => {
+        this.state = 'failed';
+        this.notification.ErrorMessage(error.message, '', 2500);
+      }
+    );
   }
 
   applyFilter(filterValue: string) {

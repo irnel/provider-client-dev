@@ -25,6 +25,7 @@ export class ProviderWorkspaceComponent implements OnInit {
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
   deleting = false;
+  state = 'waiting';
 
   constructor(
     private ngZone: NgZone,
@@ -36,14 +37,19 @@ export class ProviderWorkspaceComponent implements OnInit {
 
   ngOnInit() {
     const userId = this.authService.currentUserValue.uid;
-    this.observer$ = this.providerService.getAllProviderByUserId(userId)
-      .pipe(
-        tap(providers => {
-          this.providers = providers;
-          this.dataSource = new MatTableDataSource(providers);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        })
+    this.observer$ = this.providerService.getAllProviderByUserId(userId);
+    this.observer$.subscribe(
+      providers => {
+        this.providers = providers;
+        this.dataSource = new MatTableDataSource(providers);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.state = 'finished';
+      },
+      error => {
+        this.state = 'failed';
+        this.notification.ErrorMessage(error.message, '', 2500);
+      }
     );
   }
 
