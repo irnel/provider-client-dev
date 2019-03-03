@@ -34,7 +34,7 @@
       </div>
 
       <!-- Description -->
-      <div class="md-form form-sm mt-5 mb-2">
+      <div class="md-form form-sm mt-5">
         <textarea class="md-textarea md-textarea-auto form-control"
             id="formDescription" formControlName="description"
             type="text" [validateSuccess]="false"
@@ -44,7 +44,7 @@
       </div>
 
       <!-- Google maps (Location) -->
-      <div class="md-form form-sm">
+      <div class="md-form form-sm mt-5">
 
         <div class="md-form form-sm">
           <input #search mdbInputDirective type="text" class="form-control"
@@ -74,10 +74,12 @@
       </div>
 
       <!-- Gallery component -->
-      <app-gallery
-        (filesInfo)="onSelectedFiles($event)"
-        [onProgress]="allPercentage"
-        [uploading]="loading">
+      <app-gallery 
+        (files)="onSelectedFiles($event)"
+        [serverFiles$]="serverFiles$"
+        [progress$]="allPercentage"
+        [uploading]="loading"
+        [mode]="mode">
       </app-gallery>
 
     </form>
@@ -120,5 +122,5 @@
 </mdb-card>
 
 <ng-template #progress>
-  <app-circle-progress></app-circle-progress>
+  <app-circle-progress [state]="state"></app-circle-progress>
 </ng-template>

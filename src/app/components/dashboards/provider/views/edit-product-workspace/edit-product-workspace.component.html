@@ -62,7 +62,7 @@
         <!-- Image -->
         <app-gallery
           (filesInfo)="onSelectedFiles($event)"
-          [onProgress]="allPercentage"
+          [progress$]="allPercentage"
           [uploading]="loading">
         </app-gallery>
       </form>

@@ -1,12 +1,18 @@
 
 <!-- Grid row -->
-<div *ngIf="selectedFiles.length > 0" class="row border mb-2">
+<div *ngIf="serverFiles$ | async" class="row mb-2">
+  <div class="loading-shade w-100 h-100" *ngIf="clicked">
+    <!-- <i class="fa fa-spinner fa-pulse fa-5x" style = "color:#ffffff" aria-hidden="true"></i> -->
+    <div class="loader"></div>
+  </div>
+
   <!-- Grid column -->
   <div *ngFor="let image of selectedFiles"  class="col-lg-4 mt-3 mb-3">
     <!-- Card -->
     <mdb-card>
       <!-- Image -->
-      <img class="img-fluid card-img-top z-depth-1" src="{{image.src}}" alt="image">
+      <img *ngIf="image.file" class="img-fluid card-img-top z-depth-1" src="{{image.src}}" alt="image">
+      <img *ngIf="!image.file" class="img-fluid card-img-top z-depth-1" src="{{image.url}}" alt="image">
       <!-- Footer -->
       <mdb-card-footer *ngIf="!uploading" class="text-center">
         <!-- principal -->
@@ -23,7 +29,7 @@
           style="color: #37474F"
           (click)="removeImage(image)">
         </i>
-
+        
       </mdb-card-footer>
 
     </mdb-card>
@@ -58,14 +64,14 @@
 <input #fileInput type="file" accept="image/*" multiple style="display: none;"
     (change)="onSelectFile($event)">
 
-<div *ngIf="onProgress" class="text-center mt-2">
-  <small>Uploading images: {{onProgress | async}}%</small>
+<div *ngIf="progress$" class="text-center mt-2">
+  <small>Uploading images: {{progress$ | async}}%</small>
 </div>
-<div *ngIf="onProgress" class="progress">
+<div *ngIf="progress$" class="progress">
   <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
       role="progressbar"
-      [style.width]="((onProgress | async) + '%')"
-      aria-valuenow="{{onProgress | async}}"
+      [style.width]="((progress$ | async) + '%')"
+      aria-valuenow="{{progress$ | async}}"
       aria-valuemin="0"
       aria-valuemax="100">
   </div>

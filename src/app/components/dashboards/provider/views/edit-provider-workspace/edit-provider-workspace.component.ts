@@ -1,4 +1,3 @@
-
 /// <reference types="@types/googlemaps" />
 
 import { DOCUMENT } from '@angular/common';
@@ -12,8 +11,7 @@ import { PageScrollService, PageScrollInstance } from 'ngx-page-scroll';
 
 import { ProviderService, AuthService, NotificationService, FileService } from './../../../../../services';
 import { Config } from '../../../../../infrastructure';
-import { FileInfo } from '../../../../../helpers';
-import { Address, Provider } from '../../../../../models';
+import { Address, Provider, FileInfo } from '../../../../../models';
 import { Observable, interval } from 'rxjs';
 
 @Component({
@@ -33,7 +31,8 @@ export class EditProviderWorkspaceComponent implements OnInit {
   edit: boolean;
   test: string;
 
-  selectedFiles: FileInfo [] = [];
+  localFiles: FileInfo [] = [];  // create mode
+  serverFiles$: Observable<any>; // edit mode
   allPercentage: Observable<number>;
   observer$: Observable<any>;
   regEx: string = Config.regex[0];
@@ -43,7 +42,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
   addressError: string;
   mode: string;
   loading = false;
-  waiting = true;
+  state = 'waiting';
 
   constructor(
     private router: Router,
@@ -82,6 +81,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
         // initialize observable with interval
         // to hide progress interface
         this.observer$ = interval(1);
+        this.serverFiles$ = interval(1);
 
         // google maps values
         this.zoom = 4;
@@ -100,21 +100,29 @@ export class EditProviderWorkspaceComponent implements OnInit {
         this.edit = true;
 
         const providerId = this.route.snapshot.params['id'];
-        this.observer$ = this.providerService.getProviderById(providerId)
-          .pipe(
-            tap(provider => {
-              this.provider = provider;
-              // google maps values
-              this.address = this.provider.address;
-              this.zoom = 12;
-              // updated Form Control values
-              this.editForm.patchValue({
-                name: this.provider.name,
-                address: this.provider.address.formattedAddress,
-                description: this.provider.description
-              });
-            })
-          );
+        // Images value
+        this.serverFiles$ = this.fileService.getAllFilesInfoByProviderId(providerId);
+
+        this.observer$ = this.providerService.getProviderById(providerId);
+        this.observer$.subscribe(
+          provider => {
+            this.provider = provider;
+            this.state = 'finished';
+            // google maps values
+            this.address = this.provider.address;
+            this.zoom = 12;
+            // updated Form Control values
+            this.editForm.patchValue({
+              name: this.provider.name,
+              address: this.provider.address.formattedAddress,
+              description: this.provider.description
+            });
+          },
+          error => {
+            this.state = 'failed';
+            this.notification.ErrorMessage(error.message, '', 2500);
+          }
+        );
       }
     });
 
@@ -249,6 +257,12 @@ export class EditProviderWorkspaceComponent implements OnInit {
         url: ''
       };
 
+      // mark as principal by default
+      if (this.localFiles.length > 0) {
+        const index = this.localFiles.findIndex(file => file.markAsPrincipal === true);
+        if (index === -1) { this.localFiles[0].markAsPrincipal = true; }
+      }
+
       // create provider
       await this.providerService.create(data).then(
         async (provider) => {
@@ -261,18 +275,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
           return;
         });
 
-      // redirect to provider workspace if not upload images
-      if (this.selectedFiles.length === 0) {
-        this.redirectToProviderWorkspace();
-      }
-
-      this.allPercentage = this.fileService.upload(this.selectedFiles, this.provider);
-      // complete operation
-      this.allPercentage.subscribe(progress => {
-        if (progress === 100) {
-          this.redirectToProviderWorkspace();
-        }
-      });
+        this.uploadFiles();
 
     } else {
       this.msg = 'Provider edited';
@@ -283,7 +286,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
       this.provider.description = this.form.description.value;
 
       this.providerService.update(this.provider).then(() => {
-        this.redirectToProviderWorkspace();
+        this.uploadFiles();
       })
       .catch(error => {
         this.notification.ErrorMessage(error.message, '', 2500);
@@ -300,20 +303,29 @@ export class EditProviderWorkspaceComponent implements OnInit {
     this.pageScrollService.start(scroll);
   }
 
-  // receive files from file-input-component
-  onSelectedFiles(files: FileInfo []) {
-    let principal = false;
+  uploadFiles() {
+    // filtering local files
+    const filterFiles = this.localFiles.filter(file => file.file);
 
-    files.forEach(f => {
-      f.modelType = 'providers';
-      f.markAsPrincipal ? principal = true : principal = false;
-    });
-
-    // mark as principal first element
-    if (!principal) {
-      files[0].markAsPrincipal = true;
+    // redirect to provider workspace if not upload images
+    if (filterFiles.length === 0) {
+      this.redirectToProviderWorkspace();
+    } else {
+      this.allPercentage = this.fileService.upload(filterFiles, this.provider);
+      // complete operation
+      this.allPercentage.subscribe(progress => {
+        if (progress === 100) {
+          this.redirectToProviderWorkspace();
+        }
+      });
     }
+  }
 
-    this.selectedFiles = files;
+  // receive files from gallery-component
+  onSelectedFiles(files: FileInfo []) {
+    this.localFiles = files.map(file => {
+      file.modelType = 'providers';
+      return file;
+    });
   }
 }

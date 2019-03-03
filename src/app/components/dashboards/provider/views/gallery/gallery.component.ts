@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
-import { FileInfo } from '../../../../../helpers';
 import { Observable } from 'rxjs';
+import { FileInfo } from './../../../../../models';
+import { FileService } from '../../../../../services';
+import { NotificationService } from '../../../../../services';
 
 @Component({
   selector: 'app-gallery',
@@ -8,9 +10,11 @@ import { Observable } from 'rxjs';
   styleUrls: ['./gallery.component.scss']
 })
 export class GalleryComponent implements OnInit {
-  @Output() public filesInfo = new EventEmitter<FileInfo []>();
-  @Input() onProgress: Observable<number>;
+  @Output() files = new EventEmitter<FileInfo []>();
+  @Input() serverFiles$: Observable<any>;
+  @Input() progress$: Observable<number>;
   @Input() uploading: Boolean;
+  @Input() mode: string;
   @ViewChild('alert') alert: ElementRef;
 
   selectedFiles: FileInfo [] = [];
@@ -19,12 +23,22 @@ export class GalleryComponent implements OnInit {
   errorMsg = '';
   extensionError = false;
   sizeError = false;
+  clicked = false;
 
-  constructor() { }
+  constructor(
+    private readonly fileService: FileService,
+    private readonly notification: NotificationService
+  ) {}
 
   ngOnInit() {
+    if (this.mode === 'edit') {
+      this.serverFiles$.subscribe(files => {
+        this.selectedFiles = files;
+      });
+    }
   }
 
+  // local files
   onSelectFile(event) {
     // multiple files
     for (const file of event.target.files) {
@@ -49,14 +63,23 @@ export class GalleryComponent implements OnInit {
       }
 
       reader.addEventListener('load', (eventProgress: any) => {
-        const index = this.selectedFiles.findIndex(f => f.file.name === file.name);
+        const index = this.selectedFiles.findIndex(f => f.name === file.name);
         if (index === -1) {
-          const fileInfo = new FileInfo(eventProgress.target.result, file);
+          const fileInfo: FileInfo = {
+            file: file,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            src: eventProgress.target.result,
+            createdAt: new Date(),
+            markAsPrincipal: false
+          };
+
           this.selectedFiles.push(fileInfo);
         }
 
         // event send fileInfo data
-        this.filesInfo.emit(this.selectedFiles);
+        this.files.emit(this.selectedFiles);
       });
 
       reader.readAsDataURL(file);
@@ -64,23 +87,57 @@ export class GalleryComponent implements OnInit {
   }
 
   markAsPrincipal(image: FileInfo) {
-    // find image marked as principal
-    this.selectedFiles.map(f => f.markAsPrincipal = false);
+    this.selectedFiles = this.selectedFiles.map(file => {
+      file.markAsPrincipal = false;
 
-    // mark as principal new image
-    const index = this.selectedFiles.findIndex(f => f.file.name === image.file.name);
-    this.selectedFiles[index].markAsPrincipal = true;
+      return file;
+    });
 
     // event send fileInfo data
-    this.filesInfo.emit(this.selectedFiles);
+    if (image.file) {
+      // mark as principal new image
+      const newIndex = this.selectedFiles.findIndex(f => f.name === image.name);
+      this.selectedFiles[newIndex].markAsPrincipal = true;
+
+      this.files.emit(this.selectedFiles);
+    } else {
+      this.clicked = true;
+      this.fileService.updateFileInfo(image).then(() => {
+        this.clicked = false;
+        this.files.emit(this.selectedFiles);
+      })
+      .catch(error => {
+        this.clicked = false;
+        this.notification.ErrorMessage(error.message, '', 2500);
+      });
+    }
   }
 
   removeImage(image: FileInfo) {
-    const index = this.selectedFiles.findIndex(f => f.file.name === image.file.name);
-    this.selectedFiles.splice(index, 1);
+    if (image.markAsPrincipal) {
+      this.notification.WarningMessage(
+        'Can not delete the main image', '', 2500);
+
+      return;
+    }
 
     // event send fileInfo data
-    this.filesInfo.emit(this.selectedFiles);
+    if (image.file) {
+      const index = this.selectedFiles.findIndex(f => f.name === image.name);
+      this.selectedFiles.splice(index, 1);
+
+      this.files.emit(this.selectedFiles);
+    } else {
+      this.clicked = true;
+      this.fileService.removeFileInfo(image).then(() => {
+        this.clicked = false;
+        this.files.emit(this.selectedFiles);
+      })
+      .catch(error => {
+        this.clicked = false;
+        this.notification.ErrorMessage(error.message, '', 2500);
+      });
+    }
   }
 
   // valid image extension "jpg", "jpeg", "gif", "png"

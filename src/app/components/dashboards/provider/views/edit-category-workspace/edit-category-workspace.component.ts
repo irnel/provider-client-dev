@@ -1,16 +1,12 @@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Inject, NgZone } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 
 import { Observable } from 'rxjs';
 import { startWith, map, tap } from 'rxjs/operators';
 
-
-import { PageScrollInstance, PageScrollService } from 'ngx-page-scroll';
 import { NotificationService, CategoryService, FileService } from '../../../../../services';
-import { FileInfo } from './../../../../../helpers';
-import { Provider, Category } from '../../../../../models';
+import { Provider, Category, FileInfo } from '../../../../../models';
 import { Config } from './../../../../../infrastructure';
 import { ProviderService } from '../../../../../services/provider/provider.service';
 
@@ -47,9 +43,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     private readonly categoryService: CategoryService,
     private readonly providerService: ProviderService,
     private readonly fileService: FileService
-  ) {
-
-  }
+  ) { }
 
   ngOnInit() {
     // create controls

@@ -1,14 +1,10 @@
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DOCUMENT } from '@angular/platform-browser';
-
 import { startWith, map, tap } from 'rxjs/operators';
-import { PageScrollService, PageScrollInstance } from 'ngx-page-scroll';
 
 import { Config } from './../../../../../infrastructure';
-import { FileInfo } from '../../../../../helpers';
-import { Product, Category } from '../../../../../models';
+import { Product, Category, FileInfo } from '../../../../../models';
 import { CategoryService, ProductService, NotificationService } from '../../../../../services';
 import { Observable, Observer } from 'rxjs';
 import { FileService } from '../../../../../services/file/file.service';
