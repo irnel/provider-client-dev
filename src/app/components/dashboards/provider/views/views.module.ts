@@ -31,6 +31,7 @@ import {
   GalleryComponent
 } from './index';
 
+
 @NgModule({
   imports: [
     CommonModule,
