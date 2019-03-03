@@ -33,4 +33,14 @@ export class NotificationService {
       pauseOnHover: true
     });
   }
+
+  WarningMessage(body: string, title: string, timeOut: number) {
+    this.toast.warning(body, title, {
+      timeout: timeOut,
+      backdrop: 0.2,
+      showProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true
+    });
+  }
 }
