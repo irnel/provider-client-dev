@@ -4,4 +4,4 @@ export * from './address';
 export * from './category';
 export * from './product';
 export * from './cashier';
-export * from './image-info';
+export * from './file-info';
