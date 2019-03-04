@@ -101,7 +101,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
 
         const providerId = this.route.snapshot.params['id'];
         // Images value
-        this.serverFiles$ = this.fileService.getAllFilesInfoByProviderId(providerId);
+        this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(providerId);
 
         this.observer$ = this.providerService.getProviderById(providerId);
         this.observer$.subscribe(

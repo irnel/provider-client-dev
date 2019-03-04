@@ -6,7 +6,7 @@ import { startWith, map, tap } from 'rxjs/operators';
 import { Config } from './../../../../../infrastructure';
 import { Product, Category, FileInfo } from '../../../../../models';
 import { CategoryService, ProductService, NotificationService } from '../../../../../services';
-import { Observable, Observer } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 import { FileService } from '../../../../../services/file/file.service';
 
 @Component({
@@ -26,7 +26,8 @@ export class EditProductWorkspaceComponent implements OnInit {
   nameError: string;
   priceError: string;
 
-  selectedFiles: FileInfo [] = [];
+  localFiles: FileInfo [] = [];  // create mode
+  serverFiles$: Observable<any>; // edit mode
   allPercentage: Observable<number>;
   observer$: Observable<any>;
   product: Product;
@@ -35,6 +36,7 @@ export class EditProductWorkspaceComponent implements OnInit {
   categoryId: string;
   mode: string;
   loading = false;
+  state = 'waiting';
 
   constructor(
     private route: ActivatedRoute,
@@ -66,25 +68,44 @@ export class EditProductWorkspaceComponent implements OnInit {
       this.categoryId = this.route.snapshot.params['catId'];
       this.mode = data.mode;
 
-      if (data.mode === 'edit') {
+      if (data.mode === 'create') {
+        this.edit = false;
+        this.title = 'Create Product';
+
+        // initialize observable with interval
+        this.serverFiles$ = interval(1);
+        this.observer$ = this.categoryService.getCategoryById(this.categoryId);
+        this.observer$.subscribe(
+          category => {
+            this.category = category;
+            this.state = 'finished';
+          },
+          error => {
+            this.state = 'failed';
+            this.notification.ErrorMessage(error.message, '', 2500);
+          }
+        );
+
+      } else {
         this.edit = true;
         this.title = 'Edit Product';
 
         const productId = this.route.snapshot.params['prodId'];
-        this.observer$ = this.productService.getProductById(productId)
-          .pipe(
-            tap(product => {
-              this.product = product;
-              this.editForm.patchValue(product);
-            })
-          );
+        // Images value
+        this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(productId);
 
-      } else {
-        this.edit = false;
-        this.title = 'Create Product';
-
-        this.observer$ = this.categoryService.getCategoryById(this.categoryId)
-          .pipe(tap(category => this.category = category));
+        this.observer$ = this.productService.getProductById(productId);
+        this.observer$.subscribe(
+          product => {
+            this.product = product;
+            this.editForm.patchValue(product);
+            this.state = 'finished';
+          },
+          error => {
+            this.state = 'failed';
+            this.notification.ErrorMessage(error.message, '', 2500);
+          }
+        );
       }
     });
 
@@ -202,18 +223,7 @@ export class EditProductWorkspaceComponent implements OnInit {
         return;
       });
 
-      // redirect to provider workspace if not upload images
-      if (this.selectedFiles.length === 0) {
-        this.redirectToProductWorkSpace();
-      }
-
-      this.allPercentage = this.fileService.upload(this.selectedFiles, this.product);
-      // complete operation
-      this.allPercentage.subscribe(progress => {
-        if (progress === 100) {
-          this.redirectToProductWorkSpace();
-        }
-      });
+      this.uploadFiles();
 
     } else {
       this.msg = 'product edited';
@@ -223,7 +233,7 @@ export class EditProductWorkspaceComponent implements OnInit {
       this.product.description = this.form.description.value;
 
       this.productService.update(this.product).then(() => {
-        this.redirectToProductWorkSpace();
+        this.uploadFiles();
       })
       .catch(error => {
         this.notification.ErrorMessage(error.message, '', 2500);
@@ -234,20 +244,29 @@ export class EditProductWorkspaceComponent implements OnInit {
     }
   }
 
-  // receive files from file-input-component
-  onSelectedFiles(files: FileInfo []) {
-    let principal = false;
+  uploadFiles() {
+    // filtering local files
+    const filterFiles = this.localFiles.filter(file => file.file);
 
-    files.forEach(f => {
-      f.modelType = 'products';
-      f.markAsPrincipal ? principal = true : principal = false;
-    });
-
-    // mark as principal first element
-    if (!principal) {
-      files[0].markAsPrincipal = true;
+    // redirect to provider workspace if not upload images
+    if (filterFiles.length === 0) {
+      this.redirectToProductWorkSpace();
+    } else {
+      this.allPercentage = this.fileService.upload(filterFiles, this.product);
+      // complete operation
+      this.allPercentage.subscribe(progress => {
+        if (progress === 100) {
+          this.redirectToProductWorkSpace();
+        }
+      });
     }
+  }
 
-    this.selectedFiles = files;
+  // receive files from gallery-component
+  onSelectedFiles(files: FileInfo []) {
+    this.localFiles = files.map(file => {
+      file.modelType = 'products';
+      return file;
+    });
   }
 }

@@ -1,14 +1,14 @@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit, Inject, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { startWith, map, tap } from 'rxjs/operators';
+import { Observable, interval } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 
-import { NotificationService, CategoryService, FileService } from '../../../../../services';
+import {
+  ProviderService, NotificationService, CategoryService, FileService } from '../../../../../services';
 import { Provider, Category, FileInfo } from '../../../../../models';
 import { Config } from './../../../../../infrastructure';
-import { ProviderService } from '../../../../../services/provider/provider.service';
 
 @Component({
   selector: 'app-edit-category-workspace',
@@ -24,7 +24,8 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   regEx: string = Config.regex[0];
   regEx1: string = Config.regex[1];
 
-  selectedFiles: FileInfo [] = [];
+  localFiles: FileInfo [] = [];  // create mode
+  serverFiles$: Observable<any>; // edit mode
   observer$: Observable<any>;
   allPercentage: Observable<number>;
   category: Category;
@@ -32,7 +33,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   providerId: string;
   mode: string;
   loading = false;
-  waiting = true;
+  state = 'waiting';
 
   constructor(
     private router: Router,
@@ -58,28 +59,46 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     // Change Form values
     this.route.data.subscribe(data => {
       // find provider by url params
-     this.providerId = this.route.snapshot.params['id'];
       this.mode = data.mode;
+      this.providerId = this.route.snapshot.params['id'];
 
-      if (data.mode === 'edit') {
+      if (data.mode === 'create') {
+        this.edit = false;
+        this.title = 'Create Category';
+
+        // initialize observable with interval
+        this.serverFiles$ = interval(1);
+        this.observer$ = this.providerService.getProviderById(this.providerId);
+        this.observer$.subscribe(
+          provider => {
+            this.provider = provider;
+            this.state = 'finished';
+          },
+          error => {
+            this.state = 'failed';
+            this.notification.ErrorMessage(error.message, '', 2500);
+          }
+        );
+      } else {
         this.edit = true;
         this.title = 'Edit Category';
 
         const catId = this.route.snapshot.params['catId'];
-        this.observer$ = this.categoryService.getCategoryById(catId)
-          .pipe(
-            tap(category => {
-              this.category = category;
-              this.editForm.patchValue(category);
-            })
-          );
-
-      } else {
-        this.edit = false;
-        this.title = 'Create Category';
-
-        this.observer$ = this.providerService.getProviderById(this.providerId)
-          .pipe(tap(provider => this.provider = provider));
+        // Images value
+        this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(catId);
+        // current category
+        this.observer$ = this.categoryService.getCategoryById(catId);
+        this.observer$.subscribe(
+          category => {
+            this.category = category;
+            this.state = 'finished';
+            this.editForm.patchValue(category);
+          },
+          error => {
+            this.state = 'failed';
+            this.notification.ErrorMessage(error.message, '', 2500);
+          }
+        );
       }
     });
 
@@ -158,18 +177,8 @@ export class EditCategoryWorkspaceComponent implements OnInit {
           return;
         });
 
-      // redirect to provider workspace if not upload images
-      if (this.selectedFiles.length === 0) {
-        this.redirectToCategoryWorkspace();
-      }
+        this.uploadFiles();
 
-      this.allPercentage = this.fileService.upload(this.selectedFiles, this.category);
-       // complete operation
-       this.allPercentage.subscribe(progress => {
-        if (progress === 100) {
-          this.redirectToCategoryWorkspace();
-        }
-      });
     } else {
       this.msg = 'Category edited';
 
@@ -178,7 +187,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       this.category.description = this.form.description.value;
 
       this.categoryService.update(this.category).then(() => {
-        this.redirectToCategoryWorkspace();
+        this.uploadFiles();
       })
       .catch(error => {
         this.notification.ErrorMessage(error.message, '', 2500);
@@ -187,23 +196,31 @@ export class EditCategoryWorkspaceComponent implements OnInit {
         return;
       });
     }
-
   }
 
-  // receive files from file-input-component
-  onSelectedFiles(files: FileInfo []) {
-    let principal = false;
+  uploadFiles() {
+    // filtering local files
+    const filterFiles = this.localFiles.filter(file => file.file);
 
-    files.forEach(f => {
-      f.modelType = 'categories';
-      f.markAsPrincipal ? principal = true : principal = false;
-    });
-
-    // mark as principal first element
-    if (!principal) {
-      files[0].markAsPrincipal = true;
+    // redirect to category workspace if not upload images
+    if (filterFiles.length === 0) {
+      this.redirectToCategoryWorkspace();
+    } else {
+      this.allPercentage = this.fileService.upload(filterFiles, this.category);
+      // complete operation
+      this.allPercentage.subscribe(progress => {
+        if (progress === 100) {
+          this.redirectToCategoryWorkspace();
+        }
+      });
     }
+  }
 
-    this.selectedFiles = files;
+  // receive files from gallery-component
+  onSelectedFiles(files: FileInfo []) {
+    this.localFiles = files.map(file => {
+      file.modelType = 'categories';
+      return file;
+    });
   }
 }

@@ -48,11 +48,13 @@
         <label for="formDescription">Description</label>
       </div>
 
-      <!-- Image -->
-      <app-gallery
-        (filesInfo)="onSelectedFiles($event)"
+      <!-- Gallery component -->
+      <app-gallery 
+        (files)="onSelectedFiles($event)"
+        [serverFiles$]="serverFiles$"
         [progress$]="allPercentage"
-        [uploading]="loading">
+        [uploading]="loading"
+        [mode]="mode">
       </app-gallery>
     </form>
 
@@ -95,5 +97,5 @@
 </mdb-card>
 
 <ng-template #progress>
-  <app-circle-progress></app-circle-progress>
+  <app-circle-progress [state]="state"></app-circle-progress>
 </ng-template>
