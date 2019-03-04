@@ -86,7 +86,7 @@ export class FileService {
     this.filesCollection.add(fileInfo);
   }
 
-  getAllFilesInfoByProviderId(id) {
+  getAllFilesInfoByModelId(id) {
     const collection = this.afs.collection(
       'filesinfo', query => query.where('modelId', '==', id));
 

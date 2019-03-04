@@ -12,6 +12,7 @@ export class Converter {
       photoURL: firebaseUser.photoURL,
       roles: [Roles.Provider],
       emailVerified: firebaseUser.emailVerified,
+      enable: false,
       refreshToken: firebaseUser.refreshToken,
       uid: firebaseUser.uid
     };
