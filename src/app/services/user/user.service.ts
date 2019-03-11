@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 
 import { User } from '../../models';
 import { Observable } from 'rxjs';
-import { map, every, first } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -34,9 +34,14 @@ export class UserService {
 
 
   getUserById(uid) {
-    this.userDocument = this.af.doc(`users/${uid}`);
+    return this.af.doc(`users/${uid}`).snapshotChanges().pipe(
+      map(snapshot => {
+        this.userModel = snapshot.payload.data() as User;
+        this.userModel.uid = snapshot.payload.id;
 
-    return this.userDocument;
+        return this.userModel;
+      })
+    );
   }
 
   getUserByEmail(email: string) {

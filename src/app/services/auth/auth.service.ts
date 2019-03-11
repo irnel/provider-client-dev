@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
-import { SnotifyService } from 'ng-snotify';
-import { auth, firestore } from 'firebase';
+import { auth } from 'firebase';
 
 import { User } from '../../models';
 import { Converter } from '../../helpers/converter';
-import { Roles } from './../../helpers/enum-roles';
 import { NotificationService } from '../notification/notification.service';
+import { UserService } from '../user/user.service';
+import { Roles } from '../../helpers/enum-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -21,17 +21,17 @@ export class AuthService {
   constructor(
     private readonly afAuth: AngularFireAuth,
     private readonly afs: AngularFirestore,
-    private readonly toast: SnotifyService,
-    private readonly notificationService: NotificationService,
-    private router: Router
+    private readonly userService: UserService,
+    private readonly notificationService: NotificationService
   ) {
 
      /* Saving user data in local storage when
     logged in and setting up null when logged out */
     this.afAuth.authState.subscribe(firebaseUser => {
       if (firebaseUser) {
-        localStorage.setItem(
-          'user', JSON.stringify(Converter.ToUser(firebaseUser)));
+        this.userService.getUserById(firebaseUser.uid).subscribe(
+          user => localStorage.setItem('user', JSON.stringify(user))
+        );
       } else {
         localStorage.setItem('user', null);
       }
@@ -45,10 +45,13 @@ export class AuthService {
   SignIn(email, password) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then(credential => {
-        const user = Converter.ToUser(credential.user);
-        this.currentUserSubject.next(user);
+        return this.userService.getUserById(credential.user.uid).subscribe(
+          user => {
+            this.currentUserSubject.next(user);
 
-        return user;
+            return user;
+          }
+        );
       });
   }
 
@@ -72,9 +75,19 @@ export class AuthService {
   GoogleAuth() {
     return this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider())
       .then(credential => {
-        const user = Converter.ToUser(credential.user);
-        this.currentUserSubject.next(user);
+        const user: User = {
+          displayName: credential.user.displayName,
+          email: credential.user.email,
+          phoneNumber: credential.user.phoneNumber,
+          photoURL: credential.user.photoURL,
+          enable: false,
+          roles: [Roles.Provider],
+          emailVerified: credential.user.emailVerified,
+          refreshToken: credential.user.refreshToken,
+          uid: credential.user.uid
+        };
 
+        this.SetUserData(user);
         return user;
       })
       .catch(error => {
@@ -117,15 +130,5 @@ export class AuthService {
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
     return (user && user.emailVerified) ? true : false;
-  }
-
-  showErrorMessage(message: string, title: string, time: number) {
-    this.toast.error(message, title, {
-      backdrop: 0.2,
-      closeOnClick: true,
-      pauseOnHover: true,
-      showProgressBar: false,
-      timeout: time
-    });
   }
 }
