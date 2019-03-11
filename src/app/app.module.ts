@@ -18,22 +18,29 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import { environment } from '../environments/environment';
 
+// Home Admin Module
+import { HomeAdminModule } from './components/dashboards/admin/home-admin/home-admin.module';
+
 // Home Provider Module
 import { HomeProviderModule } from './components/dashboards/provider/home-provider/home-provider.module';
+
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { DefaultComponent } from './components/default/default.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    DefaultComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HomeAdminModule,
     HomeProviderModule,
     FormsModule,
     ReactiveFormsModule,

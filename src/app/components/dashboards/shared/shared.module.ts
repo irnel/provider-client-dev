@@ -9,7 +9,6 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 import { FooterComponent } from './footer/footer.component';
 import { LayoutComponent } from './layout/layout.component';
-import { HeaderComponent } from './header/header.component';
 import { CircleProgressComponent } from './circle-progress/circle-progress.component';
 
 @NgModule({
@@ -24,13 +23,11 @@ import { CircleProgressComponent } from './circle-progress/circle-progress.compo
   declarations: [
     LayoutComponent,
     FooterComponent,
-    HeaderComponent,
     CircleProgressComponent
   ],
   exports: [
     LayoutComponent,
     FooterComponent,
-    HeaderComponent,
     CircleProgressComponent
   ],
   schemas: [
