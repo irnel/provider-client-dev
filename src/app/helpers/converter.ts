@@ -4,15 +4,15 @@ import { Roles } from './enum-roles';
 export class Converter {
 
   // Convert firebase user to user app
-  static ToUser(firebaseUser: firebase.User) {
+  static ToUser(firebaseUser) {
     const user: User = {
       displayName: firebaseUser.displayName,
       email: firebaseUser.email,
       phoneNumber: firebaseUser.phoneNumber,
       photoURL: firebaseUser.photoURL,
-      roles: [Roles.Provider],
+      enable: firebaseUser.enable,
+      roles: firebaseUser.roles,
       emailVerified: firebaseUser.emailVerified,
-      enable: false,
       refreshToken: firebaseUser.refreshToken,
       uid: firebaseUser.uid
     };
