@@ -11,9 +11,7 @@ export class HomeProviderComponent implements OnInit {
 
   isHandSet$: Observable<BreakpointState>;
 
-  constructor(
-    private breakpointObserver: BreakpointObserver
-  ) {
+  constructor(private breakpointObserver: BreakpointObserver) {
     this.isHandSet$ = this.breakpointObserver.observe(Breakpoints.Handset);
   }
 

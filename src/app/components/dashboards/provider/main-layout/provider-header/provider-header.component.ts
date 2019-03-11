@@ -1,17 +1,15 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy, Output, EventEmitter, NgZone } from '@angular/core';
-import { SnotifyService } from 'ng-snotify';
 
-import { AuthService } from './../../../../services';
-import { User } from './../../../../models';
-
+import { AuthService, NotificationService } from '../../../../../services';
+import { User } from '../../../../../models';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  selector: 'app-provider-header',
+  templateUrl: './provider-header.component.html',
+  styleUrls: ['./provider-header.component.scss']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class ProviderHeaderComponent implements OnInit {
   currentUser: User;
   @Output() public sidenavToggle = new EventEmitter();
 
@@ -19,16 +17,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router,
     private ngZone: NgZone,
     private readonly authService: AuthService,
-    private readonly toast: SnotifyService
+    private readonly notification: NotificationService
   ) {
 
     this.currentUser = this.authService.currentUserValue;
    }
 
   ngOnInit() {
-  }
-
-  ngOnDestroy() {
   }
 
   public SignOut() {
@@ -38,13 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
     })
     .catch(error => {
-      this.toast.error(error.message, '', {
-        backdrop: 0.2,
-        closeOnClick: true,
-        pauseOnHover: true,
-        showProgressBar: false,
-        timeout: 2500
-      });
+      this.notification.ErrorMessage(error.message, '', 2500);
     });
   }
 

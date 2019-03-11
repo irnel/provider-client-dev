@@ -5,13 +5,13 @@ import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { SharedModule } from './../../shared/shared.module';
-import { ViewsModule } from './../views/views.module';
+import { SharedModule } from '../../shared/shared.module';
+import { ViewsModule } from '../../admin/views/views.module';
 import { MaterialModule } from '../../../material/material.module';
-import { NavigationModule } from './../main-layout/navigation/navigation.module';
+import { NavigationModule } from '../main-layout/navigation/navigation.module';
 
-import { HomeProviderComponent } from './home-provider.component';
-import { ProviderHeaderComponent } from '../main-layout/provider-header/provider-header.component';
+import { HomeAdminComponent } from './home-admin.component';
+import { AdminHeaderComponent } from '../main-layout/admin-header/admin-header.component';
 
 @NgModule({
   imports: [
@@ -26,16 +26,16 @@ import { ProviderHeaderComponent } from '../main-layout/provider-header/provider
     MDBBootstrapModule.forRoot(),
   ],
   declarations: [
-    HomeProviderComponent,
-    ProviderHeaderComponent
+    HomeAdminComponent,
+    AdminHeaderComponent
   ],
   exports: [
-    HomeProviderComponent,
-    ProviderHeaderComponent
+    HomeAdminComponent,
+    AdminHeaderComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA
   ]
 })
-export class HomeProviderModule { }
+export class HomeAdminModule { }

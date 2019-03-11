@@ -4,11 +4,8 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
 import { Config } from '../../../../../infrastructure';
 import { Provider, Cashier } from '../../../../../models';
-import {  } from 'src/app/services';
 import { CashierService, NotificationService } from '../../../../../services';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
 
 @Component({
   selector: 'app-cashier-workspace',

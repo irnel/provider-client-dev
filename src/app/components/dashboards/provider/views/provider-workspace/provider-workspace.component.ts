@@ -1,12 +1,11 @@
 import { Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { Component, OnInit, ViewChild, NgZone, Renderer2, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 
 import { Config } from '../../../../../infrastructure';
 import { ProviderService, AuthService, NotificationService } from '../../../../../services';
 import { Provider } from '../../../../../models';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-provider-workspace',
@@ -14,8 +13,9 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./provider-workspace.component.scss']
 })
 export class ProviderWorkspaceComponent implements OnInit {
-  columnsToDisplay: string [] = ['image', 'name', 'address', 'description', 'operation'];
-  dataSource: MatTableDataSource<Provider>;
+  public columnsToDisplay: string [] = ['image', 'name', 'address', 'description', 'operation'];
+  public dataSource: MatTableDataSource<Provider>;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('frame') frame: ElementRef;
@@ -41,7 +41,7 @@ export class ProviderWorkspaceComponent implements OnInit {
     this.observer$.subscribe(
       providers => {
         this.providers = providers;
-        this.dataSource = new MatTableDataSource(providers);
+        this.dataSource = new MatTableDataSource(this.providers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.state = 'finished';

@@ -124,6 +124,7 @@ export class RegisterComponent implements OnInit {
       displayName: this.form.fullName.value,
       email: this.form.email.value,
       password: this.form.password.value,
+      enable: false,
       roles: [Roles.Provider]
     }).then(user => {
       this.loading = false;

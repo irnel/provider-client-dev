@@ -4,8 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Provider, Category } from '../../../../../models';
 import { CategoryService, NotificationService } from './../../../../../services';
-import { tap } from 'rxjs/operators';
-
 
 @Component({
   selector: 'app-category-details-workspace',
@@ -25,7 +23,7 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
     private ngZone: NgZone,
     private readonly categoryService: CategoryService,
     private readonly notification: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.providerId = this.route.snapshot.params['id'];

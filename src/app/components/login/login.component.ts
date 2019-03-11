@@ -1,12 +1,12 @@
-import { first, startWith, map, catchError } from 'rxjs/operators';
+import { startWith, map } from 'rxjs/operators';
 
 import { Component, OnInit, NgZone, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService, NotificationService } from '../../services';
-import { Roles } from './../../helpers/enum-roles';
 import { FirebaseCode } from '../../helpers/firebase-code';
+import { Roles } from '../../helpers';
 
 @Component({
   selector: 'app-login',
@@ -34,21 +34,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly notificationService: NotificationService
-  ) {
-
-    // redirect to specific dashboard if already logged in
-    if (this.authService.currentUserValue) {
-      this.authService.currentUserValue.roles.forEach(rol => {
-        if (rol === Roles.Admin) {
-          // redirect to admin dashboard
-        } else if (rol === Roles.Provider) {
-          this.router.navigate(['/provider-dashboard/workspace/home']);
-        } else {
-          // redirect to cashier dashboard
-        }
-      });
-    }
-  }
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
