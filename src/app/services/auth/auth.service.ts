@@ -122,12 +122,17 @@ export class AuthService {
     });
   }
 
-  get currentUserValue(): User {
+  get currentUserValue() {
     return this.currentUserSubject.value;
   }
 
+  get isAdmin() {
+    const index = this.currentUserSubject.value.roles.findIndex(role => role === Roles.Admin);
+    return index !== -1;
+  }
+
   // Returns true when user is logged in and email is verified
-  get isLoggedIn(): boolean {
+  get isLoggedIn() {
     const user = JSON.parse(localStorage.getItem('user'));
     return (user && user.emailVerified) ? true : false;
   }
