@@ -15,19 +15,22 @@ import {
 
 import {
    HomeWorkspaceComponent,
-   ProviderWorkspaceComponent,
    EditProviderWorkspaceComponent,
-   ProductWorkspaceComponent,
    EditProductWorkspaceComponent,
-   CategoryWorkspaceComponent,
    EditCategoryWorkspaceComponent,
-   CashierWorkspaceComponent,
    EditCashierWorkspaceComponent,
    OrderWorkspaceComponent,
-   ProviderDetailsWorkspaceComponent,
-   CategoryDetailsWorkspaceComponent,
    ProductDetailsWorkspaceComponent
 } from './components/dashboards/provider/views';
+
+import {
+  ProviderWorkspaceComponent,
+  ProviderDetailsWorkspaceComponent,
+  CashierWorkspaceComponent,
+  CategoryWorkspaceComponent,
+  CategoryDetailsWorkspaceComponent,
+  ProductWorkspaceComponent
+} from './components/dashboards/shared';
 
 import { AuthGuard, AccessGuard } from './guards';
 
@@ -39,10 +42,35 @@ const routes: Routes = [
   { path: 'redirecting', component: DefaultComponent },
 
   // Admin Dashboard
-  { path: 'admin-dashboard/workspace', component: HomeAdminComponent, canActivate: [AuthGuard, AccessGuard], data: {role: 'admin'},
+  {
+    path: 'admin-dashboard/workspace',
+    component: HomeAdminComponent,
+    canActivate: [AuthGuard, AccessGuard],
+    data: {role: 'admin'},
     children: [
       { path: 'home', component: HomeAdminWorkspaceComponent },
       { path: 'users', component: UsersWorkspaceComponent },
+      { path: 'users/:userId/providers', component: ProviderWorkspaceComponent },
+      {
+        path: 'users/:userId/providers/:providerId/details',
+        component: ProviderDetailsWorkspaceComponent
+      },
+      {
+        path: 'users/:userId/providers/:providerId/cashiers',
+        component: CashierWorkspaceComponent
+      },
+      {
+        path: 'users/:userId/providers/:providerId/categories',
+        component: CategoryWorkspaceComponent
+      },
+      {
+        path: 'users/:userId/providers/:providerId/categories/:catId/details',
+        component: CategoryDetailsWorkspaceComponent
+      },
+      {
+        path: 'users/:userId/providers/:providerId/categories/:catId/products',
+        component: ProductWorkspaceComponent
+      },
 
       // redirect to workspace home by default
       { path: '', redirectTo: 'home', pathMatch: 'full' }
@@ -50,24 +78,64 @@ const routes: Routes = [
   },
 
   // Provider Dashboard
-  { path: 'provider-dashboard/workspace', component: HomeProviderComponent, canActivate: [AuthGuard, AccessGuard], data: {role: 'provider'},
+  {
+    path: 'provider-dashboard/workspace',
+    component: HomeProviderComponent,
+    canActivate: [AuthGuard, AccessGuard],
+    data: {role: 'provider'},
     children: [
       { path: 'home', component: HomeWorkspaceComponent },
       { path: 'providers', component: ProviderWorkspaceComponent },
-      { path: 'providers/create', component: EditProviderWorkspaceComponent, data: {mode: 'create'}},
-      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent, data: {mode: 'edit'}},
-      { path: 'providers/:id/details', component: ProviderDetailsWorkspaceComponent },
-      { path: 'providers/:id/categories', component: CategoryWorkspaceComponent },
-      { path: 'providers/:id/categories/create', component: EditCategoryWorkspaceComponent, data: {mode: 'create'}},
-      { path: 'providers/:id/categories/:catId/edit', component: EditCategoryWorkspaceComponent, data: {mode: 'edit'}},
-      { path: 'providers/:id/categories/:catId/details', component: CategoryDetailsWorkspaceComponent },
-      { path: 'providers/:id/cashiers', component: CashierWorkspaceComponent },
-      { path: 'providers/:id/cashiers/create', component: EditCashierWorkspaceComponent, data: {mode: 'create'}},
-      { path: 'providers/:id/cashiers/:cashierId/edit', component: EditCashierWorkspaceComponent, data: {mode: 'edit'}},
-      { path: 'providers/:id/categories/:catId/products', component: ProductWorkspaceComponent },
-      { path: 'providers/:id/categories/:catId/products/create', component: EditProductWorkspaceComponent, data: {mode: 'create'}},
-      { path: 'providers/:id/categories/:catId/products/:prodId/edit', component: EditProductWorkspaceComponent, data: {mode: 'edit'}},
-      { path: 'providers/:id/categories/:catId/products/:prodId/details', component: ProductDetailsWorkspaceComponent },
+      {
+        path: 'providers/create',
+        component: EditProviderWorkspaceComponent, data: { mode: 'create' }
+      },
+      {
+        path: 'providers/:providerId/edit',
+        component: EditProviderWorkspaceComponent, data: { mode: 'edit'}
+      },
+      {
+        path: 'providers/:providerId/details',
+        component: ProviderDetailsWorkspaceComponent
+      },
+      { path: 'providers/:providerId/categories', component: CategoryWorkspaceComponent },
+      {
+        path: 'providers/:providerId/categories/create',
+        component: EditCategoryWorkspaceComponent, data: { mode: 'create'}
+      },
+      {
+        path: 'providers/:providerId/categories/:catId/edit',
+        component: EditCategoryWorkspaceComponent, data: {mode: 'edit'}
+      },
+      {
+        path: 'providers/:providerId/categories/:catId/details',
+        component: CategoryDetailsWorkspaceComponent
+      },
+      { path: 'providers/:providerId/cashiers', component: CashierWorkspaceComponent },
+      {
+        path: 'providers/:providerId/cashiers/create',
+        component: EditCashierWorkspaceComponent, data: {mode: 'create'}
+      },
+      {
+        path: 'providers/:providerId/cashiers/:cashierId/edit',
+        component: EditCashierWorkspaceComponent, data: {mode: 'edit'}
+      },
+      {
+        path: 'providers/:providerId/categories/:catId/products',
+        component: ProductWorkspaceComponent
+      },
+      {
+        path: 'providers/:id/categories/:catId/products/create',
+        component: EditProductWorkspaceComponent, data: {mode: 'create'}
+      },
+      {
+        path: 'providers/:id/categories/:catId/products/:prodId/edit',
+        component: EditProductWorkspaceComponent, data: { mode: 'edit' }
+      },
+      {
+        path: 'providers/:id/categories/:catId/products/:prodId/details',
+        component: ProductDetailsWorkspaceComponent
+      },
       // { path: 'orders', component: OrderWorkspaceComponent },
 
       { path: '', redirectTo: 'home', pathMatch: 'full' }

@@ -7,9 +7,18 @@ import { NavigationModule } from '../provider/main-layout/navigation/navigation.
 import { MaterialModule } from './../../material/material.module';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
-import { FooterComponent } from './footer/footer.component';
-import { LayoutComponent } from './layout/layout.component';
-import { CircleProgressComponent } from './circle-progress/circle-progress.component';
+import {
+  FooterComponent,
+  LayoutComponent,
+  CircleProgressComponent,
+  ProviderWorkspaceComponent,
+  ProviderDetailsWorkspaceComponent,
+  CashierWorkspaceComponent,
+  CategoryWorkspaceComponent,
+  CategoryDetailsWorkspaceComponent,
+  ProductWorkspaceComponent
+} from './index';
+
 
 @NgModule({
   imports: [
@@ -23,12 +32,23 @@ import { CircleProgressComponent } from './circle-progress/circle-progress.compo
   declarations: [
     LayoutComponent,
     FooterComponent,
-    CircleProgressComponent
+    CircleProgressComponent,
+    ProviderWorkspaceComponent,
+    ProviderDetailsWorkspaceComponent,
+    CashierWorkspaceComponent,
+    CategoryWorkspaceComponent,
+    CategoryDetailsWorkspaceComponent,
+    ProductWorkspaceComponent
   ],
   exports: [
     LayoutComponent,
     FooterComponent,
-    CircleProgressComponent
+    CircleProgressComponent,
+    ProviderWorkspaceComponent,
+    CashierWorkspaceComponent,
+    CategoryWorkspaceComponent,
+    CategoryDetailsWorkspaceComponent,
+    ProductWorkspaceComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,
