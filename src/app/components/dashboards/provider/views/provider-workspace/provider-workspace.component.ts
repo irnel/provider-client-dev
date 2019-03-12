@@ -41,7 +41,7 @@ export class ProviderWorkspaceComponent implements OnInit {
     this.observer$.subscribe(
       providers => {
         this.providers = providers;
-        this.dataSource = new MatTableDataSource(this.providers);
+        this.dataSource = new MatTableDataSource(providers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.state = 'finished';

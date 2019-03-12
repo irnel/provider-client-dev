@@ -213,6 +213,12 @@ export class EditProductWorkspaceComponent implements OnInit {
         url: ''
       };
 
+      // mark as principal by default
+      if (this.localFiles.length > 0) {
+        const index = this.localFiles.findIndex(file => file.markAsPrincipal === true);
+        if (index === -1) { this.localFiles[0].markAsPrincipal = true; }
+      }
+
       // create product
       await this.productService.create(data).then(async product => {
         this.product = product;

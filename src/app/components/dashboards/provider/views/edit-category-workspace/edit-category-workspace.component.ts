@@ -165,6 +165,12 @@ export class EditCategoryWorkspaceComponent implements OnInit {
         url: ''
       };
 
+      // mark as principal by default
+      if (this.localFiles.length > 0) {
+        const index = this.localFiles.findIndex(file => file.markAsPrincipal === true);
+        if (index === -1) { this.localFiles[0].markAsPrincipal = true; }
+      }
+
       // create category
       await this.categoryService.create(data).then(
         async (category) => {
