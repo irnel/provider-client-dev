@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 import { User } from '../../models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Roles } from '../../helpers/enum-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,6 @@ import { map } from 'rxjs/operators';
 export class UserService {
   private usersCollection: AngularFirestoreCollection<User>;
   private userDocument: AngularFirestoreDocument<User>;
-  users: Observable<User[]>;
-  userModel: User;
 
   constructor(private readonly af: AngularFirestore) {
     this.usersCollection = this.af.collection('users');
@@ -20,26 +19,39 @@ export class UserService {
 
   // return all documents with metadata
   getAllUsers() {
-    this.users = this.usersCollection.snapshotChanges().pipe(
+    return this.usersCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as User;
-        data.uid = a.payload.doc.id;
+        const user = a.payload.doc.data() as User;
+        user.uid = a.payload.doc.id;
 
-        return data;
+        return user;
       }))
     );
-
-    return this.users;
   }
 
+  getAllUserProviders() {
+    const collection = this.af.collection(
+      'users', query => query.where('roles', 'array-contains', Roles.Provider));
+
+    return collection.snapshotChanges().pipe(
+      map(actions => actions.map(
+        action => {
+          const user = action.payload.doc.data() as User;
+          user.uid = action.payload.doc.id;
+
+          return user;
+        }
+      ))
+    );
+  }
 
   getUserById(uid) {
     return this.af.doc(`users/${uid}`).snapshotChanges().pipe(
       map(snapshot => {
-        this.userModel = snapshot.payload.data() as User;
-        this.userModel.uid = snapshot.payload.id;
+        const user = snapshot.payload.data() as User;
+        user.uid = snapshot.payload.id;
 
-        return this.userModel;
+        return user;
       })
     );
   }
@@ -86,9 +98,9 @@ export class UserService {
     return this.usersCollection.add(user);
   }
 
-  // update(user: User) {
-  //   return this.http.put(`/users/${user.id}`, user);
-  // }
+  update(user: User) {
+    return this.usersCollection.doc(user.uid).update(user);
+  }
 
   // delete(id: number) {
   //   return this.http.delete(`/users/${id}`);
