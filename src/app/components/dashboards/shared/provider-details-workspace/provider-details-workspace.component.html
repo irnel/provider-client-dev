@@ -1,0 +1,94 @@
+<!-- Provider Details -->
+<div *ngIf="observer$ | async; else progress" class="w-responsive mr-auto ml-auto mt-3">
+  <!-- navigation -->
+  <mdb-card>
+    <h6 class="pt-2 text-center">
+      <!-- Provider -->
+      <div *ngIf="!isAdmin">
+        <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+        <a routerLink="/provider-dashboard/workspace/home">Home</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+        <span> / </span>
+        <span>Details</span>
+      </div>
+
+      <!-- Admin -->
+      <div *ngIf="isAdmin">
+        <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+        <a routerLink="/admin-dashboard/workspace/home">Home</a>
+        <span> / </span>
+        <a routerLink="/admin-dashboard/workspace/users">Users</a>
+        <span> / </span>
+        <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
+        <span> / </span>
+        <span>Details</span>
+      </div>
+    </h6>
+  </mdb-card>
+
+  <!-- provider options -->
+  <mdb-card>
+    <!-- Content -->
+    <div class="view">
+      <img class="card-img-top h-75" src="{{provider.url}}" alt="provider image">
+      <div class="mask text-white text-center rgba-black-light py-4 px-3">
+        <h3 class="card-title pt-2"><strong>{{provider.name}}</strong></h3>
+        <div class="block-options">
+          <i class="fa fa-map-marker fa-fw mr-2" aria-hidden="true"></i>
+          <p>{{provider.address.formattedAddress}}</p>
+        </div>
+        <p *ngIf="provider.description.length > 0">{{provider.description}}</p>
+      </div>
+    </div>
+    
+    <mdb-card-footer>
+      <h4 class="text-center mb-3">
+         <!-- Add category -->
+        <a *ngIf="!isAdmin" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/create">
+          <mdb-badge class="mr-2 mt-3" color="red">Add category</mdb-badge>
+        </a>
+
+        <!-- List categories -->
+        <!-- Provider -->
+        <a *ngIf="!isAdmin" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">
+          <mdb-badge class="mr-2 mt-3" color="cyan">List categories</mdb-badge>
+        </a>
+        <!-- Admin -->
+        <a *ngIf="isAdmin" routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories">
+          <mdb-badge class="mr-2 mt-3" color="cyan">List categories</mdb-badge>
+        </a>
+
+        <!-- Add cashier -->
+        <a *ngIf="!isAdmin" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/cashiers/create">
+          <mdb-badge class="mr-2 mt-3" color="amber darken-2">Add cashier</mdb-badge>
+        </a>
+
+        <!-- List cashiers -->
+        <!-- Provider -->
+        <a *ngIf="!isAdmin" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/cashiers">
+          <mdb-badge class="mr-2 mt-3" color="pink">List cashiers</mdb-badge>
+        </a>
+        <!-- Admin -->
+        <a *ngIf="isAdmin" routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/cashiers">
+          <mdb-badge class="mr-2 mt-3" color="pink">List cashiers</mdb-badge>
+        </a>
+
+        <!-- List orders -->
+        <!-- Provider -->
+        <a *ngIf="!isAdmin" href="">
+          <mdb-badge class="mr-2 mt-3" color="purple darken-2">List orders</mdb-badge>
+        </a>
+        <!-- Admin -->
+        <a *ngIf="isAdmin" href="">
+          <mdb-badge class="mr-2 mt-3" color="purple darken-2">List orders</mdb-badge>
+        </a>
+      </h4>
+
+    </mdb-card-footer>
+  </mdb-card>
+</div>
+
+<ng-template #progress>
+  <app-circle-progress [state]="state"></app-circle-progress>
+</ng-template>

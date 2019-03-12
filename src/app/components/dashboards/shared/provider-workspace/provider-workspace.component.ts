@@ -1,10 +1,10 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 
-import { Config } from '../../../../../infrastructure';
-import { ProviderService, AuthService, NotificationService } from '../../../../../services';
-import { Provider } from '../../../../../models';
+import { Config } from '../../../../infrastructure';
+import { ProviderService, AuthService, NotificationService } from '../../../../services';
+import { Provider } from '../../../../models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -24,20 +24,27 @@ export class ProviderWorkspaceComponent implements OnInit {
   observer$: Observable<any>;
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
+  isAdmin: boolean;
+  userId: string;
   deleting = false;
   state = 'waiting';
 
   constructor(
     private ngZone: NgZone,
     private router: Router,
+    private route: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly providerService: ProviderService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
-    const userId = this.authService.currentUserValue.uid;
-    this.observer$ = this.providerService.getAllProviderByUserId(userId);
+    this.isAdmin = this.authService.isAdmin;
+    this.isAdmin
+      ? this.userId = this.route.snapshot.params['userId']
+      : this.userId = this.authService.currentUserValue.uid;
+
+    this.observer$ = this.providerService.getAllProviderByUserId(this.userId);
     this.observer$.subscribe(
       providers => {
         this.providers = providers;
@@ -53,7 +60,13 @@ export class ProviderWorkspaceComponent implements OnInit {
     );
   }
 
-  redirectToHome() {
+  redirectToAdminHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['admin-dashboard/workspace/home']);
+    });
+  }
+
+  redirectToProviderHome() {
     this.ngZone.run(() => {
       this.router.navigate(['provider-dashboard/workspace/home']);
     });
@@ -68,10 +81,13 @@ export class ProviderWorkspaceComponent implements OnInit {
   }
 
   // redirect to provider details
-  redirectToProviderDetails(id: string) {
+  redirectToProviderDetails(providerId: string) {
     this.ngZone.run(() => {
-      this.router.navigate([
-        `provider-dashboard/workspace/providers/${id}/details`]);
+      const url = this.isAdmin
+        ? `admin-dashboard/workspace/users/${this.userId}/providers/${providerId}/details`
+        : `provider-dashboard/workspace/providers/${providerId}/details`;
+
+      this.router.navigate([url]);
     });
   }
 

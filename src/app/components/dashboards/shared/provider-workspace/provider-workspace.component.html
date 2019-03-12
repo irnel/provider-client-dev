@@ -8,10 +8,23 @@
         <!-- Breadcrumbs navigation -->
         <div class="col">
           <h6 class="pt-5">
-            <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
-            <a routerLink="/provider-dashboard/workspace/home">Home</a>
-            <span> / </span>
-            <span>Providers</span>
+            <!-- Admin -->
+            <div *ngIf="isAdmin">
+              <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+              <a routerLink="/admin-dashboard/workspace/home">Home</a>
+              <span> / </span>
+              <a routerLink="/admin-dashboard/workspace/users">Users</a>
+              <span> / </span>
+              <span>Providers</span>
+            </div>
+            
+            <!-- Provider -->
+            <div *ngIf="!isAdmin">
+              <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+              <a routerLink="/provider-dashboard/workspace/home">Home</a>
+              <span> / </span>
+              <span>Providers</span>
+            </div>
           </h6>
         </div>
 
@@ -114,7 +127,7 @@
                 <i class="fa fa-info-circle prefix" style="color: #37474F" aria-hidden="true"></i>
               </a>
               <!-- Option Edit -->
-              <a type="button"
+              <a *ngIf="!isAdmin" type="button"
                   mdbTooltip="Edit provider"
                   placement="top"
                   class="waves-light mr-3 ml-3"
@@ -123,7 +136,7 @@
                 <i class="fa fa-pencil prefix" style="color: #37474F" aria-hidden="true"></i>
               </a>
               <!-- Option Delete -->
-              <a type="button"
+              <a *ngIf="!isAdmin" type="button"
                   mdbTooltip="Delete provider"
                   placement="top"
                   class="relative waves-light"
@@ -209,7 +222,7 @@
   </div>
 
   <!-- Floating Action Button -->
-  <a routerLink="create" type="button" mat-fab class="pink mat-elevation-z8">+</a>
+  <a *ngIf="!isAdmin" routerLink="create" type="button" mat-fab class="pink mat-elevation-z8">+</a>
 
 </div>
 

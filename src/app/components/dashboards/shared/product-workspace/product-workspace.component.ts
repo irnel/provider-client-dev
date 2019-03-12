@@ -2,11 +2,10 @@ import { Component, OnInit, ViewChild, NgZone, Renderer2, ElementRef } from '@an
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
-import { Product } from '../../../../../models';
-import { Config } from '../../../../../infrastructure';
-import { ProductService, NotificationService } from '../../../../../services';
+import { Product } from '../../../../models';
+import { Config } from '../../../../infrastructure';
+import { ProductService, NotificationService, AuthService } from '../../../../services';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-workspace',
@@ -27,8 +26,10 @@ export class ProductWorkspaceComponent implements OnInit {
   observer$: Observable<any>;
   maxChar = Config.maxChar;
   pageSizeOptions = Config.pageSizeOptions;
+  userId: string;
   providerId: string;
   categoryId: string;
+  isAdmin: boolean;
   deleting = false;
   state = 'waiting';
 
@@ -37,11 +38,17 @@ export class ProductWorkspaceComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private readonly productService: ProductService,
+    private readonly authService: AuthService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
-    this.providerId = this.route.snapshot.params['id'];
+    this.isAdmin = this.authService.isAdmin;
+    if (this.isAdmin) {
+      this.userId = this.route.snapshot.params['userId'];
+    }
+
+    this.providerId = this.route.snapshot.params['providerId'];
     this.categoryId = this.route.snapshot.params['catId'];
 
     this.observer$ = this.productService.getAllProductsByCategoryId(this.categoryId);
@@ -68,7 +75,13 @@ export class ProductWorkspaceComponent implements OnInit {
     }
   }
 
-  redirectToHome() {
+  redirectToAdminHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['admin-dashboard/workspace/home']);
+    });
+  }
+
+  redirectToProviderHome() {
     this.ngZone.run(() => {
       this.router.navigate(['provider-dashboard/workspace/home']);
     });
@@ -85,10 +98,13 @@ export class ProductWorkspaceComponent implements OnInit {
 
   redirectToProductDetails(productId) {
     this.ngZone.run(() => {
-      this.router.navigate([
-        `provider-dashboard/workspace/providers/` +
-        `${this.providerId}/categories/${this.categoryId}/products/${productId}/details`
-      ]);
+      const url = this.isAdmin
+        ? `admin-dashboard/workspace/users/${this.userId}/providers/` +
+          `${this.providerId}/categories/${this.categoryId}/products/${productId}/details`
+        : `provider-dashboard/workspace/providers/` +
+          `${this.providerId}/categories/${this.categoryId}/products/${productId}/details`;
+
+      this.router.navigate([url]);
     });
   }
 

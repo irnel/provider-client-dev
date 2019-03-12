@@ -13,7 +13,7 @@ import { Config } from '../../../../../infrastructure';
   styleUrls: ['./users-workspace.component.scss']
 })
 export class UsersWorkspaceComponent implements OnInit {
-  public columnsToDisplay: string [] = ['name', 'email', 'publish'];
+  public columnsToDisplay: string [] = ['name', 'email', 'publish', 'view'];
   public dataSource: MatTableDataSource<User>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -51,6 +51,12 @@ export class UsersWorkspaceComponent implements OnInit {
   redirectToHome() {
     this.ngZone.run(() => {
       this.router.navigate(['admin-dashboard/workspace/home']);
+    });
+  }
+
+  redirectToProviderWorkspace(userId) {
+    this.ngZone.run(() => {
+      this.router.navigate([`admin-dashboard/workspace/users/${userId}/providers`]);
     });
   }
 
