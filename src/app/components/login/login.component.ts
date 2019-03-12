@@ -145,6 +145,12 @@ export class LoginComponent implements OnInit {
           });
         });
       }
+    })
+    .catch(error => {
+      this.loading = false;
+      this.clicked = false;
+
+      this.notificationService.ErrorMessage(error.message, '', 2500);
     });
   }
 
