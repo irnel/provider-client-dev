@@ -2,11 +2,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 
-import { Config } from '../../../../../infrastructure';
-import { Category } from '../../../../../models';
-import { CategoryService, NotificationService } from '../../../../../services';
+import { Config } from '../../../../infrastructure';
+import { Category } from '../../../../models';
+import { CategoryService, NotificationService, AuthService } from '../../../../services';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-category-workspace',
@@ -23,7 +22,9 @@ export class CategoryWorkspaceComponent implements OnInit {
 
   categories: Category [];
   observer$: Observable<any>;
+  userId: string;
   providerId: string;
+  isAdmin: boolean;
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
   state = 'waiting';
@@ -34,11 +35,17 @@ export class CategoryWorkspaceComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private categoryService: CategoryService,
+    private readonly authService: AuthService,
     private notification: NotificationService
   ) {}
 
   ngOnInit() {
-    this.providerId = this.route.snapshot.params['id'];
+    this.isAdmin = this.authService.isAdmin;
+    if (this.isAdmin) {
+      this.userId = this.route.snapshot.params['userId'];
+    }
+
+    this.providerId = this.route.snapshot.params['providerId'];
     this.observer$ = this.categoryService.getAllCategoriesByProviderId(this.providerId);
     this.observer$.subscribe(
       categories => {
@@ -63,11 +70,16 @@ export class CategoryWorkspaceComponent implements OnInit {
     }
   }
 
-  redirectToHome() {
+  redirectToAdminHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['admin-dashboard/workspace/home']);
+    });
+  }
+
+  redirectToProviderHome() {
     this.ngZone.run(() => {
       this.router.navigate(['provider-dashboard/workspace/home']);
     });
-
   }
 
   redirectToEditCategory(catId: number) {
@@ -80,9 +92,11 @@ export class CategoryWorkspaceComponent implements OnInit {
 
   redirectToCategoryDetails(catId: number) {
     this.ngZone.run(() => {
-      this.router.navigate([
-        `provider-dashboard/workspace/providers/${this.providerId}/categories/${catId}/details`
-      ]);
+      const url = this.isAdmin
+        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/categories/${catId}/details`
+        : `provider-dashboard/workspace/providers/${this.providerId}/categories/${catId}/details`;
+
+      this.router.navigate([url]);
     });
   }
 

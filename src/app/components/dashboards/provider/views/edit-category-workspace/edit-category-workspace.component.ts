@@ -60,7 +60,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     this.route.data.subscribe(data => {
       // find provider by url params
       this.mode = data.mode;
-      this.providerId = this.route.snapshot.params['id'];
+      this.providerId = this.route.snapshot.params['providerId'];
 
       if (data.mode === 'create') {
         this.edit = false;

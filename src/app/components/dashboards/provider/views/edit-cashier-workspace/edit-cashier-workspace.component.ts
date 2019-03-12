@@ -56,7 +56,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
 
      // Change Form values
      this.route.data.subscribe(data => {
-      this.providerId = this.route.snapshot.params['id'];
+      this.providerId = this.route.snapshot.params['providerId'];
       this.mode = data.mode;
 
       if (data.mode === 'edit') {

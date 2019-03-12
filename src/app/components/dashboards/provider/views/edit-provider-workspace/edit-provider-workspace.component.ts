@@ -99,7 +99,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
         this.title = 'Edit Provider';
         this.edit = true;
 
-        const providerId = this.route.snapshot.params['id'];
+        const providerId = this.route.snapshot.params['providerId'];
         // Images value
         this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(providerId);
 

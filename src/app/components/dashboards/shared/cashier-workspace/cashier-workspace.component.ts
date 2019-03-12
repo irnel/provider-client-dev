@@ -2,9 +2,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
-import { Config } from '../../../../../infrastructure';
-import { Provider, Cashier } from '../../../../../models';
-import { CashierService, NotificationService } from '../../../../../services';
+import { Config } from '../../../../infrastructure';
+import { Provider, Cashier } from '../../../../models';
+import { CashierService, NotificationService, AuthService } from '../../../../services';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -22,7 +22,9 @@ export class CashierWorkspaceComponent implements OnInit {
   pageSizeOptions: number[] = Config.pageSizeOptions;
   observer$: Observable<any>;
   cashiers: Cashier [] = [];
+  userId: string;
   providerId: string;
+  isAdmin: boolean;
   deleting = false;
   state = 'waiting';
 
@@ -31,11 +33,17 @@ export class CashierWorkspaceComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private readonly cashierService: CashierService,
+    private readonly authService: AuthService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
-    this.providerId = this.route.snapshot.params['id'];
+    this.isAdmin = this.authService.isAdmin;
+    if (this.isAdmin) {
+      this.userId = this.route.snapshot.params['userId'];
+    }
+
+    this.providerId = this.route.snapshot.params['providerId'];
     this.observer$ = this.cashierService.getAllCashiersByProviderId(this.providerId);
     this.observer$.subscribe(
       cashiers => {
@@ -60,7 +68,13 @@ export class CashierWorkspaceComponent implements OnInit {
     }
   }
 
-  redirectToHome() {
+  redirectToAdminHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['admin-dashboard/workspace/home']);
+    });
+  }
+
+  redirectToProviderHome() {
     this.ngZone.run(() => {
       this.router.navigate(['provider-dashboard/workspace/home']);
     });

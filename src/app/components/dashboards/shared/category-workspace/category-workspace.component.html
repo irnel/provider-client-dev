@@ -8,12 +8,28 @@
         <!-- Breadcrumbs navigation -->
         <div class="col">
           <h6 class="pt-5">
-            <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
-            <a routerLink="/provider-dashboard/workspace/home">Home</a>
-            <span> / </span>
-            <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
-            <span> / </span>
-            <span>Categories</span>
+            <!-- Provider -->
+            <div *ngIf="!isAdmin">
+              <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+              <a routerLink="/provider-dashboard/workspace/home">Home</a>
+              <span> / </span>
+              <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+              <span> / </span>
+              <span>Categories</span>
+            </div>
+
+            <!-- Admin -->
+            <div *ngIf="isAdmin">
+              <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+              <a routerLink="/admin-dashboard/workspace/home">Home</a>
+              <span> / </span>
+              <a routerLink="/admin-dashboard/workspace/providers">Users</a>
+              <span> / </span>
+              <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
+              <span> / </span>
+              <span>Categories</span>
+            </div>
+            
           </h6>
         </div>
 
@@ -37,7 +53,6 @@
   <div class="mat-elevation-z8">
     <!-- Table -->
     <table mat-table [dataSource]="dataSource" matSort>
-
       <!-- Column Image -->
       <ng-container matColumnDef="image">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Image </th>
@@ -115,7 +130,7 @@
               <i class="fa fa-info-circle prefix" style="color: #37474F" aria-hidden="true"></i>
             </a>
             <!-- Option Edit -->
-            <a type="button"
+            <a *ngIf="!isAdmin" type="button"
                 mdbTooltip="Edit category"
                 placement="top"
                 class="waves-light mr-3 ml-3"
@@ -124,7 +139,7 @@
               <i class="fa fa-pencil prefix" style="color: #37474F" aria-hidden="true"></i>
             </a>
             <!-- Option Delete -->
-            <a type="button"
+            <a *ngIf="!isAdmin" type="button"
                 mdbTooltip="Delete category"
                 placement="top"
                 class="relative waves-light"
@@ -216,7 +231,7 @@
   </div>
 
   <!-- Floating Action Button -->
-  <a routerLink="create" type="button" mat-fab class="pink mat-elevation-z8">+</a>
+  <a *ngIf="!isAdmin" routerLink="create" type="button" mat-fab class="pink mat-elevation-z8">+</a>
 
 </div>
 

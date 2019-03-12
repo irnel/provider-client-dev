@@ -1,0 +1,79 @@
+<!-- Category Details -->
+<div *ngIf="observer$ | async; else progress" class="w-responsive mt-3 mb-3 center ml-auto mr-auto">
+  <!-- Breadcrumbs navigation -->
+  <mdb-card>
+    <h6 class="pt-2 text-center">
+      <!-- Provider -->
+      <div *ngIf="!isAdmin">
+        <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+        <a routerLink="/provider-dashboard/workspace/home">Home</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">Categories</a>
+        <span> / </span>
+        <span>Details</span>
+      </div>
+
+      <!-- Provider -->
+      <div *ngIf="isAdmin">
+        <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+        <a routerLink="/admin-dashboard/workspace/home">Home</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/users">Users</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/users/{{userId}}/providers">Providers</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories">Categories</a>
+        <span> / </span>
+        <span>Details</span>
+      </div>
+     
+    </h6>
+  </mdb-card>
+
+  <!-- Category content -->
+  <mdb-card>
+    <!-- Content -->
+    <div class="view">
+      <!-- Image -->
+      <img class="card-img-top h-75" src="{{category.url}}" alt="provider image">
+      <div class="mask text-white text-center rgba-black-light py-4 px-3">
+        <!-- Name -->
+        <h3 class="card-title pt-2"><strong>{{category.name}}</strong></h3>
+        <!-- Description -->
+        <p *ngIf="category.description.length > 0">{{category.description}}</p>
+        <!-- Provider -->
+        <h5 class="text-center mt-1 mb-2">
+          <a *ngIf="!isAdmin" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
+            <span class="badge badge-pill indigo mr-2">{{category.providerName}}</span>
+          </a>
+
+          <a *ngIf="isAdmin" routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">
+            <span class="badge badge-pill indigo mr-2">{{category.providerName}}</span>
+          </a>
+        </h5>
+      </div>
+    </div>
+    
+    <mdb-card-footer>
+      <h4 class="text-center">
+        <!-- Add Product -->
+        <a *ngIf="!isAdmin" (click)="redirectToEditProduct()">
+          <mdb-badge class="mr-2" color="pink">Add product</mdb-badge>
+        </a>
+
+        <!-- List Products -->
+        <a (click)="redirectToProductWorkspace()">
+          <mdb-badge class="mr-2 mt-2" color="purple darken-2">List products</mdb-badge>
+        </a>
+      </h4>
+    </mdb-card-footer>
+
+  </mdb-card>
+
+</div>
+
+<ng-template #progress>
+  <app-circle-progress [state]="state"></app-circle-progress>
+</ng-template>
