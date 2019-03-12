@@ -10,6 +10,7 @@ import { MaterialModule } from '../../../material/material.module';
 import { SharedModule } from '../../shared/shared.module';
 import {
   HomeAdminWorkspaceComponent,
+  UsersWorkspaceComponent,
   StatsCard1Component,
   ChartsComponent
 } from './index';
@@ -29,12 +30,14 @@ import {
   declarations: [
     HomeAdminWorkspaceComponent,
     StatsCard1Component,
-    ChartsComponent
+    ChartsComponent,
+    UsersWorkspaceComponent
   ],
   exports: [
     HomeAdminWorkspaceComponent,
     StatsCard1Component,
-    ChartsComponent
+    ChartsComponent,
+    UsersWorkspaceComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

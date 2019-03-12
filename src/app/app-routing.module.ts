@@ -9,7 +9,8 @@ import { HomeProviderComponent } from './components/dashboards/provider/home-pro
 import { HomeAdminComponent } from './components/dashboards/admin/home-admin/home-admin.component';
 
 import {
-  HomeAdminWorkspaceComponent
+  HomeAdminWorkspaceComponent,
+  UsersWorkspaceComponent
 } from './components/dashboards/admin/views';
 
 import {
@@ -28,7 +29,7 @@ import {
    ProductDetailsWorkspaceComponent
 } from './components/dashboards/provider/views';
 
-import { AuthGuard, RoleGuard } from './guards';
+import { AuthGuard, AccessGuard } from './guards';
 
 const routes: Routes = [
   // Auth routing
@@ -38,9 +39,10 @@ const routes: Routes = [
   { path: 'redirecting', component: DefaultComponent },
 
   // Admin Dashboard
-  { path: 'admin-dashboard/workspace', component: HomeAdminComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'admin' },
+  { path: 'admin-dashboard/workspace', component: HomeAdminComponent, canActivate: [AuthGuard, AccessGuard], data: {role: 'admin'},
     children: [
       { path: 'home', component: HomeAdminWorkspaceComponent },
+      { path: 'users', component: UsersWorkspaceComponent },
 
       // redirect to workspace home by default
       { path: '', redirectTo: 'home', pathMatch: 'full' }
@@ -48,27 +50,26 @@ const routes: Routes = [
   },
 
   // Provider Dashboard
-  { path: 'provider-dashboard/workspace', component: HomeProviderComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'provider' },
+  { path: 'provider-dashboard/workspace', component: HomeProviderComponent, canActivate: [AuthGuard, AccessGuard], data: {role: 'provider'},
     children: [
       { path: 'home', component: HomeWorkspaceComponent },
       { path: 'providers', component: ProviderWorkspaceComponent },
-      { path: 'providers/create', component: EditProviderWorkspaceComponent, data: { mode: 'create' }},
-      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'providers/create', component: EditProviderWorkspaceComponent, data: {mode: 'create'}},
+      { path: 'providers/:id/edit', component: EditProviderWorkspaceComponent, data: {mode: 'edit'}},
       { path: 'providers/:id/details', component: ProviderDetailsWorkspaceComponent },
       { path: 'providers/:id/categories', component: CategoryWorkspaceComponent },
-      { path: 'providers/:id/categories/create', component: EditCategoryWorkspaceComponent, data: { mode: 'create' }},
-      { path: 'providers/:id/categories/:catId/edit', component: EditCategoryWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'providers/:id/categories/create', component: EditCategoryWorkspaceComponent, data: {mode: 'create'}},
+      { path: 'providers/:id/categories/:catId/edit', component: EditCategoryWorkspaceComponent, data: {mode: 'edit'}},
       { path: 'providers/:id/categories/:catId/details', component: CategoryDetailsWorkspaceComponent },
       { path: 'providers/:id/cashiers', component: CashierWorkspaceComponent },
-      { path: 'providers/:id/cashiers/create', component: EditCashierWorkspaceComponent, data: { mode: 'create' }},
-      { path: 'providers/:id/cashiers/:cashierId/edit', component: EditCashierWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'providers/:id/cashiers/create', component: EditCashierWorkspaceComponent, data: {mode: 'create'}},
+      { path: 'providers/:id/cashiers/:cashierId/edit', component: EditCashierWorkspaceComponent, data: {mode: 'edit'}},
       { path: 'providers/:id/categories/:catId/products', component: ProductWorkspaceComponent },
-      { path: 'providers/:id/categories/:catId/products/create', component: EditProductWorkspaceComponent, data: { mode: 'create' }},
-      { path: 'providers/:id/categories/:catId/products/:prodId/edit', component: EditProductWorkspaceComponent, data: { mode: 'edit' }},
+      { path: 'providers/:id/categories/:catId/products/create', component: EditProductWorkspaceComponent, data: {mode: 'create'}},
+      { path: 'providers/:id/categories/:catId/products/:prodId/edit', component: EditProductWorkspaceComponent, data: {mode: 'edit'}},
       { path: 'providers/:id/categories/:catId/products/:prodId/details', component: ProductDetailsWorkspaceComponent },
       // { path: 'orders', component: OrderWorkspaceComponent },
 
-      // redirect to login by default
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
