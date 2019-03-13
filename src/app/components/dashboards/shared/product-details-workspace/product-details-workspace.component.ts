@@ -1,10 +1,9 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Product } from '../../../../../models';
-import { ProductService, NotificationService } from '../../../../../services';
+import { Product } from '../../../../models';
+import { ProductService, NotificationService, AuthService } from '../../../../services';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-details-workspace',
@@ -14,8 +13,10 @@ import { tap } from 'rxjs/operators';
 export class ProductDetailsWorkspaceComponent implements OnInit {
   product: Product;
   observer$: Observable<any>;
+  userId: string;
   providerId: string;
   categoryId: string;
+  isAdmin: boolean;
   state = 'waiting';
 
   constructor(
@@ -23,11 +24,17 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private readonly productService: ProductService,
+    private readonly authService: AuthService,
     private readonly notification: NotificationService
   ) { }
 
   ngOnInit() {
-    this.providerId = this.route.snapshot.params['id'];
+    this.isAdmin = this.authService.isAdmin;
+    if (this.isAdmin) {
+      this.userId = this.route.snapshot.params['userId'];
+    }
+
+    this.providerId = this.route.snapshot.params['providerId'];
     this.categoryId = this.route.snapshot.params['catId'];
     const productId = this.route.snapshot.params['prodId'];
 
@@ -44,7 +51,13 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
     );
   }
 
-  redirectToHome() {
+  redirectToAdminHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['admin-dashboard/workspace/home']);
+    });
+  }
+
+  redirectToProviderHome() {
     this.ngZone.run(() => {
       this.router.navigate(['provider-dashboard/workspace/home']);
     });
@@ -52,24 +65,33 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
 
   redirectToProviderWorkspace() {
     this.ngZone.run(() => {
-      this.router.navigate([`provider-dashboard/workspace/providers`]);
+      const url = this.isAdmin
+        ? `admin-dashboard/workspace/users/${this.userId}/providers`
+        : `provider-dashboard/workspace/providers`;
+
+      this.router.navigate([url]);
     });
   }
 
   redirectToCategoryWorkspace() {
     this.ngZone.run(() => {
-      this.router.navigate([
-        `provider-dashboard/workspace/providers/${this.providerId}/categories`
-      ]);
+      const url = this.isAdmin
+        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/categories`
+        : `provider-dashboard/workspace/providers/${this.providerId}/categories`;
+
+      this.router.navigate([url]);
     });
   }
 
   redirectToProductWorkSpace() {
     this.ngZone.run(() => {
-      this.router.navigate([
-        `provider-dashboard/workspace/providers/` +
-        `${this.providerId}/categories/${this.categoryId}/products`
-      ]);
+      const url = this.isAdmin
+        ? `admin-dashboard/workspace/users/${this.userId}/providers/` +
+          `${this.providerId}/categories/${this.categoryId}/products`
+        : `provider-dashboard/workspace/providers/` +
+          `${this.providerId}/categories/${this.categoryId}/products`;
+
+      this.router.navigate([url]);
     });
   }
 }

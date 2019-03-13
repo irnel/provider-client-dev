@@ -19,8 +19,7 @@ import {
    EditProductWorkspaceComponent,
    EditCategoryWorkspaceComponent,
    EditCashierWorkspaceComponent,
-   OrderWorkspaceComponent,
-   ProductDetailsWorkspaceComponent
+   OrderWorkspaceComponent
 } from './components/dashboards/provider/views';
 
 import {
@@ -29,7 +28,8 @@ import {
   CashierWorkspaceComponent,
   CategoryWorkspaceComponent,
   CategoryDetailsWorkspaceComponent,
-  ProductWorkspaceComponent
+  ProductWorkspaceComponent,
+  ProductDetailsWorkspaceComponent
 } from './components/dashboards/shared';
 
 import { AuthGuard, AccessGuard } from './guards';
@@ -70,6 +70,10 @@ const routes: Routes = [
       {
         path: 'users/:userId/providers/:providerId/categories/:catId/products',
         component: ProductWorkspaceComponent
+      },
+      {
+        path: 'users/:userId/providers/:providerId/categories/:catId/products/:prodId/details',
+        component: ProductDetailsWorkspaceComponent
       },
 
       // redirect to workspace home by default
@@ -125,15 +129,15 @@ const routes: Routes = [
         component: ProductWorkspaceComponent
       },
       {
-        path: 'providers/:id/categories/:catId/products/create',
+        path: 'providers/:providerId/categories/:catId/products/create',
         component: EditProductWorkspaceComponent, data: {mode: 'create'}
       },
       {
-        path: 'providers/:id/categories/:catId/products/:prodId/edit',
+        path: 'providers/:providerId/categories/:catId/products/:prodId/edit',
         component: EditProductWorkspaceComponent, data: { mode: 'edit' }
       },
       {
-        path: 'providers/:id/categories/:catId/products/:prodId/details',
+        path: 'providers/:providerId/categories/:catId/products/:prodId/details',
         component: ProductDetailsWorkspaceComponent
       },
       // { path: 'orders', component: OrderWorkspaceComponent },

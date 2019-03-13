@@ -21,7 +21,6 @@ import {
   EditCategoryWorkspaceComponent,
   EditProductWorkspaceComponent,
   EditCashierWorkspaceComponent,
-  ProductDetailsWorkspaceComponent,
   GalleryComponent
 } from './index';
 
@@ -52,7 +51,6 @@ import {
     EditCategoryWorkspaceComponent,
     EditProductWorkspaceComponent,
     EditCashierWorkspaceComponent,
-    ProductDetailsWorkspaceComponent,
     GalleryComponent
   ],
   exports: [
@@ -65,7 +63,6 @@ import {
     EditProviderWorkspaceComponent,
     EditProductWorkspaceComponent,
     EditCashierWorkspaceComponent,
-    ProductDetailsWorkspaceComponent,
     GalleryComponent
   ],
   schemas: [

@@ -64,7 +64,7 @@ export class EditProductWorkspaceComponent implements OnInit {
 
     // Change Form values
     this.route.data.subscribe(data => {
-      this.providerId = this.route.snapshot.params['id'];
+      this.providerId = this.route.snapshot.params['providerId'];
       this.categoryId = this.route.snapshot.params['catId'];
       this.mode = data.mode;
 

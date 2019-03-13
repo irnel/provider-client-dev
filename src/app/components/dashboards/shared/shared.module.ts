@@ -16,7 +16,8 @@ import {
   CashierWorkspaceComponent,
   CategoryWorkspaceComponent,
   CategoryDetailsWorkspaceComponent,
-  ProductWorkspaceComponent
+  ProductWorkspaceComponent,
+  ProductDetailsWorkspaceComponent
 } from './index';
 
 
@@ -38,7 +39,8 @@ import {
     CashierWorkspaceComponent,
     CategoryWorkspaceComponent,
     CategoryDetailsWorkspaceComponent,
-    ProductWorkspaceComponent
+    ProductWorkspaceComponent,
+    ProductDetailsWorkspaceComponent
   ],
   exports: [
     LayoutComponent,
@@ -48,7 +50,8 @@ import {
     CashierWorkspaceComponent,
     CategoryWorkspaceComponent,
     CategoryDetailsWorkspaceComponent,
-    ProductWorkspaceComponent
+    ProductWorkspaceComponent,
+    ProductDetailsWorkspaceComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

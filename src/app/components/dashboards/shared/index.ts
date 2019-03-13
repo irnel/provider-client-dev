@@ -7,4 +7,4 @@ export * from './cashier-workspace/cashier-workspace.component';
 export * from './category-workspace/category-workspace.component';
 export * from './category-details-workspace/category-details-workspace.component';
 export * from './product-workspace/product-workspace.component';
-
+export * from './product-details-workspace/product-details-workspace.component';
