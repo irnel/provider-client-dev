@@ -9,13 +9,10 @@ import { map } from 'rxjs/operators';
 export class CashierService {
   cashierCollection: AngularFirestoreCollection<Cashier>;
 
-  constructor(private afs: AngularFirestore) {
-    this.cashierCollection = this.afs.collection('cashiers');
-  }
+  constructor(private afs: AngularFirestore) {}
 
   getAllCashiersByProviderId(providerId) {
-    const collection = this.afs.collection(
-      'cashiers', query => query.where('providerId', '==', providerId));
+    const collection = this.afs.collection(`cashiers/${providerId}/list`);
 
     return collection.snapshotChanges().pipe(
       map(actions => actions.map(
@@ -29,8 +26,10 @@ export class CashierService {
     );
   }
 
-  getCashierById(id) {
-    return this.cashierCollection.doc(id).snapshotChanges().pipe(
+  getCashierData(providerId, cashierId) {
+    const cashierDoc = this.afs.doc(`cashiers/${providerId}/list/${cashierId}`);
+
+    return cashierDoc.snapshotChanges().pipe(
       map(snapshot => {
         const cashier = snapshot.payload.data() as Cashier;
         cashier.id = snapshot.payload.id;
@@ -41,7 +40,9 @@ export class CashierService {
   }
 
   create(cashier: Cashier) {
-    return this.cashierCollection.add(cashier).then(docRef => {
+    const collection = this.afs.collection(`cashiers/${cashier}/list`);
+
+    return collection.add(cashier).then(docRef => {
       return docRef.get().then(snapshot => {
         const cashierDoc = snapshot.data() as Cashier;
         cashierDoc.id = snapshot.id;
@@ -52,10 +53,12 @@ export class CashierService {
   }
 
   update(cashier: Cashier) {
-    return this.cashierCollection.doc(cashier.id).update(cashier);
+    const cashierDoc = this.afs.doc(`cashiers/${cashier.providerId}/list/${cashier.id}`);
+    return cashierDoc.update(cashier);
   }
 
-  delete(id) {
-    return this.cashierCollection.doc(id).delete();
+  delete(cashier) {
+    const cashierDoc = this.afs.doc(`cashiers/${cashier.providerId}/list/${cashier.id}`);
+    return cashierDoc.delete();
   }
 }

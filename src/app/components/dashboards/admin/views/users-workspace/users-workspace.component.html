@@ -59,12 +59,14 @@
         <td mat-cell *matCellDef="let user" (dblclick)="redirectToProviderWorkspace(user.uid)">
 
           <h6>
-            <span class="badge badge-pill purple darken-2 ml-2"
+            <span class="badge badge-pill ml-2" [ngStyle]="{'background-color':user.enable ? '#00C851' : '#ff4444' }"
                 mdbTooltip="Change status"
                 placement="top" 
                 (click)="update(user)">
 
-              {{user.enable}}</span>
+              <a *ngIf="user.enable">Yes</a>
+              <a *ngIf="!user.enable">No</a>
+            </span>
           </h6>
         </td>
       </ng-container>

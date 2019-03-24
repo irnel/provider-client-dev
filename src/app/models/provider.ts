@@ -1,4 +1,4 @@
-import { Address } from './index';
+import { Address } from './address';
 
 export interface Provider {
   name: string;

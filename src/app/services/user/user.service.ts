@@ -102,6 +102,10 @@ export class UserService {
     return this.usersCollection.doc(user.uid).update(user);
   }
 
+  publish(userId, publish) {
+    return this.usersCollection.doc(userId).update({ enable: publish });
+  }
+
   // delete(id: number) {
   //   return this.http.delete(`/users/${id}`);
   // }

@@ -100,9 +100,9 @@ export class ProviderWorkspaceComponent implements OnInit {
     }
   }
 
-  deleteProvider(id) {
+  deleteProvider(provider) {
     this.deleting = true;
-    this.providerService.delete(id).then(() => {
+    this.providerService.delete(provider).then(() => {
       this.notification.SuccessMessage('removed provider', '', 2500);
       this.deleting = false;
     })

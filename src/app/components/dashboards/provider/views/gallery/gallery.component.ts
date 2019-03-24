@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FileInfo } from './../../../../../models';
@@ -11,6 +12,7 @@ import { NotificationService } from '../../../../../services';
 })
 export class GalleryComponent implements OnInit {
   @Output() files = new EventEmitter<FileInfo []>();
+  @Input() model: any;
   @Input() serverFiles$: Observable<any>;
   @Input() progress$: Observable<number>;
   @Input() uploading: Boolean;
@@ -18,6 +20,7 @@ export class GalleryComponent implements OnInit {
   @ViewChild('alert') alert: ElementRef;
 
   selectedFiles: FileInfo [] = [];
+  providerId: string;
   showError = false;
   fileName = '';
   errorMsg = '';
@@ -26,11 +29,13 @@ export class GalleryComponent implements OnInit {
   clicked = false;
 
   constructor(
+    private route: ActivatedRoute,
     private readonly fileService: FileService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
+    this.providerId = this.route.snapshot.params['providerId'];
     if (this.mode === 'edit') {
       this.serverFiles$.subscribe(files => {
         this.selectedFiles = files;
@@ -102,7 +107,7 @@ export class GalleryComponent implements OnInit {
       this.files.emit(this.selectedFiles);
     } else {
       this.clicked = true;
-      this.fileService.updateFileInfo(image).then(() => {
+      this.fileService.updateFileInfo(image, this.model).then(() => {
         this.clicked = false;
         this.files.emit(this.selectedFiles);
       })

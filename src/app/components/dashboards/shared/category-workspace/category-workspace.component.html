@@ -195,7 +195,7 @@
                         [disabled]="deleting"
                         color="danger" rounded=" true"
                         class="relative waves-light" mdbWavesEffect
-                        (click)="deleteCategory(category.id)">
+                        (click)="deleteCategory(category)">
 
                       <i *ngIf="!deleting"class="fa fa-trash-o left mr-2" aria-hidden="true"></i>Delete
                       <i *ngIf="deleting" class="fa fa-spinner fa-pulse ml-2" aria-hidden="true"></i>

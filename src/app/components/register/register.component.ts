@@ -36,11 +36,23 @@ export class RegisterComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly notificationService: NotificationService
   ) {
-
-    // redirect to home if already logged in
-    if (this.authService.currentUserValue) {
-      this.router.navigate(['/']);
-    }
+    // redirect to specific dashboard if already logged in
+    this.authService.currentUser.subscribe(
+      currentUser => {
+        if (currentUser) {
+          currentUser.roles.forEach(rol => {
+            if (rol === Roles.Admin) {
+              // redirect to admin dashboard
+              this.router.navigate(['/admin-dashboard/workspace/home']);
+            } else if (rol === Roles.Provider) {
+              this.router.navigate(['/provider-dashboard/workspace/home']);
+            } else {
+              // redirect to cashier dashboard
+            }
+          });
+        }
+      }
+    );
   }
 
   ngOnInit() {
@@ -124,7 +136,7 @@ export class RegisterComponent implements OnInit {
       displayName: this.form.fullName.value,
       email: this.form.email.value,
       password: this.form.password.value,
-      enable: false,
+      publish: false,
       roles: [Roles.Provider]
     }).then(user => {
       this.loading = false;

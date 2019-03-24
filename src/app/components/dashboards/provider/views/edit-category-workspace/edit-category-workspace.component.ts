@@ -87,7 +87,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
         // Images value
         this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(catId);
         // current category
-        this.observer$ = this.categoryService.getCategoryById(catId);
+        this.observer$ = this.categoryService.getCategoryData(this.providerId, catId);
         this.observer$.subscribe(
           category => {
             this.category = category;

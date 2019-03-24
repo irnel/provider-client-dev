@@ -1,6 +1,6 @@
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 
 import { Provider } from '../../models';
@@ -11,14 +11,8 @@ import { NotificationService } from '../notification/notification.service';
 })
 export class ProviderService {
   providerCollection: AngularFirestoreCollection<Provider>;
-  providers: Observable<Provider[]>;
-  provider: Observable<Provider>;
 
-  constructor(
-    private readonly afs: AngularFirestore,
-    private readonly notificationService: NotificationService
-  ) {
-
+  constructor(private readonly afs: AngularFirestore) {
     this.providerCollection = this.afs.collection('providers');
   }
 

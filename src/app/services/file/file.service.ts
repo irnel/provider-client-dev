@@ -1,4 +1,4 @@
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import {
   AngularFireStorage,
@@ -34,6 +34,7 @@ export class FileService {
       fileInfo.modelId = model.id;
 
       const basePath = `${fileInfo.modelType}/${fileInfo.createdAt.getTime()}_${fileInfo.name}`;
+      const docFileRef = `filesinfo/${fileInfo.modelId}/list`;
       this.storageRef = this.storage.ref(basePath);
       this.uploadTask = this.storage.upload(basePath, fileInfo.file);
 
@@ -48,7 +49,7 @@ export class FileService {
 
       this.uploadTask.then(snapshot => {
         return snapshot.ref.getDownloadURL().then(url => {
-          return this.filesCollection.add({
+          return this.afs.collection(docFileRef).add({
            name: fileInfo.name,
            size: fileInfo.size,
            type: fileInfo.type,
@@ -61,7 +62,11 @@ export class FileService {
             // update image url of model
             if (fileInfo.markAsPrincipal) {
               model.url = url;
-              this.afs.doc(`${fileInfo.modelType}/${model.id}`).update(model);
+              const docRef = (fileInfo.modelType === 'providers')
+                ? this.afs.doc(`${fileInfo.modelType}/${model.id}`)
+                : this.afs.doc(`${fileInfo.modelType}/${model.providerId}/list/${model.id}`);
+
+              docRef.update(model);
             }
           });
         });
@@ -86,9 +91,8 @@ export class FileService {
     this.filesCollection.add(fileInfo);
   }
 
-  getAllFilesInfoByModelId(id) {
-    const collection = this.afs.collection(
-      'filesinfo', query => query.where('modelId', '==', id));
+  getAllFilesInfoByModelId(modelId) {
+    const collection = this.afs.collection(`filesinfo/${modelId}/list`);
 
     return collection.snapshotChanges().pipe(
       map(actions => actions.map(
@@ -102,17 +106,34 @@ export class FileService {
     );
   }
 
-  updateFileInfo(file: FileInfo) {
-    const modelDoc = this.afs.doc(`${file.modelType}/${file.modelId}`);
-    const newFileDoc = this.filesCollection.doc(file.id);
-    const fileDoc = this.afs.collection('filesinfo', query =>
-      query.where('modelId', '==', file.modelId).where(
-        'markAsPrincipal', '==', true));
+  updateFileInfo(file: FileInfo, model: any) {
+    let modelDoc: AngularFirestoreDocument;
+    const collectionRef = this.afs.collection(`filesinfo/${model.id}/list`);
+    const newFileDoc = this.afs.doc(`filesinfo/${file.modelId}/list/${file.id}`);
 
-    fileDoc.get().pipe(
+    switch (file.modelType) {
+      case 'providers': {
+        modelDoc = this.afs.doc(`providers/${model.id}`);
+        break;
+      }
+      case 'categories': {
+        modelDoc = this.afs.doc(`categories/${model.providerId}/list/${model.id}`);
+        break;
+      }
+      case 'products': {
+        modelDoc = this.afs.doc(
+          `products/${model.providerId}/list/${model.categoryId}/list/${model.id}`);
+
+        break;
+      }
+      default:
+        break;
+    }
+
+    // update old file (markAsPrincipal = false)
+    collectionRef.get().pipe(
       map(query => query.docs.map(doc => {
         if (doc.exists) {
-          // update old file (markAsPrincipal = false)
           doc.ref.update({ markAsPrincipal: false });
         }
       }))
@@ -130,11 +151,11 @@ export class FileService {
   }
 
   removeFileInfo(file: FileInfo) {
-    const fileDoc = this.filesCollection.doc(file.id);
+    const fileInfoDoc = this.afs.doc(`filesinfo/${file.modelId}/list/${file.id}`);
 
     return this.afs.firestore.runTransaction(t => {
-      return t.get(fileDoc.ref).then(() => {
-        t.delete(fileDoc.ref);
+      return t.get(fileInfoDoc.ref).then(() => {
+        t.delete(fileInfoDoc.ref);
         // delete file from firebase storage
         this.storage.storage.refFromURL(file.url).delete();
       });

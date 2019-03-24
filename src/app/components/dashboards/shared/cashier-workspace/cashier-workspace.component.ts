@@ -88,9 +88,9 @@ export class CashierWorkspaceComponent implements OnInit {
     });
   }
 
-  deleteCashier(id) {
+  deleteCashier(cashier) {
     this.deleting = true;
-    this.cashierService.delete(id).then(() => {
+    this.cashierService.delete(cashier).then(() => {
       this.notification.SuccessMessage('cashier removed', '', 2500);
       this.deleting = false;
     })

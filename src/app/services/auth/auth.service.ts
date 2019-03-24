@@ -6,7 +6,6 @@ import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firest
 import { auth } from 'firebase';
 
 import { User } from '../../models';
-import { Converter } from '../../helpers/converter';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
 import { Roles } from '../../helpers/enum-roles';
@@ -45,13 +44,10 @@ export class AuthService {
   SignIn(email, password) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then(credential => {
-        return this.userService.getUserById(credential.user.uid).subscribe(
-          user => {
-            this.currentUserSubject.next(user);
-
-            return user;
-          }
-        );
+        if (credential) {
+          this.userService.getUserById(credential.user.uid).subscribe(
+            user => this.currentUserSubject.next(user));
+        }
       });
   }
 
@@ -80,7 +76,7 @@ export class AuthService {
           email: credential.user.email,
           phoneNumber: credential.user.phoneNumber,
           photoURL: credential.user.photoURL,
-          enable: false,
+          publish: false,
           roles: [Roles.Provider],
           emailVerified: credential.user.emailVerified,
           refreshToken: credential.user.refreshToken,
@@ -88,7 +84,7 @@ export class AuthService {
         };
 
         this.SetUserData(user);
-        return user;
+        this.currentUserSubject.next(user);
       })
       .catch(error => {
         this.notificationService.ErrorMessage(error.message, '', 2500);
@@ -127,7 +123,7 @@ export class AuthService {
   }
 
   get isAdmin() {
-    const index = this.currentUserSubject.value.roles.findIndex(role => role === Roles.Admin);
+    const index = this.currentUserValue.roles.findIndex(role => role === Roles.Admin);
     return index !== -1;
   }
 

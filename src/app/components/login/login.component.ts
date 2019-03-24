@@ -33,8 +33,26 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private readonly authService: AuthService,
-    private readonly notificationService: NotificationService
-  ) {}
+    private readonly notification: NotificationService
+  ) {
+    // redirect to specific dashboard if already logged in
+    this.authService.currentUser.subscribe(
+      currentUser => {
+        if (currentUser) {
+          currentUser.roles.forEach(rol => {
+            if (rol === Roles.Admin) {
+              // redirect to admin dashboard
+              this.router.navigate(['/admin-dashboard/workspace/home']);
+            } else if (rol === Roles.Provider) {
+              this.router.navigate(['/provider-dashboard/workspace/home']);
+            } else {
+              // redirect to cashier dashboard
+            }
+          });
+        }
+      }
+    );
+  }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -127,30 +145,26 @@ export class LoginComponent implements OnInit {
           msg = error.message;
         }
 
-        this.notificationService.ErrorMessage(msg, '', 2500);
+        this.notification.ErrorMessage(msg, '', 2500);
       });
   }
 
   loginWithGoogle() {
     this.clicked = true;
     this.googleLoading = true;
-    this.authService.GoogleAuth().then(user => {
+    this.authService.GoogleAuth().then(() => {
       this.clicked = false;
       this.googleLoading = false;
 
-      if (user) {
-        this.ngZone.run(() => {
-          this.ngZone.run(() => {
-            this.router.navigate(['provider-dashboard/workspace/home']);
-          });
-        });
-      }
+      this.ngZone.run(() => {
+        this.router.navigate([this.returnUrl]);
+      });
     })
     .catch(error => {
       this.loading = false;
       this.clicked = false;
 
-      this.notificationService.ErrorMessage(error.message, '', 2500);
+      this.notification.ErrorMessage(error.message, '', 2500);
     });
   }
 
@@ -167,11 +181,11 @@ export class LoginComponent implements OnInit {
       this.sending = false;
       this.hideModal();
 
-      this.notificationService.SuccessMessage(
+      this.notification.SuccessMessage(
         `forgot password sent email to ${email}`, '', 2500);
     })
     .catch(error => {
-       this.notificationService.ErrorMessage(error.message, '', 2500);
+       this.notification.ErrorMessage(error.message, '', 2500);
     });
   }
 

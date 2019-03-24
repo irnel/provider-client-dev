@@ -65,7 +65,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
 
         // update form if mode is edit
         const cashierId = this.route.snapshot.params['cashierId'];
-        this.observer$ = this.cashierService.getCashierById(cashierId).pipe(
+        this.observer$ = this.cashierService.getCashierData(this.providerId, cashierId).pipe(
           tap(cashier => {
             this.cashier = cashier;
             this.editForm.patchValue(cashier);

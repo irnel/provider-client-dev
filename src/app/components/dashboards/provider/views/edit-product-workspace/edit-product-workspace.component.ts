@@ -74,7 +74,7 @@ export class EditProductWorkspaceComponent implements OnInit {
 
         // initialize observable with interval
         this.serverFiles$ = interval(1);
-        this.observer$ = this.categoryService.getCategoryById(this.categoryId);
+        this.observer$ = this.categoryService.getCategoryData(this.providerId, this.categoryId);
         this.observer$.subscribe(
           category => {
             this.category = category;
@@ -94,7 +94,7 @@ export class EditProductWorkspaceComponent implements OnInit {
         // Images value
         this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(productId);
 
-        this.observer$ = this.productService.getProductById(productId);
+        this.observer$ = this.productService.getProductData(this.providerId, this.categoryId, productId);
         this.observer$.subscribe(
           product => {
             this.product = product;

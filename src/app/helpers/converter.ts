@@ -10,7 +10,7 @@ export class Converter {
       email: firebaseUser.email,
       phoneNumber: firebaseUser.phoneNumber,
       photoURL: firebaseUser.photoURL,
-      enable: firebaseUser.enable,
+      publish: firebaseUser.publish,
       roles: firebaseUser.roles,
       emailVerified: firebaseUser.emailVerified,
       refreshToken: firebaseUser.refreshToken,

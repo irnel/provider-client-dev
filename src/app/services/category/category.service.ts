@@ -1,5 +1,4 @@
-import { Observable } from 'rxjs';
-import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { Category } from '../../models';
 import { map } from 'rxjs/operators';
@@ -8,15 +7,11 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class CategoryService {
-  categoriesCollection: AngularFirestoreCollection<Category>;
 
-  constructor(private readonly afs: AngularFirestore) {
-    this.categoriesCollection = this.afs.collection('categories');
-  }
+  constructor(private readonly afs: AngularFirestore) {}
 
   getAllCategoriesByProviderId(providerId) {
-    const collection = this.afs.collection(
-      'categories', query => query.where('providerId', '==', providerId));
+    const collection = this.afs.collection(`categories/${providerId}/list`);
 
     return collection.snapshotChanges().pipe(
       map(actions => actions.map(
@@ -30,20 +25,23 @@ export class CategoryService {
     );
   }
 
-  getCategoryById(categoryId) {
-    return this.categoriesCollection.doc(categoryId).snapshotChanges()
-      .pipe(
-        map(snapshot => {
-          const category = snapshot.payload.data() as Category;
-          category.id = snapshot.payload.id;
+  getCategoryData(providerId, categoryId) {
+    const categoryDoc = this.afs.doc(`categories/${providerId}/list/${categoryId}`);
 
-          return category;
-        })
-      );
+    return categoryDoc.get().pipe(
+      map(snapshot => {
+        const category = snapshot.data() as Category;
+        category.id = snapshot.id;
+
+        return category;
+      })
+    );
   }
 
   async create(category: Category) {
-    return await this.categoriesCollection.add(category).then(async docRef => {
+    const collection = this.afs.collection(`categories/${category.providerId}/list`);
+
+    return await collection.add(category).then(async docRef => {
       return await docRef.get().then(async snapshot => {
         const categoryDoc = snapshot.data() as Category;
         categoryDoc.id = snapshot.id;
@@ -54,10 +52,12 @@ export class CategoryService {
   }
 
   update(category: Category) {
-    return this.categoriesCollection.doc(category.id).update(category);
+    const categoryDoc = this.afs.doc(`categories/${category.providerId}/list/${category.id}`);
+    return categoryDoc.update(category);
   }
 
-  delete(id) {
-    return this.categoriesCollection.doc(id).delete();
+  delete(category: Category) {
+    const categoryDoc = this.afs.doc(`categories/${category.providerId}/list/${category.id}`);
+    return categoryDoc.delete();
   }
 }

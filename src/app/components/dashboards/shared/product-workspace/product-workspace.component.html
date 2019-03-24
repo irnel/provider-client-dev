@@ -212,7 +212,7 @@
                       <button mdbBtn color="danger"
                           [disabled]="deleting"
                           class="relative waves-light" mdbWavesEffect
-                          (click)="deleteProduct(product.id)">
+                          (click)="deleteProduct(product)">
 
                         <i *ngIf="!deleting"class="fa fa-trash-o left mr-2" aria-hidden="true"></i>Delete
                         <i *ngIf="deleting" class="fa fa-spinner fa-pulse ml-2" aria-hidden="true"></i>

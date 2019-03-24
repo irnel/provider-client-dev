@@ -188,7 +188,7 @@
                           [disabled]="deleting"
                           color="danger"
                           class="relative waves-light" mdbWavesEffect
-                          (click)="deleteProvider(provider.id)">
+                          (click)="deleteProvider(provider)">
 
                         <i *ngIf="!deleting"class="fa fa-trash-o left mr-2" aria-hidden="true"></i>Delete
                         <i *ngIf="deleting" class="fa fa-spinner fa-pulse ml-2" aria-hidden="true"></i>

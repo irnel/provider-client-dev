@@ -7,15 +7,12 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProductService {
-  productCollection: AngularFirestoreCollection<Product>;
 
-  constructor(private afs: AngularFirestore) {
-    this.productCollection = this.afs.collection('products');
-  }
+  constructor(private afs: AngularFirestore) {}
 
-  getAllProductsByCategoryId(categoryId) {
+  getAllProductsData(providerId, categoryId) {
     const collection = this.afs.collection(
-      'products', query => query.where('categoryId', '==', categoryId));
+      `products/${providerId}/list/${categoryId}/list`);
 
     return collection.snapshotChanges().pipe(
       map(actions => actions.map(
@@ -29,8 +26,11 @@ export class ProductService {
     );
   }
 
-  getProductById(id) {
-    return this.productCollection.doc(id).snapshotChanges()
+  getProductData(providerId, categoryId, productId) {
+    const productDoc = this.afs.doc(
+      `products/${providerId}/list/${categoryId}/list/${productId}`);
+
+    return productDoc.snapshotChanges()
       .pipe(
         map(snapshot => {
           const product = snapshot.payload.data() as Product;
@@ -42,7 +42,10 @@ export class ProductService {
   }
 
   async create(product: Product) {
-    return await this.productCollection.add(product).then(async docRef => {
+    const collection = this.afs.collection(
+      `products/${product.providerId}/list/${product.categoryId}/list`);
+
+    return await collection.add(product).then(async docRef => {
       return await docRef.get().then(async snapshot => {
         const productDoc = snapshot.data() as Product;
         productDoc.id = snapshot.id;
@@ -53,10 +56,16 @@ export class ProductService {
   }
 
   update(product: Product) {
-    return this.productCollection.doc(product.id).update(product);
+    const productDoc = this.afs.doc(
+      `products/${product.providerId}/list/${product.categoryId}/list/${product.id}`);
+
+    return productDoc.update(product);
   }
 
-  delete(id) {
-    return this.productCollection.doc(id).delete();
+  delete(product: Product) {
+    const productDoc = this.afs.doc(
+      `products/${product.providerId}/list/${product.categoryId}/list/${product.id}`);
+
+    return productDoc.delete();
   }
 }

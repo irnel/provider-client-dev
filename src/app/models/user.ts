@@ -4,7 +4,7 @@ export interface User {
   phoneNumber: string;
   password?: string;    // if user sign in with provider don't need password
   photoURL?: string;
-  enable?: boolean;
+  publish?: boolean;
   emailVerified?: boolean;
   refreshToken?: string;
   roles?: Array<string>;

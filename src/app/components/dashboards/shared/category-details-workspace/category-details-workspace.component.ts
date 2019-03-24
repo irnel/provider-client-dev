@@ -36,7 +36,7 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
 
     this.providerId = this.route.snapshot.params['providerId'];
     this.categoryId = this.route.snapshot.params['catId'];
-    this.observer$ = this.categoryService.getCategoryById(this.categoryId);
+    this.observer$ = this.categoryService.getCategoryData(this.providerId, this.categoryId);
     this.observer$.subscribe(
       category => {
         this.category = category;

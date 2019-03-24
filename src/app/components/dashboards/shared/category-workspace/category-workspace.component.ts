@@ -100,9 +100,9 @@ export class CategoryWorkspaceComponent implements OnInit {
     });
   }
 
-  deleteCategory(id) {
+  deleteCategory(category) {
     this.deleting = true;
-    this.categoryService.delete(id).then(() => {
+    this.categoryService.delete(category).then(() => {
       this.notification.SuccessMessage('removed category', '', 2500);
       this.deleting = false;
     })
