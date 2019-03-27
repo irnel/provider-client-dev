@@ -11,7 +11,6 @@ import { Roles } from '../../helpers/enum-roles';
 })
 export class UserService {
   private usersCollection: AngularFirestoreCollection<User>;
-  private userDocument: AngularFirestoreDocument<User>;
 
   constructor(private readonly af: AngularFirestore) {
     this.usersCollection = this.af.collection('users');
@@ -103,7 +102,7 @@ export class UserService {
   }
 
   publish(userId, publish) {
-    return this.usersCollection.doc(userId).update({ enable: publish });
+    return this.usersCollection.doc(userId).update({ publish: publish });
   }
 
   // delete(id: number) {

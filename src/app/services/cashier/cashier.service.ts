@@ -40,7 +40,7 @@ export class CashierService {
   }
 
   create(cashier: Cashier) {
-    const collection = this.afs.collection(`cashiers/${cashier}/list`);
+    const collection = this.afs.collection(`cashiers/${cashier.providerId}/list`);
 
     return collection.add(cashier).then(docRef => {
       return docRef.get().then(snapshot => {

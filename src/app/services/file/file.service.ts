@@ -61,10 +61,26 @@ export class FileService {
           }).then(() => {
             // update image url of model
             if (fileInfo.markAsPrincipal) {
+              let docRef: AngularFirestoreDocument;
               model.url = url;
-              const docRef = (fileInfo.modelType === 'providers')
-                ? this.afs.doc(`${fileInfo.modelType}/${model.id}`)
-                : this.afs.doc(`${fileInfo.modelType}/${model.providerId}/list/${model.id}`);
+
+              switch (fileInfo.modelType) {
+                case 'providers': {
+                  docRef = this.afs.doc(`providers/${model.userId}/list/${model.id}`);
+                  break;
+                }
+                case 'categories': {
+                  docRef = this.afs.doc(`categories/${model.providerId}/list/${model.id}`);
+                  break;
+                }
+                case 'products': {
+                  docRef = this.afs.doc(
+                    `products/${model.categoryId}/list/${model.id}`);
+                  break;
+                }
+                default:
+                  break;
+              }
 
               docRef.update(model);
             }
@@ -113,7 +129,7 @@ export class FileService {
 
     switch (file.modelType) {
       case 'providers': {
-        modelDoc = this.afs.doc(`providers/${model.id}`);
+        modelDoc = this.afs.doc(`providers/${model.userId}/list/${model.id}`);
         break;
       }
       case 'categories': {
