@@ -71,11 +71,16 @@ export class UsersWorkspaceComponent implements OnInit {
 
   update(user: User) {
     let msg = '';
-    user.publish
-      ? msg = `${user.displayName} can not publish`
-      : msg = `${user.displayName} can publish`;
 
-    this.userService.publish(user.uid, !user.publish).then(() => {
+    if (user.publish) {
+      msg = `${user.displayName} can not publish`;
+      user.publish = false;
+    } else {
+      msg = `${user.displayName} can publish`;
+      user.publish = true;
+    }
+
+    this.userService.update(user).then(() => {
       this.notification.SuccessMessage(msg, '', 2500);
     })
     .catch(error => {

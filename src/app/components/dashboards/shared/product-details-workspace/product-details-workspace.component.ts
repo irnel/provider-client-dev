@@ -38,7 +38,7 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
     this.categoryId = this.route.snapshot.params['catId'];
     const productId = this.route.snapshot.params['prodId'];
 
-    this.observer$ = this.productService.getProductData(this.providerId, this.categoryId, productId);
+    this.observer$ = this.productService.getProductData(this.categoryId, productId);
     this.observer$.subscribe(
       product => {
         this.product = product;

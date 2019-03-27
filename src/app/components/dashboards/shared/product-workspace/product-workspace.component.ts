@@ -51,7 +51,7 @@ export class ProductWorkspaceComponent implements OnInit {
     this.providerId = this.route.snapshot.params['providerId'];
     this.categoryId = this.route.snapshot.params['catId'];
 
-    this.observer$ = this.productService.getAllProductsData(this.providerId, this.categoryId);
+    this.observer$ = this.productService.getAllProductsByCategoryId(this.categoryId);
     this.observer$.subscribe(
       products => {
         this.products = products;

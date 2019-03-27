@@ -5,7 +5,7 @@ import { startWith, map, tap } from 'rxjs/operators';
 
 import { Config } from './../../../../../infrastructure';
 import { Provider, Cashier } from '../../../../../models';
-import { ProviderService, CashierService, NotificationService } from '../../../../../services';
+import { ProviderService, CashierService, NotificationService, AuthService } from '../../../../../services';
 import { Roles } from '../../../../../helpers';
 import { Observable } from 'rxjs';
 
@@ -26,6 +26,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
 
   observer$: Observable<any>;
   provider: Provider;
+  userId: string;
   providerId: string; // to navigation
   cashier: Cashier;
   waiting = true;
@@ -39,6 +40,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
     private ngZone: NgZone,
     private readonly providerService: ProviderService,
     private readonly cashierService: CashierService,
+    private readonly authService: AuthService,
     private readonly notification: NotificationService
     ) {}
 
@@ -59,6 +61,10 @@ export class EditCashierWorkspaceComponent implements OnInit {
       this.providerId = this.route.snapshot.params['providerId'];
       this.mode = data.mode;
 
+      this.authService.isAdmin
+        ? this.userId = this.route.snapshot.params['userId']
+        : this.userId = this.authService.currentUserValue.uid;
+
       if (data.mode === 'edit') {
         this.edit = true;
         this.title = 'Edit Cashier';
@@ -77,7 +83,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
         this.edit = false;
         this.title = 'Create Cashier';
 
-        this.observer$ = this.providerService.getProviderById(this.providerId)
+        this.observer$ = this.providerService.getProviderData(this.userId, this.providerId)
           .pipe(tap(provider => this.provider = provider)
         );
       }

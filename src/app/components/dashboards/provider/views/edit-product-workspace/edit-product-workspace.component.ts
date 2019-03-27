@@ -94,7 +94,7 @@ export class EditProductWorkspaceComponent implements OnInit {
         // Images value
         this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(productId);
 
-        this.observer$ = this.productService.getProductData(this.providerId, this.categoryId, productId);
+        this.observer$ = this.productService.getProductData(this.categoryId, productId);
         this.observer$.subscribe(
           product => {
             this.product = product;

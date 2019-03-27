@@ -29,12 +29,12 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin;
-    if (this.isAdmin) {
-      this.userId = this.route.snapshot.params['userId'];
-    }
+    this.isAdmin
+      ? this.userId = this.route.snapshot.params['userId']
+      : this.userId = this.authService.currentUserValue.uid;
 
     this.providerId = this.route.snapshot.params['providerId'];
-    this.observer$ = this.providerService.getProviderById(this.providerId);
+    this.observer$ = this.providerService.getProviderData(this.userId, this.providerId);
     this.observer$.subscribe(
       provider => {
         this.provider = provider;
@@ -61,7 +61,7 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
 
   redirectToCategoryWorkspace() {
     this.ngZone.run(() => {
-      const url = this.isAdmin
+      const url = this.authService.isAdmin
         ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/categories`
         : `provider-dashboard/workspace/providers/${this.providerId}/categories`;
 
@@ -79,7 +79,7 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
 
   redirectToCashierWorkspace() {
     this.ngZone.run(() => {
-      const url = this.isAdmin
+      const url = this.authService.isAdmin
         ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/cashiers`
         : `provider-dashboard/workspace/providers/${this.providerId}/cashiers`;
 

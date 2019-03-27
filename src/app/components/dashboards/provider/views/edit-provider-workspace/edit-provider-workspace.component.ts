@@ -37,6 +37,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
   observer$: Observable<any>;
   regEx: string = Config.regex[0];
   regEx1: string = Config.regex[1];
+  userId: string;
   msg: string;
   nameError: string;
   addressError: string;
@@ -74,6 +75,10 @@ export class EditProviderWorkspaceComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.mode = data.mode;
 
+      this.authService.isAdmin
+        ? this.userId = this.route.snapshot.params['userId']
+        : this.userId = this.authService.currentUserValue.uid;
+
       if (data.mode === 'create') {
         this.title = 'Create Provider';
         this.edit = false;
@@ -103,7 +108,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
         // Images value
         this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(providerId);
 
-        this.observer$ = this.providerService.getProviderById(providerId);
+        this.observer$ = this.providerService.getProviderData(this.userId, providerId);
         this.observer$.subscribe(
           provider => {
             this.provider = provider;

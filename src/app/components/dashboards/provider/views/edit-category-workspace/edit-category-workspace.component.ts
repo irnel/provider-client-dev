@@ -6,7 +6,13 @@ import { Observable, interval } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
 import {
-  ProviderService, NotificationService, CategoryService, FileService } from '../../../../../services';
+  ProviderService,
+  NotificationService,
+  CategoryService,
+  FileService,
+  AuthService
+} from '../../../../../services';
+
 import { Provider, Category, FileInfo } from '../../../../../models';
 import { Config } from './../../../../../infrastructure';
 
@@ -30,6 +36,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   allPercentage: Observable<number>;
   category: Category;
   provider: Provider;
+  userId: string;
   providerId: string;
   mode: string;
   loading = false;
@@ -43,6 +50,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     private readonly notification: NotificationService,
     private readonly categoryService: CategoryService,
     private readonly providerService: ProviderService,
+    private readonly authService: AuthService,
     private readonly fileService: FileService
   ) { }
 
@@ -60,6 +68,10 @@ export class EditCategoryWorkspaceComponent implements OnInit {
     this.route.data.subscribe(data => {
       // find provider by url params
       this.mode = data.mode;
+      this.authService.isAdmin
+        ? this.userId = this.route.snapshot.params['userId']
+        : this.userId = this.authService.currentUserValue.uid;
+
       this.providerId = this.route.snapshot.params['providerId'];
 
       if (data.mode === 'create') {
@@ -68,7 +80,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
 
         // initialize observable with interval
         this.serverFiles$ = interval(1);
-        this.observer$ = this.providerService.getProviderById(this.providerId);
+        this.observer$ = this.providerService.getProviderData(this.userId, this.providerId);
         this.observer$.subscribe(
           provider => {
             this.provider = provider;
