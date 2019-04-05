@@ -80,7 +80,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
 
         // initialize observable with interval
         this.serverFiles$ = interval(1);
-        this.observer$ = this.providerService.getProviderData(this.userId, this.providerId);
+        this.observer$ = this.providerService.getProviderById(this.providerId);
         this.observer$.subscribe(
           provider => {
             this.provider = provider;

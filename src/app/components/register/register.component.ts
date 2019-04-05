@@ -137,11 +137,11 @@ export class RegisterComponent implements OnInit {
       email: this.form.email.value,
       password: this.form.password.value,
       publish: false,
-      roles: [Roles.Provider]
+      roles: [Roles.Provider],
+      parentId: null
     }).then(user => {
       this.loading = false;
       this.email = user.email;
-
       this.showModal();
     }).catch(error => {
       let msg: string;

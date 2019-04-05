@@ -83,7 +83,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
         this.edit = false;
         this.title = 'Create Cashier';
 
-        this.observer$ = this.providerService.getProviderData(this.userId, this.providerId)
+        this.observer$ = this.providerService.getProviderById(this.providerId)
           .pipe(tap(provider => this.provider = provider)
         );
       }
@@ -173,7 +173,14 @@ export class EditCashierWorkspaceComponent implements OnInit {
       };
 
       // create cashier
-      this.cashierService.create(data).then(() => {
+      this.authService.SignUp({
+        displayName: this.form.name.value,
+        email: this.form.email.value,
+        // password: this.form.password.value,
+        publish: false,
+        roles: [Roles.Cashier],
+        parentId: this.providerId
+      }).then(() => {
         this.redirectToCashierWorkspace();
       })
       .catch(error => {

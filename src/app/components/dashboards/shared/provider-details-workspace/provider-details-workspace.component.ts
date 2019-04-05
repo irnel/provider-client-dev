@@ -34,7 +34,7 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
       : this.userId = this.authService.currentUserValue.uid;
 
     this.providerId = this.route.snapshot.params['providerId'];
-    this.observer$ = this.providerService.getProviderData(this.userId, this.providerId);
+    this.observer$ = this.providerService.getProviderById(this.providerId);
     this.observer$.subscribe(
       provider => {
         this.provider = provider;

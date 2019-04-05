@@ -6,6 +6,7 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { User } from '../../../../../models';
 import { UserService, NotificationService } from '../../../../../services';
 import { Config } from '../../../../../infrastructure';
+import { Roles } from '../../../../../helpers';
 
 @Component({
   selector: 'app-users-workspace',
@@ -32,7 +33,7 @@ export class UsersWorkspaceComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.observer$ = this.userService.getAllUserProviders();
+    this.observer$ = this.userService.getAllUsersByType(Roles.Provider);
     this.observer$.subscribe(
       users => {
         this.users = users;

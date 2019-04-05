@@ -108,7 +108,7 @@ export class EditProviderWorkspaceComponent implements OnInit {
         // Images value
         this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(providerId);
 
-        this.observer$ = this.providerService.getProviderData(this.userId, providerId);
+        this.observer$ = this.providerService.getProviderById(providerId);
         this.observer$.subscribe(
           provider => {
             this.provider = provider;
