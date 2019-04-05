@@ -80,6 +80,7 @@ export class AuthService {
           roles: [Roles.Provider],
           emailVerified: credential.user.emailVerified,
           refreshToken: credential.user.refreshToken,
+          parentId: null,
           uid: credential.user.uid
         };
 
