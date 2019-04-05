@@ -8,5 +8,6 @@ export interface User {
   emailVerified?: boolean;
   refreshToken?: string;
   roles?: Array<string>;
+  parentId?: string;     // null when user is admin or provider
   uid?: string;
 }
