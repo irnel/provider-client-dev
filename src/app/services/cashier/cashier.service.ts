@@ -11,6 +11,7 @@ export class CashierService {
 
   constructor(private afs: AngularFirestore) {}
 
+  // TODO: change cashier to user collection and query
   getAllCashiersByProviderId(providerId) {
     const collection = this.afs.collection(`cashiers/${providerId}/list`);
 

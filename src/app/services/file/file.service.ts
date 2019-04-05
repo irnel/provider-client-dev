@@ -66,7 +66,7 @@ export class FileService {
 
               switch (fileInfo.modelType) {
                 case 'providers': {
-                  docRef = this.afs.doc(`providers/${model.userId}/list/${model.id}`);
+                  docRef = this.afs.doc(`providers/${model.id}`);
                   break;
                 }
                 case 'categories': {
@@ -75,7 +75,7 @@ export class FileService {
                 }
                 case 'products': {
                   docRef = this.afs.doc(
-                    `products/${model.categoryId}/list/${model.id}`);
+                    `products/${model.providerId}/list/${model.categoryId}/list/${model.id}`);
                   break;
                 }
                 default:

@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 import { User } from '../../models';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Roles } from '../../helpers/enum-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -28,9 +26,9 @@ export class UserService {
     );
   }
 
-  getAllUserProviders() {
+  getAllUsersByType(type) {
     const collection = this.af.collection(
-      'users', query => query.where('roles', 'array-contains', Roles.Provider));
+      'users', query => query.where('roles', 'array-contains', type));
 
     return collection.snapshotChanges().pipe(
       map(actions => actions.map(

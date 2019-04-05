@@ -10,8 +10,8 @@ export class ProductService {
 
   constructor(private afs: AngularFirestore) {}
 
-  getAllProductsByCategoryId(categoryId) {
-    const collection = this.afs.collection(`products/${categoryId}/list`);
+  getAllProductsData(providerId, categoryId) {
+    const collection = this.afs.collection(`products/${providerId}/list/${categoryId}/list`);
 
     return collection.snapshotChanges().pipe(
       map(actions => actions.map(
@@ -25,8 +25,9 @@ export class ProductService {
     );
   }
 
-  getProductData(categoryId, productId) {
-    const productDoc = this.afs.doc(`products/${categoryId}/list/${productId}`);
+  getProductData(providerId, categoryId, productId) {
+    const productDoc = this.afs.doc(
+      `products/${providerId}/list/${categoryId}/list/${productId}`);
 
     return productDoc.snapshotChanges()
       .pipe(
@@ -40,7 +41,8 @@ export class ProductService {
   }
 
   async create(product: Product) {
-    const collection = this.afs.collection(`products/${product.categoryId}/list`);
+    const collection = this.afs.collection(
+      `products/${product.providerId}/list/${product.categoryId}/list`);
 
     return await collection.add(product).then(async docRef => {
       return await docRef.get().then(async snapshot => {
@@ -54,14 +56,14 @@ export class ProductService {
 
   update(product: Product) {
     const productDoc = this.afs.doc(
-      `products/${product.categoryId}/list/${product.id}`);
+      `products/${product.providerId}/list/${product.categoryId}/list/${product.id}`);
 
     return productDoc.update(product);
   }
 
   delete(product: Product) {
     const productDoc = this.afs.doc(
-      `products/${product.categoryId}/list/${product.id}`);
+      `products/${product.providerId}/list/${product.categoryId}/list/${product.id}`);
 
     return productDoc.delete();
   }

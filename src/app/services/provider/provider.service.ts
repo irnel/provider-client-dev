@@ -16,7 +16,8 @@ export class ProviderService {
   }
 
   getAllProviderByUserId(userId) {
-    const collection = this.afs.collection(`providers/${userId}/list`);
+    const collection = this.afs.collection(
+      'providers', query => query.where('userId', '==', userId));
 
     return collection.snapshotChanges().pipe(
       map(actions => actions.map(
@@ -30,10 +31,8 @@ export class ProviderService {
     );
   }
 
-  getProviderData(userId, providerId) {
-    const providerDoc = this.afs.doc(`providers/${userId}/list/${providerId}`);
-
-    return providerDoc.snapshotChanges()
+  getProviderById(providerId) {
+    return this.providerCollection.doc(providerId).snapshotChanges()
       .pipe(
         map(snapshot => {
           const provider = snapshot.payload.data() as Provider;
@@ -45,9 +44,7 @@ export class ProviderService {
   }
 
   async create(provider: Provider) {
-    const collection = this.afs.collection(`providers/${provider.userId}/list`);
-
-    return await collection.add(provider).then(async docRef => {
+    return await this.providerCollection.add(provider).then(async docRef => {
       return await docRef.get().then(async snapshot => {
         const providerDoc = snapshot.data() as Provider;
         providerDoc.id = snapshot.id;
@@ -58,16 +55,10 @@ export class ProviderService {
   }
 
   update(provider: Provider) {
-    const providerDoc = this.afs.doc(
-      `providers/${provider.userId}/list/${provider.id}`);
-
-    return providerDoc.update(provider);
+    return this.providerCollection.doc(provider.id).update(provider);
   }
 
   delete(provider: Provider) {
-    const providerDoc = this.afs.doc(
-      `providers/${provider.userId}/list/${provider.id}`);
-
-    return providerDoc.delete();
+    return this.providerCollection.doc(provider.id).delete();
   }
 }
