@@ -1,0 +1,54 @@
+<!-- Product Details -->
+<div class="w-responsive mt-3 center ml-auto mr-auto">
+  <!-- Breadcrumbs -->
+  <mdb-card>
+    <h6 class="pt-2 text-center">
+      <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+      <a routerLink="/provider-dashboard/workspace/home">Home</a>
+      <span> / </span>
+      <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+      <span> / </span>
+      <a routerLink="/provider-dashboard/workspace/providers/{{provId}}/categories">Categories</a>
+      <span> / </span>
+      <a routerLink="/provider-dashboard/workspace/providers/{{provId}}/categories/{{catId}}/products">Products</a>
+      <span> / </span>
+      <span>Details</span>
+    </h6>
+  </mdb-card>
+
+  <mdb-card class="mt-2">
+    <!-- Card Header -->
+    <mdb-card-header>
+      <img class="mx-auto d-block rounded" src={{currentProduct.image}} alt="Provider image">
+    </mdb-card-header>
+
+    <!--Card content-->
+    <mdb-card-body class="px-lg-5">
+      <!-- Name -->
+      <mdb-card-text class="mt-4">
+        <h6>Name: {{currentProduct.name}}</h6>
+      </mdb-card-text>
+
+      <!-- Provider  -->
+      <mdb-card-text class="mt-2">
+        <h6>Provider: {{currentProduct.provider}}</h6>
+      </mdb-card-text>
+
+      <!-- Category  -->
+      <mdb-card-text class="mt-2">
+        <h6>Category: {{currentProduct.category}}</h6>
+      </mdb-card-text>
+
+      <!-- Price -->
+      <mdb-card-text class="mt-2">
+        <h6>Price: {{currentProduct.price}}</h6>
+      </mdb-card-text>
+
+      <!-- Description -->
+      <mdb-card-text class="mt-2">
+        <h6>Description: {{currentProduct.description}}</h6>
+      </mdb-card-text>
+
+    </mdb-card-body>
+  </mdb-card>
+</div>
