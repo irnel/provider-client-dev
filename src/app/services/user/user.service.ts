@@ -42,6 +42,22 @@ export class UserService {
     );
   }
 
+  getAllUsersByParentId(parentId) {
+    const collection = this.af.collection(
+      'users', query => query.where('parentId', '==', parentId));
+
+    return collection.snapshotChanges().pipe(
+      map(actions => actions.map(
+        action => {
+          const user = action.payload.doc.data() as User;
+          user.uid = action.payload.doc.id;
+
+          return user;
+        }
+      ))
+    );
+  }
+
   getUserById(uid) {
     return this.af.doc(`users/${uid}`).snapshotChanges().pipe(
       map(snapshot => {
@@ -103,7 +119,7 @@ export class UserService {
     return this.usersCollection.doc(userId).update({ publish: publish });
   }
 
-  // delete(id: number) {
-  //   return this.http.delete(`/users/${id}`);
-  // }
+  delete(id) {
+    return this.usersCollection.doc(id).delete();
+  }
 }

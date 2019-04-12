@@ -1,6 +1,5 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
 import { auth } from 'firebase';
@@ -52,11 +51,14 @@ export class AuthService {
   }
 
   // Sign up with email/password
-  SignUp(data) {
+  SignUp(data, sendEmail) {
     const user = data as User;
     return this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password)
       .then(credential => {
-        this.SendVerificationMail();
+        if (sendEmail) {
+          this.SendVerificationMail();
+        }
+
         // update data
         user.emailVerified = credential.user.emailVerified;
         user.refreshToken = credential.user.refreshToken;
