@@ -1,7 +1,7 @@
 export interface User {
   displayName: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   password?: string;    // if user sign in with provider don't need password
   photoURL?: string;
   publish?: boolean;
