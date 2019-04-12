@@ -9,6 +9,7 @@ export * from './enum-roles';
 export * from './converter';
 export * from './file-info';
 export * from './data-transfer';
+export * from './firebase-code';
 
 export * from './provider';
 export * from './category';
