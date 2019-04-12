@@ -3,8 +3,8 @@ import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core'
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
 import { Config } from '../../../../infrastructure';
-import { Provider, Cashier } from '../../../../models';
-import { CashierService, NotificationService, AuthService } from '../../../../services';
+import { User } from '../../../../models';
+import { UserService, NotificationService, AuthService } from '../../../../services';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,15 +14,13 @@ import { Observable } from 'rxjs';
 })
 export class CashierWorkspaceComponent implements OnInit {
   columnsToDisplay: string[] = ['name', 'email', 'provider', 'operation'];
-  dataSource: MatTableDataSource<Cashier>;
+  dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   pageSizeOptions: number[] = Config.pageSizeOptions;
   observer$: Observable<any>;
-  cashiers: Cashier [] = [];
-  userId: string;
   providerId: string;
   isAdmin: boolean;
   deleting = false;
@@ -32,23 +30,19 @@ export class CashierWorkspaceComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ngZone: NgZone,
-    private readonly cashierService: CashierService,
+    private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin;
-    if (this.isAdmin) {
-      this.userId = this.route.snapshot.params['userId'];
-    }
-
     this.providerId = this.route.snapshot.params['providerId'];
-    this.observer$ = this.cashierService.getAllCashiersByProviderId(this.providerId);
+
+    this.observer$ = this.userService.getAllUsersByParentId(this.providerId);
     this.observer$.subscribe(
       cashiers => {
-        this.cashiers = cashiers;
-        this.dataSource = new MatTableDataSource(this.cashiers);
+        this.dataSource = new MatTableDataSource(cashiers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.state = 'finished';
@@ -58,6 +52,7 @@ export class CashierWorkspaceComponent implements OnInit {
         this.notification.ErrorMessage(error.message, '', 2500);
       }
     );
+
   }
 
   applyFilter(filterValue: string) {
@@ -88,9 +83,9 @@ export class CashierWorkspaceComponent implements OnInit {
     });
   }
 
-  deleteCashier(cashier) {
+  deleteCashier(id) {
     this.deleting = true;
-    this.cashierService.delete(cashier).then(() => {
+    this.userService.delete(id).then(() => {
       this.notification.SuccessMessage('cashier removed', '', 2500);
       this.deleting = false;
     })

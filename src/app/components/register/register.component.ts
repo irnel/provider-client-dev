@@ -7,8 +7,8 @@ import { startWith, map } from 'rxjs/operators';
 import { AuthService, NotificationService } from '../../services';
 import { Config } from '../../infrastructure';
 import { Roles } from '../../helpers/enum-roles';
-import { User } from '../../models';
 import { FirebaseCode } from '../../helpers/firebase-code';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-register',
@@ -132,14 +132,16 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.authService.SignUp({
+    const data = {
       displayName: this.form.fullName.value,
       email: this.form.email.value,
       password: this.form.password.value,
       publish: false,
       roles: [Roles.Provider],
       parentId: null
-    }).then(user => {
+    };
+
+    this.authService.SignUp(data, true).then(user => {
       this.loading = false;
       this.email = user.email;
       this.showModal();

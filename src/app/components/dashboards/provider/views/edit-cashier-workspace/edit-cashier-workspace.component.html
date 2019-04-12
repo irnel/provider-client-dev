@@ -28,6 +28,7 @@
 
       <!-- Name -->
       <div class="md-form form-sm mt-2">
+        <i class="fa fa-user prefix" aria-hidden="true"></i>
         <input mdbInputDirective type="text" class="form-control"
             id="formName" formControlName="name"
             [errorMessage]="nameError"
@@ -38,12 +39,33 @@
 
       <!-- Email -->
       <div class="md-form form-sm mt-1">
+        <i class="fa fa-envelope prefix" aria-hidden="true"></i>
         <input mdbInputDirective type="email" class="form-control"
             id="formEmail" formControlName="email"
             [validateSuccess]="false"
             [errorMessage]="emailError">
 
         <label for="formEmail">Email</label>
+      </div>
+
+      <!-- Password -->
+      <div class="md-form form-sm mt-0">
+        <i class="fa fa-lock prefix" aria-hidden="true"></i>
+        <input mdbInputDirective type="password" class="form-control"
+          id="formPassword" data-error="password must be at least 6 character"
+          [validateSuccess]="false" minlength="6" formControlName="password">
+
+        <label for="formPassword">Password</label>
+      </div>
+
+      <!-- Confirmation Password -->
+      <div class="md-form form-sm mt-0 mb-0">
+        <i class="fa fa-repeat prefix" aria-hidden="true"></i>
+        <input mdbInputDirective type="password" class="form-control"
+          id="formPasswordConfirmation" data-error="Confirmation password is required"
+          [validateSuccess]="false" formControlName="passwordConfirmation">
+
+        <label for="formPasswordConfirmation">Confirmation password</label>
       </div>
 
     </form>
@@ -53,8 +75,7 @@
   <!-- Footer -->
   <mdb-card-footer>
     <div class="text-center">
-      <button mdbBtn
-          [disabled]="loading"
+      <button mdbBtn [disabled]="loading"
           color="primary"
           class="relative waves-light" mdbWavesEffect
           (click)="editCashier()">
@@ -74,7 +95,7 @@
       </button>
 
       <!-- Button Cancel -->
-      <button mdbBtn
+      <button mdbBtn [disabled]="loading"
           outline="true" color="primary"
           aria-label="Close" mdbWavesEffect
           (click)="cancel()">

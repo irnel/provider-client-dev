@@ -4,9 +4,9 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { startWith, map, tap } from 'rxjs/operators';
 
 import { Config } from './../../../../../infrastructure';
-import { Provider, Cashier } from '../../../../../models';
-import { ProviderService, CashierService, NotificationService, AuthService } from '../../../../../services';
-import { Roles } from '../../../../../helpers';
+import { Provider, User } from '../../../../../models';
+import { ProviderService, UserService, NotificationService, AuthService } from '../../../../../services';
+import { Roles, FirebaseCode } from '../../../../../helpers';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -28,7 +28,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
   provider: Provider;
   userId: string;
   providerId: string; // to navigation
-  cashier: Cashier;
+  cashier: User;
   waiting = true;
   loading = false;
   mode: string;
@@ -39,7 +39,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
     private formBuilder: FormBuilder,
     private ngZone: NgZone,
     private readonly providerService: ProviderService,
-    private readonly cashierService: CashierService,
+    private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly notification: NotificationService
     ) {}
@@ -53,8 +53,13 @@ export class EditCashierWorkspaceComponent implements OnInit {
       email: ['', Validators.compose([
         Validators.required,
         Validators.email]
-      )]
-    });
+      )],
+      password: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(6)]
+      )],
+      passwordConfirmation: ['', Validators.required]
+    }, { validator: this.passwordMatchValidator });
 
      // Change Form values
      this.route.data.subscribe(data => {
@@ -71,10 +76,15 @@ export class EditCashierWorkspaceComponent implements OnInit {
 
         // update form if mode is edit
         const cashierId = this.route.snapshot.params['cashierId'];
-        this.observer$ = this.cashierService.getCashierData(this.providerId, cashierId).pipe(
+        this.observer$ = this.userService.getUserById(cashierId).pipe(
           tap(cashier => {
             this.cashier = cashier;
-            this.editForm.patchValue(cashier);
+            this.editForm.patchValue({
+              name: this.cashier.displayName,
+              email: this.cashier.email,
+              password: this.cashier.password,
+              passwordConfirmation: this.cashier.password
+            });
           })
         );
 
@@ -126,6 +136,11 @@ export class EditCashierWorkspaceComponent implements OnInit {
 
   get form() { return this.editForm.controls; }
 
+  passwordMatchValidator(formGroup: FormGroup) {
+    return formGroup.controls.password.value === formGroup.controls.passwordConfirmation.value
+      ? null : { passwordMismatch: true };
+  }
+
   redirectToHome() {
     this.ngZone.run(() => {
       this.router.navigate(['provider-dashboard/workspace/home']);
@@ -152,54 +167,74 @@ export class EditCashierWorkspaceComponent implements OnInit {
 
   editCashier() {
     this.loading = true;
+    let errorMsg: string;
+
     // Mark the control as dirty
     if (this.editForm.invalid) {
       this.form.name.markAsDirty();
       this.form.email.markAsDirty();
       this.loading = false;
+      this.form.password.markAsDirty();
+      this.form.passwordConfirmation.markAsDirty();
 
+      if (this.editForm.hasError('passwordMismatch')) {
+        this.notification.ErrorMessage('Passwords do not match', '', 2000);
+      }
+
+      this.loading = false;
       return;
     }
 
     if (!this.edit) {
       this.msg = 'New cashier created';
 
-      const data: Cashier = {
-        name: this.form.name.value,
+      const cashier = {
+        displayName: this.form.name.value,
         email: this.form.email.value,
-        providerName: this.provider.name,
-        providerId: this.provider.id,
-        role: [Roles.Cashier]
+        password: this.form.password.value,
+        emailVerified: true,
+        publish: false,
+        roles: [Roles.Cashier],
+        parentId: this.provider.id,
+        providerName: this.provider.name
       };
 
       // create cashier
-      this.authService.SignUp({
-        displayName: this.form.name.value,
-        email: this.form.email.value,
-        // password: this.form.password.value,
-        publish: false,
-        roles: [Roles.Cashier],
-        parentId: this.providerId
-      }).then(() => {
+      this.authService.SignUp(cashier, false).then(() => {
         this.redirectToCashierWorkspace();
       })
       .catch(error => {
-        this.notification.ErrorMessage(error.message, '', 2500);
         this.loading = false;
+
+        if (error.code === FirebaseCode.EMAIL_ALREADY_IN_USE) {
+          errorMsg = 'The email address is already in use by another cashier.';
+        } else {
+          errorMsg = error.message;
+        }
+
+        this.notification.ErrorMessage(error.message, '', 2500);
       });
 
     } else {
       this.msg = 'cashier edited';
 
-      this.cashier.name = this.form.name.value;
+      this.cashier.displayName = this.form.name.value;
       this.cashier.email = this.form.email.value;
+      this.cashier.password = this.form.password.value;
 
-      this.cashierService.update(this.cashier).then(() => {
+      this.userService.update(this.cashier).then(() => {
         this.redirectToCashierWorkspace();
       })
       .catch(error => {
-        this.notification.ErrorMessage(error.message, '', 2500);
         this.loading = false;
+
+        if (error.code === FirebaseCode.EMAIL_ALREADY_IN_USE) {
+          errorMsg = 'The email address is already in use by another cashier.';
+        } else {
+          errorMsg = error.message;
+        }
+
+        this.notification.ErrorMessage(error.message, '', 2500);
       });
     }
   }
