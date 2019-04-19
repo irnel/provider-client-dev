@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 
 import { AuthService, NotificationService } from '../../services';
 import { Roles } from '../../helpers';
-import { User } from '../../models';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-default',
@@ -30,6 +28,7 @@ export class DefaultComponent implements OnInit {
               this.router.navigate(['/provider-dashboard/workspace/home']);
             } else {
               // redirect to cashier dashboard
+              this.router.navigate(['/cashier-dashboard/workspace/home']);
             }
           });
         } else {

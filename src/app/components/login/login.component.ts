@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
               this.router.navigate(['/provider-dashboard/workspace/home']);
             } else {
               // redirect to cashier dashboard
+              this.router.navigate(['/cashier-dashboard/workspace/home']);
             }
           });
         }

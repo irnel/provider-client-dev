@@ -5,11 +5,12 @@ import { AuthService, NotificationService } from '../../../../../services';
 import { User } from '../../../../../models';
 
 @Component({
-  selector: 'app-provider-header',
-  templateUrl: './provider-header.component.html',
-  styleUrls: ['./provider-header.component.scss']
+  selector: 'app-cashier-header',
+  templateUrl: './cashier-header.component.html',
+  styleUrls: ['./cashier-header.component.scss']
 })
-export class ProviderHeaderComponent implements OnInit {
+export class CashierHeaderComponent implements OnInit {
+
   currentUser: User;
   @Output() public sidenavToggle = new EventEmitter();
 

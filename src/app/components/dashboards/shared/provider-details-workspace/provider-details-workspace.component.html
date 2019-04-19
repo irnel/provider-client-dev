@@ -76,11 +76,11 @@
 
         <!-- List orders -->
         <!-- Provider -->
-        <a *ngIf="!isAdmin" href="">
+        <a *ngIf="!isAdmin" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/orders">
           <mdb-badge class="mr-2 mt-3" color="purple darken-2">List orders</mdb-badge>
         </a>
         <!-- Admin -->
-        <a *ngIf="isAdmin" href="">
+        <a *ngIf="isAdmin" routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/orders">
           <mdb-badge class="mr-2 mt-3" color="purple darken-2">List orders</mdb-badge>
         </a>
       </h4>

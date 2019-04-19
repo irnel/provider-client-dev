@@ -24,6 +24,9 @@ import { HomeAdminModule } from './components/dashboards/admin/home-admin/home-a
 // Home Provider Module
 import { HomeProviderModule } from './components/dashboards/provider/home-provider/home-provider.module';
 
+// Home Cashier Module
+import { HomeCashierModule } from './components/dashboards/cashier/home-cashier/home-cashier.module';
+
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -42,6 +45,7 @@ import { DefaultComponent } from './components/default/default.component';
     BrowserAnimationsModule,
     HomeAdminModule,
     HomeProviderModule,
+    HomeCashierModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,

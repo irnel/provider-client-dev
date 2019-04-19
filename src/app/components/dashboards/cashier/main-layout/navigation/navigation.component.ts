@@ -14,6 +14,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit {
+
   currentUser: User;
   clicked: boolean;
 

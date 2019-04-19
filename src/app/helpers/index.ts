@@ -6,6 +6,7 @@ export * from './fake-backend';
 export * from './content-type.interceptor';
 export * from './key-values';
 export * from './enum-roles';
+export * from './order-state.enum';
 export * from './converter';
 export * from './file-info';
 export * from './data-transfer';

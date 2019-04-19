@@ -94,4 +94,14 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
       ]);
     });
   }
+
+  redirectToOrderWorkspace() {
+    this.ngZone.run(() => {
+      const url = this.authService.isAdmin
+        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders`
+        : `provider-dashboard/workspace/providers/${this.providerId}/orders`;
+
+      this.router.navigate([url]);
+    });
+  }
 }

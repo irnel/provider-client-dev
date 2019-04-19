@@ -3,7 +3,7 @@ export * from './edit-provider-workspace/edit-provider-workspace.component';
 export * from './edit-product-workspace/edit-product-workspace.component';
 export * from './edit-category-workspace/edit-category-workspace.component';
 export * from './edit-cashier-workspace/edit-cashier-workspace.component';
-export * from './order-workspace/order-workspace.component';
+export * from '../../shared/order-workspace/order-workspace.component';
 export * from './gallery/gallery.component';
 
 export * from './charts/charts.component';

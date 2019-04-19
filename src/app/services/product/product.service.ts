@@ -1,4 +1,4 @@
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { Product } from '../../models';
 import { map } from 'rxjs/operators';

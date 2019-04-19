@@ -7,6 +7,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { DefaultComponent } from './components/default/default.component';
 import { HomeProviderComponent } from './components/dashboards/provider/home-provider/home-provider.component';
 import { HomeAdminComponent } from './components/dashboards/admin/home-admin/home-admin.component';
+import { HomeCashierComponent } from './components/dashboards/cashier/home-cashier/home-cashier.component';
 
 import {
   HomeAdminWorkspaceComponent,
@@ -31,6 +32,8 @@ import {
   ProductWorkspaceComponent,
   ProductDetailsWorkspaceComponent
 } from './components/dashboards/shared';
+
+import { HomeCashierWorkspaceComponent } from './components/dashboards/cashier/views';
 
 import { AuthGuard, AccessGuard } from './guards';
 
@@ -140,8 +143,23 @@ const routes: Routes = [
         path: 'providers/:providerId/categories/:catId/products/:prodId/details',
         component: ProductDetailsWorkspaceComponent
       },
-      // { path: 'orders', component: OrderWorkspaceComponent },
+      {
+        path: 'providers/:providerId/orders',
+        component: OrderWorkspaceComponent
+      },
 
+      { path: '', redirectTo: 'home', pathMatch: 'full' }
+    ]
+  },
+
+  // Cashier Dashboard
+  {
+    path: 'cashier-dashboard/workspace',
+    component: HomeCashierComponent,
+    canActivate: [AuthGuard, AccessGuard],
+    data: {role: 'cashier'},
+    children: [
+      { path: 'home', component: HomeCashierWorkspaceComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
