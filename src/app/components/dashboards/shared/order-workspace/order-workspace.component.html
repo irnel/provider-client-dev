@@ -16,7 +16,7 @@
                 <span> / </span>
                 <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
                 <span> / </span>
-                <span>Categories</span>
+                <span>Orders</span>
               </div>
   
               <!-- Admin -->
@@ -28,7 +28,7 @@
                 <span> / </span>
                 <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
                 <span> / </span>
-                <span>Categories</span>
+                <span>Orders</span>
               </div>
               
             </h6>
@@ -51,31 +51,35 @@
     </mdb-card>
     <!-- Heading -->
   
+    <!-- Table -->
     <div class="mat-elevation-z8 mt-2">
-      <!-- Table -->
       <table mat-table [dataSource]="dataSource" matSort>
         <!-- Column Created Date -->
         <ng-container matColumnDef="createdDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date</th>
-          <td mat-cell *matCellDef='let order'>{{order.createdDate}}</td>
+          <td mat-cell *matCellDef='let order' (dblclick)="redirectToOrderDetails(order.id)">
+            {{order.createdDate.toMillis() | date: 'yyyy/MM/dd h:mm:ss a z' }}
+          </td>
         </ng-container>
   
         <!-- Column Pickup Time -->
         <ng-container matColumnDef="pickupTime">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Pickup Time</th>
-          <td mat-cell *matCellDef='let order'>{{order.pickupTime}}</td>
+          <td mat-cell *matCellDef='let order' (dblclick)="selectedOrder = order;">{{order.pickupTime}}</td>
         </ng-container>
   
         <!-- Column Provider -->
         <ng-container matColumnDef="provider">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Provider</th>
-          <td mat-cell *matCellDef='let order'>{{order.providerName}}</td>
+          <td mat-cell *matCellDef='let order' (dblclick)="redirectToOrderDetails(order.id)">
+            {{order.providerName}}
+          </td>
         </ng-container>
   
         <!-- Column Paid -->
         <ng-container matColumnDef="paid">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Paid</th>
-          <td mat-cell *matCellDef='let order'>
+          <td mat-cell *matCellDef='let order' (dblclick)="redirectToOrderDetails(order.id)">
             <h6>
               <span class="badge badge-pill mr-4"
                   [ngStyle]="{'background-color': order.paid ? '#00C851' : '#ff4444' }">
@@ -89,18 +93,35 @@
         <!-- Column Provider -->
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-          <td mat-cell *matCellDef='let order'>{{order.status}}</td>
+          <td mat-cell *matCellDef='let order' (dblclick)="redirectToOrderDetails(order.id)">
+            {{order.status}}
+          </td>
+        </ng-container>
+
+        <!-- Column View -->
+        <ng-container matColumnDef="view">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let order">
+            <!-- Options -->
+            <a type="button"
+                mdbTooltip="View details"
+                placement="top"
+                class="waves-light ml-3"
+                (click)="redirectToOrderDetails(order.id)">
+
+              <i class="fa fa-info-circle prefix" style="color: #37474F" aria-hidden="true"></i>
+            </a>
+          </td>
         </ng-container>
   
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-        <tr mat-row *matRowDef="let provider; columns: columnsToDisplay;"></tr>
+        <tr mat-row *matRowDef="let orders; columns: columnsToDisplay;"></tr>
       </table>
   
       <mat-paginator [pageSizeOptions]='pageSizeOptions' showFirstLastButtons></mat-paginator>
   
-    </div>  
+    </div>    
   </div>
-    
 </div>
 
 <ng-template #progress>

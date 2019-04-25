@@ -1,7 +1,7 @@
 import { Product } from './product';
 
 export interface Order {
-  createDate: Date;
+  createdDate: string;
   pickupTime: string;
   status: string;
   paid: boolean;
@@ -9,5 +9,7 @@ export interface Order {
   products?: Product [];
   providerName?: string;
   providerId?: string;
+  displayName?: string;
+  userId?: string;
   id?: string;
 }

@@ -41,7 +41,7 @@ export class HomeCashierWorkspaceComponent implements OnInit {
   ngOnInit() {
     this.providerId = this.authService.currentUserValue.parentId;
 
-    this.observer$ = this.orderService.getAllOrdersByProviderId(this.providerId);
+    this.observer$ = this.orderService.getAllOrdersByProviderId(this.providerId, new Date());
     this.observer$.subscribe(
       orders => {
         this.orders = orders;

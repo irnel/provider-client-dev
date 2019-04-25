@@ -30,7 +30,8 @@ import {
   CategoryWorkspaceComponent,
   CategoryDetailsWorkspaceComponent,
   ProductWorkspaceComponent,
-  ProductDetailsWorkspaceComponent
+  ProductDetailsWorkspaceComponent,
+  OrderDetailsWorkspaceComponent
 } from './components/dashboards/shared';
 
 import { HomeCashierWorkspaceComponent } from './components/dashboards/cashier/views';
@@ -77,6 +78,14 @@ const routes: Routes = [
       {
         path: 'users/:userId/providers/:providerId/categories/:catId/products/:prodId/details',
         component: ProductDetailsWorkspaceComponent
+      },
+      {
+        path: 'users/:userId/providers/:providerId/orders',
+        component: OrderWorkspaceComponent
+      },
+      {
+        path: 'users/:userId/providers/:providerId/orders/:orderId/details',
+        component: OrderDetailsWorkspaceComponent
       },
 
       // redirect to workspace home by default
@@ -146,6 +155,10 @@ const routes: Routes = [
       {
         path: 'providers/:providerId/orders',
         component: OrderWorkspaceComponent
+      },
+      {
+        path: 'providers/:providerId/orders/:orderId/details',
+        component: OrderDetailsWorkspaceComponent
       },
 
       { path: '', redirectTo: 'home', pathMatch: 'full' }

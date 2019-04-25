@@ -1,0 +1,8 @@
+<!-- Category Details -->
+<div *ngIf="observer$ | async; else progress" class="w-responsive mt-3 mb-3 center ml-auto mr-auto">
+
+</div>
+
+<ng-template #progress>
+  <app-circle-progress [state]="state"></app-circle-progress>
+</ng-template>

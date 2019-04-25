@@ -17,9 +17,9 @@ import {
   CategoryWorkspaceComponent,
   CategoryDetailsWorkspaceComponent,
   ProductWorkspaceComponent,
-  ProductDetailsWorkspaceComponent
+  ProductDetailsWorkspaceComponent,
+  OrderDetailsWorkspaceComponent
 } from './index';
-
 
 @NgModule({
   imports: [
@@ -40,7 +40,8 @@ import {
     CategoryWorkspaceComponent,
     CategoryDetailsWorkspaceComponent,
     ProductWorkspaceComponent,
-    ProductDetailsWorkspaceComponent
+    ProductDetailsWorkspaceComponent,
+    OrderDetailsWorkspaceComponent
   ],
   exports: [
     LayoutComponent,
@@ -51,7 +52,8 @@ import {
     CategoryWorkspaceComponent,
     CategoryDetailsWorkspaceComponent,
     ProductWorkspaceComponent,
-    ProductDetailsWorkspaceComponent
+    ProductDetailsWorkspaceComponent,
+    OrderDetailsWorkspaceComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

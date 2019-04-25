@@ -41,9 +41,9 @@
       <img class="card-img-top h-75" src="{{product.url}}" alt="provider image">
       <div class="mask text-white text-center rgba-black-light py-4 px-3">
         <!-- Name -->
-        <h3 class="card-title pt-2"><strong>{{product.name}}</strong></h3>
+        <h3 class="card-title h3-responsive pt-2"><strong>{{product.name}}</strong></h3>
         <!-- Price -->
-        <h2 class="mt-1"><strong>{{product.price}}$</strong></h2>
+        <h2 class="mt-1 h1-responsive"><strong>${{product.price}}</strong></h2>
         <!-- Description -->
         <p *ngIf="product.description.length > 0">{{product.description}}</p>
         <div class="block-options mt-3">

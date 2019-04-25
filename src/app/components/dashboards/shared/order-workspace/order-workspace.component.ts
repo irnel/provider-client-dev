@@ -14,11 +14,12 @@ import { OrderService, NotificationService, AuthService } from '../../../../serv
   styleUrls: ['./order-workspace.component.scss']
 })
 export class OrderWorkspaceComponent implements OnInit {
-  public columnsToDisplay = ['createdDate', 'pickupTime', 'provider', 'paid', 'status'];
+  public columnsToDisplay = ['createdDate', 'pickupTime', 'provider', 'paid', 'status', 'view'];
   public dataSource: MatTableDataSource<Order>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('frame') frame: any;
 
   pageSizeOptions = Config.pageSizeOptions;
   orderState = OrderState.Pending;
@@ -29,6 +30,8 @@ export class OrderWorkspaceComponent implements OnInit {
   observer$: Observable<any>;
   message: string;
   state = 'waiting';
+  selectedOrder: Order;
+  customDate: any;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -46,7 +49,7 @@ export class OrderWorkspaceComponent implements OnInit {
     }
 
     this.providerId = this.route.snapshot.params['providerId'];
-    this.observer$ = this.orderService.getAllOrdersByProviderId(this.providerId);
+    this.observer$ = this.orderService.getAllOrdersByProviderId(this.providerId, new Date());
     this.observer$.subscribe(
       orders => {
         this.orders = orders;
@@ -58,6 +61,8 @@ export class OrderWorkspaceComponent implements OnInit {
       error => {
         this.state = 'failed';
         this.notification.ErrorMessage(error.message, '', 2500);
+
+        console.log(error.message);
       }
     );
   }
@@ -70,10 +75,25 @@ export class OrderWorkspaceComponent implements OnInit {
     }
   }
 
-  redirectToHome() {
+  redirectToAdminHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['admin-dashboard/workspace/home']);
+    });
+  }
+
+  redirectToProviderHome() {
     this.ngZone.run(() => {
       this.router.navigate(['provider-dashboard/workspace/home']);
     });
   }
 
+  redirectToOrderDetails(orderId) {
+    this.ngZone.run(() => {
+      const url = this.isAdmin
+        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders/${orderId}/details`
+        : `provider-dashboard/workspace/providers/${this.providerId}/orders/${orderId}/details`;
+
+      this.router.navigate([url]);
+    });
+  }
 }

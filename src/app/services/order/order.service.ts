@@ -11,8 +11,11 @@ export class OrderService {
 
   constructor(private readonly afs: AngularFirestore) { }
 
-  getAllOrdersByProviderId(providerId) {
-    const collection = this.afs.collection(`orders/${providerId}/list`);
+  getAllOrdersByProviderId(providerId, date: Date) {
+    const collection = this.afs.collection(
+      `orders/${providerId}/${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`,
+      query => query.orderBy('pickupTime')
+    );
 
     return collection.snapshotChanges().pipe(
       map(actions => actions.map(
@@ -23,6 +26,20 @@ export class OrderService {
           return order;
         }
       ))
+    );
+  }
+
+  getOrderData(providerId, orderId, date: Date) {
+    const orderDoc = this.afs.doc(
+      `orders/${providerId}/${date.getFullYear()}/${date.getMonth()}/${date.getDate()}/${orderId}`);
+
+    return orderDoc.snapshotChanges().pipe(
+      map(snapshot => {
+        const order = snapshot.payload.data() as Order;
+        order.id = snapshot.payload.id;
+
+        return order;
+      })
     );
   }
 
