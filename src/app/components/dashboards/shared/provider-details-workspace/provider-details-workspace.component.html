@@ -1,5 +1,5 @@
 <!-- Provider Details -->
-<div *ngIf="observer$ | async; else progress" class="w-responsive mr-auto ml-auto mt-3">
+<div *ngIf="observer$ | async; else progress" class="w-responsive h-responsive mr-auto ml-auto mt-3">
   <!-- navigation -->
   <mdb-card>
     <h6 class="pt-2 text-center">
@@ -31,7 +31,7 @@
   <mdb-card>
     <!-- Content -->
     <div class="view">
-      <img class="card-img-top h-75" src="{{provider.url}}" alt="provider image">
+      <img class="card-img-top" src="{{provider.url}}" alt="provider image">
       <div class="mask text-white text-center rgba-black-light py-4 px-3">
         <h3 class="card-title pt-2"><strong>{{provider.name}}</strong></h3>
         <div class="block-options">
