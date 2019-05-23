@@ -17,6 +17,11 @@ export class OrderService {
       query => query.orderBy('pickupTime')
     );
 
+    // const collection = this.afs.collection(
+    //     `orders/${providerId}/2019/4/9`,
+    //     query => query.orderBy('pickupTime')
+    // );
+
     return collection.snapshotChanges().pipe(
       map(actions => actions.map(
         action => {
