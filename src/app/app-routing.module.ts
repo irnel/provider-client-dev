@@ -157,7 +157,7 @@ const routes: Routes = [
         component: OrderWorkspaceComponent
       },
       {
-        path: 'providers/:providerId/orders/:orderId/details',
+        path: 'providers/:providerId/orders/:orderId/date/:day/:month/:year/details',
         component: OrderDetailsWorkspaceComponent
       },
 
