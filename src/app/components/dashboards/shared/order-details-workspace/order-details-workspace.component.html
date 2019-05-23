@@ -1,5 +1,37 @@
 <!-- Category Details -->
-<div *ngIf="observer$ | async; else progress" class="w-responsive mt-3 mb-3 center ml-auto mr-auto">
+<div *ngIf="observer$ | async; else progress" class="w-responsive h-responsive mt-3 mb-3 center ml-auto mr-auto">
+  <!-- Heading -->
+  <mdb-card>
+    <h6 class="h6-responsive pt-2 text-center">
+      <!-- Provider -->
+      <div *ngIf="!isAdmin">
+        <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+        <a routerLink="/provider-dashboard/workspace/home">Home</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/orders">Orders</a>
+        <span> / </span>
+        <span>Details</span>
+      </div>
+
+      <!-- Admin -->
+      <div *ngIf="isAdmin">
+        <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+        <a routerLink="/admin-dashboard/workspace/home">Home</a>
+        <span> / </span>
+        <a routerLink="/admin-dashboard/workspace/users">Users</a>
+        <span> / </span>
+        <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
+        <span> / </span>
+        <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/orders">Orders</a>
+        <span> / </span>
+        <span>Details</span>
+      </div>
+      
+    </h6>
+  </mdb-card>
+  <!-- Heading -->
 
 </div>
 

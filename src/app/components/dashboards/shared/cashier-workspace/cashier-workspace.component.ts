@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./cashier-workspace.component.scss']
 })
 export class CashierWorkspaceComponent implements OnInit {
-  columnsToDisplay: string[] = ['name', 'email', 'provider', 'operation'];
+  columnsToDisplay: string [] = ['name', 'email', 'provider', 'operation'];
   dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -21,6 +21,7 @@ export class CashierWorkspaceComponent implements OnInit {
 
   pageSizeOptions: number[] = Config.pageSizeOptions;
   observer$: Observable<any>;
+  cashiers: User [];
   providerId: string;
   isAdmin: boolean;
   deleting = false;
@@ -42,6 +43,7 @@ export class CashierWorkspaceComponent implements OnInit {
     this.observer$ = this.userService.getAllUsersByParentId(this.providerId);
     this.observer$.subscribe(
       cashiers => {
+        this.cashiers = cashiers;
         this.dataSource = new MatTableDataSource(cashiers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -31,7 +32,9 @@ export class OrderWorkspaceComponent implements OnInit {
   message: string;
   state = 'waiting';
   selectedOrder: Order;
-  customDate: any;
+  currentDate: Date;
+  date: FormControl;
+  currentDateFormat: string;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -40,31 +43,14 @@ export class OrderWorkspaceComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly orderService: OrderService,
     private readonly notification: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin;
-    if (this.isAdmin) {
-      this.userId = this.route.snapshot.params['userId'];
-    }
+    if (this.isAdmin) { this.userId = this.route.snapshot.params['userId']; }
 
     this.providerId = this.route.snapshot.params['providerId'];
-    this.observer$ = this.orderService.getAllOrdersByProviderId(this.providerId, new Date());
-    this.observer$.subscribe(
-      orders => {
-        this.orders = orders;
-        this.dataSource = new MatTableDataSource(this.orders);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.state = 'finished';
-      },
-      error => {
-        this.state = 'failed';
-        this.notification.ErrorMessage(error.message, '', 2500);
-
-        console.log(error.message);
-      }
-    );
+    this.getAllOrdersByDate(new Date());
   }
 
   applyFilter(filterValue: string) {
@@ -90,10 +76,31 @@ export class OrderWorkspaceComponent implements OnInit {
   redirectToOrderDetails(orderId) {
     this.ngZone.run(() => {
       const url = this.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders/${orderId}/details`
-        : `provider-dashboard/workspace/providers/${this.providerId}/orders/${orderId}/details`;
+        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders/${orderId}/date/` +
+          `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`
+        : `provider-dashboard/workspace/providers/${this.providerId}/orders/${orderId}/date/` +
+          `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`;
 
       this.router.navigate([url]);
     });
+  }
+
+  getAllOrdersByDate(date: Date) {
+    this.currentDate = date;
+    this.date = new FormControl(date);
+    this.observer$ = this.orderService.getAllOrdersByProviderId(this.providerId, this.currentDate);
+    this.observer$.subscribe(
+      orders => {
+        this.orders = orders;
+        this.dataSource = new MatTableDataSource(this.orders);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.state = 'finished';
+      },
+      error => {
+        this.state = 'failed';
+        this.notification.ErrorMessage(error.message, '', 2500);
+      }
+    );
   }
 }

@@ -69,7 +69,6 @@ export class FileInputComponent implements OnInit {
           const fileInfo = new FileInfo(eventProgress.target.result, file);
           this.selectedFiles.push(fileInfo);
         }
-
       });
 
       reader.readAsDataURL(file);

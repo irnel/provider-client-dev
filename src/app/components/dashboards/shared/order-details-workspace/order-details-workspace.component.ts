@@ -37,7 +37,12 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
 
     this.providerId = this.route.snapshot.params['providerId'];
     this.orderId = this.route.snapshot.params['orderId'];
-    this.observer$ = this.orderService.getOrderData(this.providerId, this.orderId, new Date());
+    const year = this.route.snapshot.params['year'];
+    const month = this.route.snapshot.params['month'];
+    const day = this.route.snapshot.params['day'];
+    const date = new Date(year, month, day);
+
+    this.observer$ = this.orderService.getOrderData(this.providerId, this.orderId, date);
     this.observer$.subscribe(
       order => {
         this.order = order;
@@ -48,6 +53,18 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
         this.notification.ErrorMessage(error.message, '', 2500);
       }
     );
+  }
+
+  redirectToAdminHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['admin-dashboard/workspace/home']);
+    });
+  }
+
+  redirectToProviderHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['provider-dashboard/workspace/home']);
+    });
   }
 
 }

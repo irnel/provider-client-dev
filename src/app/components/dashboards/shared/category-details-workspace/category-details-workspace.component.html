@@ -1,5 +1,5 @@
 <!-- Category Details -->
-<div *ngIf="observer$ | async; else progress" class="w-responsive mt-3 mb-3 center ml-auto mr-auto">
+<div *ngIf="observer$ | async; else progress" class="w-responsive h-responsive mt-3 mb-3 center ml-auto mr-auto">
   <!-- Breadcrumbs navigation -->
   <mdb-card>
     <h6 class="pt-2 text-center">
@@ -15,7 +15,7 @@
         <span>Details</span>
       </div>
 
-      <!-- Provider -->
+      <!-- Admin -->
       <div *ngIf="isAdmin">
         <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
         <a routerLink="/admin-dashboard/workspace/home">Home</a>
@@ -37,10 +37,10 @@
     <!-- Content -->
     <div class="view">
       <!-- Image -->
-      <img class="card-img-top h-75" src="{{category.url}}" alt="provider image">
+      <img class="card-img-top" src="{{category.url}}" alt="provider image">
       <div class="mask text-white text-center rgba-black-light py-4 px-3">
         <!-- Name -->
-        <h3 class="card-title pt-2"><strong>{{category.name}}</strong></h3>
+        <h3 class="h3-responsive card-title pt-2"><strong>{{category.name}}</strong></h3>
         <!-- Description -->
         <p *ngIf="category.description.length > 0">{{category.description}}</p>
         <!-- Provider -->
