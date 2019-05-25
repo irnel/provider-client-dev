@@ -1,38 +1,168 @@
 <!-- Category Details -->
 <div *ngIf="observer$ | async; else progress" class="w-responsive h-responsive mt-3 mb-3 center ml-auto mr-auto">
-  <!-- Heading -->
   <mdb-card>
-    <h6 class="h6-responsive pt-2 text-center">
-      <!-- Provider -->
-      <div *ngIf="!isAdmin">
-        <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
-        <a routerLink="/provider-dashboard/workspace/home">Home</a>
-        <span> / </span>
-        <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
-        <span> / </span>
-        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/orders">Orders</a>
-        <span> / </span>
-        <span>Details</span>
+    <!-- Heading -->
+    <mdb-card-header>
+      <h6 class="h6-responsive pt-2 text-center">
+        <!-- Provider -->
+        <div *ngIf="!isAdmin">
+          <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+          <a routerLink="/provider-dashboard/workspace/home">Home</a>
+          <span> / </span>
+          <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+          <span> / </span>
+          <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/orders">Orders</a>
+          <span> / </span>
+          <span>Details</span>
+        </div>
+  
+        <!-- Admin -->
+        <div *ngIf="isAdmin">
+          <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+          <a routerLink="/admin-dashboard/workspace/home">Home</a>
+          <span> / </span>
+          <a routerLink="/admin-dashboard/workspace/users">Users</a>
+          <span> / </span>
+          <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
+          <span> / </span>
+          <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/orders">Orders</a>
+          <span> / </span>
+          <span>Details</span>
+        </div>
+      </h6>
+      
+      <!-- Order data -->
+      <div class="text-center">
+        <h5 class="h5-responsive card-title font-weight-bold pt-3 "><strong>{{order.displayName}}</strong></h5>
+        <h6 class="h6-responsive font-weight-bold indigo-text"><strong>{{order.providerName}}</strong></h6>
+
+        <div class="row pt-1">
+          <!-- Date -->
+          <div class="col">{{order.createdDate.toMillis() | date: 'dd/MM/yyyy h:mm:ss a z' }}</div>
+          <!-- Paid -->
+          <div class="col">
+            <h6 class="h6-responsive"><strong>Paid: </strong>
+              <span class="badge badge-pill mr-4"
+                  [ngStyle]="{'background-color': order.paid ? '#00C851' : '#ff4444' }">
+  
+                 {{order.paid}}
+              </span>
+            </h6>
+          </div>
+          <!-- Status -->
+          <div class="col">
+            <h6 class="h6-responsive"><strong>Status: </strong>
+              <span class="badge badge-pill mr-4"
+                  [ngStyle]="{
+                    'background-color': order.status === completed ? '#00C851' : '#ff4444'}">
+  
+                 {{order.status}}
+              </span>
+            </h6>
+          </div>
+        </div>
       </div>
 
-      <!-- Admin -->
-      <div *ngIf="isAdmin">
-        <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
-        <a routerLink="/admin-dashboard/workspace/home">Home</a>
-        <span> / </span>
-        <a routerLink="/admin-dashboard/workspace/users">Users</a>
-        <span> / </span>
-        <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
-        <span> / </span>
-        <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/orders">Orders</a>
-        <span> / </span>
-        <span>Details</span>
+    </mdb-card-header>
+
+    <!-- Table products -->
+    <mdb-card-body>
+      <!--Grid column-->
+      <div class="col-md-12 my-1 text-left">
+        <div class="card">
+          <div class="card-body">
+
+            <!-- Shopping Cart table -->
+            <div class="table-responsive">
+
+              <table class="table product-table">
+
+                <!-- Table head -->
+                <thead class="mdb-color lighten-5">
+                  <tr>
+                    <th></th>
+                    <th class="font-weight-bold">
+                      <strong>Product</strong>
+                    </th>
+                    <th></th>
+                    <th class="font-weight-bold">
+                      <strong>Price</strong>
+                    </th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <!-- /.Table head -->
+
+                <!-- Table body -->
+                <tbody>
+
+                  <!-- Rows -->
+                  <tr *ngFor="let product of order.products">
+                    <th scope="row">
+                      <img src="{{product.url}}" alt="Product" class="img-fluid z-depth-0">
+                    </th>
+                    <td class="align-middle" style="width: 35%">
+                      <h6 class="mt-3">
+                        <strong>{{product.name}}</strong>
+                      </h6>
+                      <p class="text-muted">{{product.categoryName}}</p>
+                    </td>
+                    <td></td>
+                    <td class="font-weight-bold align-middle" style="width: 15%">
+                      <strong>${{product.price}}</strong>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <!-- /.Rows -->
+
+                  <!-- Total -->
+                  <tr>
+                    <td colspan="3"></td>
+                    <td>
+                      <h4 class="mt-2 blue-text">
+                        <strong>Total</strong>
+                      </h4>
+                    </td>
+                    <td class="text-right blue-text">
+                      <h4 class="mt-2">
+                        <strong>${{total}}</strong>
+                      </h4>
+                    </td>
+                  </tr>
+
+                </tbody>
+                <!-- /.Table body -->
+
+              </table>
+
+            </div>
+            <!-- /.Shopping Cart table -->
+
+          </div>
+
+        </div>
+
       </div>
-      
-    </h6>
+      <!--Grid column-->
+
+      <!-- Comments -->
+      <h5 class="h5-responsive text-center pt-3"><strong>Comments</strong></h5>
+      <hr>
+      <p *ngIf="order.remarks.length === 0" class="card-text font-comments font-italic text-center">
+        No comments
+      </p>
+      <p *ngIf="order.remarks.length > 0" class="card-text font-comments font-italic">
+        {{order.remarks}}
+      </p>
+
+    </mdb-card-body>
+    
   </mdb-card>
   <!-- Heading -->
 
+  <!-- Floating Action Button -->
+  <a type="button" mat-fab class="pink mat-elevation-z8">{{order.pickupTime}}</a>
+  
 </div>
 
 <ng-template #progress>

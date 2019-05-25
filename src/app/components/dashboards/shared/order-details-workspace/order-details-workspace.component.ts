@@ -18,6 +18,7 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
   isAdmin: boolean;
   order: Order;
   observer$: Observable<any>;
+  createdDate: Date;
   state = 'waiting';
 
   constructor(
@@ -46,7 +47,8 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
     this.observer$.subscribe(
       order => {
         this.order = order;
-        this.state = 'waiting';
+        console.log();
+        this.state = 'finish';
       },
       error => {
         this.state = 'failed';
@@ -65,6 +67,10 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
     this.ngZone.run(() => {
       this.router.navigate(['provider-dashboard/workspace/home']);
     });
+  }
+
+  get total() {
+    return this.order.products.map(p => p.price).reduce((total, price) => total + price);
   }
 
 }
