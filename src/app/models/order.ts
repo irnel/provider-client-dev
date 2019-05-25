@@ -1,7 +1,8 @@
 import { Product } from './product';
+import { firestore } from 'firebase';
 
 export interface Order {
-  createdDate: string;
+  createdDate: firestore.Timestamp;
   pickupTime: string;
   status: string;
   paid: boolean;
