@@ -48,8 +48,10 @@ export class OrderService {
     );
   }
 
-  update(order: Order) {
-    const orderDoc = this.afs.doc(`orders/${order.providerId}/list/${order.id}`);
+  update(order: Order, date: Date) {
+    const orderDoc = this.afs.doc(
+      `orders/${order.providerId}/${date.getFullYear()}/${date.getMonth()}/${date.getDate()}/${order.id}`);
+
     return orderDoc.update(order);
   }
 }
