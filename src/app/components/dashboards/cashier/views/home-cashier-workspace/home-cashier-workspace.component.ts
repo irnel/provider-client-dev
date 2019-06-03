@@ -1,3 +1,4 @@
+import { FormControl } from '@angular/forms';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -13,24 +14,26 @@ import { Config } from '../../../../../infrastructure';
   styleUrls: ['./home-cashier-workspace.component.scss']
 })
 export class HomeCashierWorkspaceComponent implements OnInit {
-  public columnsToDisplay = ['createdDate', 'pickupTime', 'provider', 'paid', 'status'];
+  public columnsToDisplay = ['Id', 'createdDate', 'pickupTime', 'provider', 'paid', 'status'];
   public dataSource: MatTableDataSource<Order>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  orderState = OrderState.Pending;
   providerId: string;
   orders: Order [];
   ordersPending: Order [];
   ordersReady: Order [];
   ordersCompleted: Order [];
   ordersCanceled: Order [];
+  orderState = OrderState.All;
 
   pageSizeOptions = Config.pageSizeOptions;
   observer$: Observable<any>;
   message: string;
   state = 'waiting';
+  date: FormControl;
+  currentDate: Date;
 
   constructor(
     private readonly orderService: OrderService,
@@ -40,34 +43,20 @@ export class HomeCashierWorkspaceComponent implements OnInit {
 
   ngOnInit() {
     this.providerId = this.authService.currentUserValue.parentId;
+    this.getAllOrdersByDate(new Date());
+  }
 
-    this.observer$ = this.orderService.getAllOrdersByProviderId(this.providerId, new Date());
-    this.observer$.subscribe(
-      orders => {
-        this.orders = orders;
-        this.state = 'finished';
+  onClickAllOrders() {
+    this.message = null;
+    this.orderState = OrderState.All;
 
-        // Filter orders by status
-        this.ordersPending = this.orders.filter(order => order.status === OrderState.Pending);
-        this.ordersReady = this.orders.filter(order => order.status === OrderState.Ready);
-        this.ordersCompleted = this.orders.filter(order => order.status === OrderState.Completed);
-        this.ordersCanceled = this.orders.filter(order => order.status === OrderState.Canceled);
-
-        if (this.orderState === OrderState.Pending) {
-          this.onClickPendingOrders();
-        } else if (this.orderState === OrderState.Ready) {
-          this.onClickReadyOrders();
-        } else if (this.orderState === OrderState.Completed) {
-          this.onClickCompletedOrders();
-        } else {
-          this.onClickCanceledOrders();
-        }
-      },
-      error => {
-        this.state = 'failed';
-        this.notification.ErrorMessage(error.message, '', 2500);
-      }
-    );
+    if (this.orders.length === 0) {
+      this.message = 'There are no orders';
+    } else {
+      this.dataSource = new MatTableDataSource(this.orders);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
   onClickPendingOrders() {
@@ -124,11 +113,49 @@ export class HomeCashierWorkspaceComponent implements OnInit {
 
   updateStatus(order: Order, status: string) {
     order.status = status;
-    this.orderService.update(order).then(() => {
+    this.orderService.update(order, this.currentDate).then(() => {
       this.notification.SuccessMessage(`The status of the order is ${status}`, '', 2500);
     })
     .catch(error => {
       this.notification.ErrorMessage(error.message, '', 2500);
     });
+  }
+
+  getAllOrdersByDate(date: Date) {
+    this.currentDate = date;
+    this.date = new FormControl(date);
+    this.observer$ = this.orderService.getAllOrdersByProviderId(this.providerId, this.currentDate);
+    this.observer$.subscribe(
+      orders => {
+        this.orders = orders;
+        this.state = 'finished';
+
+        // Filter orders by status
+        this.ordersPending = this.orders.filter(order => order.status === OrderState.Pending);
+        this.ordersReady = this.orders.filter(order => order.status === OrderState.Ready);
+        this.ordersCompleted = this.orders.filter(order => order.status === OrderState.Completed);
+        this.ordersCanceled = this.orders.filter(order => order.status === OrderState.Canceled);
+
+        if (this.orderState === OrderState.All) {
+          this.onClickAllOrders();
+        } else if (this.orderState === OrderState.Pending) {
+          this.onClickPendingOrders();
+        } else if (this.orderState === OrderState.Ready) {
+          this.onClickReadyOrders();
+        } else if (this.orderState === OrderState.Completed) {
+          this.onClickCompletedOrders();
+        } else {
+          this.onClickCanceledOrders();
+        }
+      },
+      error => {
+        this.state = 'failed';
+        this.notification.ErrorMessage(error.message, '', 2500);
+      }
+    );
+  }
+
+  ApplyFilter(filterValue: String) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

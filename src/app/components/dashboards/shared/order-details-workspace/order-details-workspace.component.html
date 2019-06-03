@@ -3,7 +3,7 @@
   <mdb-card>
     <!-- Heading -->
     <mdb-card-header>
-      <h6 class="h6-responsive pt-2 text-center">
+      <h6 class="h6-responsive text-center">
         <!-- Provider -->
         <div *ngIf="!isAdmin">
           <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
@@ -31,34 +31,57 @@
         </div>
       </h6>
       
+      <hr>
       <!-- Order data -->
-      <div class="text-center">
-        <h5 class="h5-responsive card-title font-weight-bold pt-3 "><strong>{{order.displayName}}</strong></h5>
-        <h6 class="h6-responsive font-weight-bold indigo-text"><strong>{{order.providerName}}</strong></h6>
-
-        <div class="row pt-1">
-          <!-- Date -->
-          <div class="col">{{order.createdDate.toMillis() | date: 'dd/MM/yyyy h:mm:ss a z' }}</div>
-          <!-- Paid -->
-          <div class="col">
-            <h6 class="h6-responsive"><strong>Paid: </strong>
-              <span class="badge badge-pill mr-4"
-                  [ngStyle]="{'background-color': order.paid ? '#00C851' : '#ff4444' }">
+      <div>
+        <h4 class="h4-responsive card-title font-weight-bold text-center">
+          <strong>{{order.displayName}}</strong>
+        </h4>
+        <h5 class="h5-responsive font-weight-bold indigo-text mt-0 text-center">
+          <strong>{{order.providerName}}</strong>
+        </h5>
+        <div>
+          <i class="fa fa-clock-o prefix mr-2 mt-0" aria-hidden="true"></i>
+          <strong>{{order.pickupTime}}</strong>
+        </div>
+             
+        <div class="container mt-3 justify-content-center">
+          <div class="row d-flex">
+            <div class="col">
+              <!-- Id -->
+              <h6 class="h6-responsive mt-0">
+                <i class="fa fa-id-card-o prefix mr-2 mt-0" aria-hidden="true"></i>
+                {{order.id}}
+              </h6>  
+                
+              <!-- CreatedDate -->
+              <div>
+                <i class="fa fa-calendar-o prefix mr-2 mt-0" aria-hidden="true"></i>
+                {{order.createdDate.toMillis() | date: 'dd/MM/yyyy h:mm:ss a z' }}
+              </div>           
+            </div>
   
-                 {{order.paid}}
-              </span>
-            </h6>
-          </div>
-          <!-- Status -->
-          <div class="col">
-            <h6 class="h6-responsive"><strong>Status: </strong>
-              <span class="badge badge-pill mr-4"
-                  [ngStyle]="{
-                    'background-color': order.status === completed ? '#00C851' : '#ff4444'}">
+            <div class="col-sm-5 text-center">
+              <!-- Paid -->
+              <h6 class="h6-responsive dark-grey-text"><strong>Paid</strong>
+                <span class="badge badge-pill ml-1 mr-4"
+                    [ngStyle]="{'background-color': order.paid ? '#00C851' : '#ff4444' }">
+    
+                  {{valueToString(order.paid) | uppercase}}
+                </span>
+              </h6>
   
-                 {{order.status}}
-              </span>
-            </h6>
+              <!-- Status -->
+              <h6 class="h6-responsive"><strong>Status</strong>
+                <span class="badge badge-pill ml-1 mr-4"
+                    [ngStyle]="{
+                      'background-color': order.status === completed ? '#00C851' : '#ff4444'}">
+                    
+                  {{order.status | uppercase}}
+                </span>
+              </h6>
+  
+            </div>
           </div>
         </div>
       </div>
@@ -161,7 +184,7 @@
   <!-- Heading -->
 
   <!-- Floating Action Button -->
-  <a type="button" mat-fab class="pink mat-elevation-z8">{{order.pickupTime}}</a>
+  <a type="button" mat-fab class="pink mat-elevation-z8">00:00</a>
   
 </div>
 

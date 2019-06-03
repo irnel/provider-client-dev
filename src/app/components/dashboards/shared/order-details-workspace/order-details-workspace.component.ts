@@ -73,4 +73,8 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
     return this.order.products.map(p => p.price).reduce((total, price) => total + price);
   }
 
+  valueToString(value) {
+    return String(value);
+  }
+
 }
