@@ -1,10 +1,12 @@
+import { OrderDetailsWorkspaceComponent } from './../../../shared/order-details-workspace/order-details-workspace.component';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ViewChild, NgZone, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 
 import { OrderState } from '../../../../../helpers';
-import { OrderService, AuthService, NotificationService } from '../../../../../services';
+import { OrderService, AuthService, NotificationService, DateService } from '../../../../../services';
 import { Order } from '../../../../../models';
 import { Config } from '../../../../../infrastructure';
 
@@ -13,13 +15,15 @@ import { Config } from '../../../../../infrastructure';
   templateUrl: './home-cashier-workspace.component.html',
   styleUrls: ['./home-cashier-workspace.component.scss']
 })
-export class HomeCashierWorkspaceComponent implements OnInit {
-  public columnsToDisplay = ['Id', 'createdDate', 'pickupTime', 'provider', 'paid', 'status'];
+export class HomeCashierWorkspaceComponent implements OnInit, OnDestroy {
+  public columnsToDisplay = ['Id', 'createdDate', 'pickupTime', 'provider', 'paid', 'status', 'view'];
   public dataSource: MatTableDataSource<Order>;
 
+  @ViewChild(OrderDetailsWorkspaceComponent) child: OrderDetailsWorkspaceComponent;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  cashierId: string;
   providerId: string;
   orders: Order [];
   ordersPending: Order [];
@@ -28,6 +32,7 @@ export class HomeCashierWorkspaceComponent implements OnInit {
   ordersCanceled: Order [];
   orderState = OrderState.All;
 
+  subscription: Subscription;
   pageSizeOptions = Config.pageSizeOptions;
   observer$: Observable<any>;
   message: string;
@@ -36,14 +41,30 @@ export class HomeCashierWorkspaceComponent implements OnInit {
   currentDate: Date;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private ngZone: NgZone,
     private readonly orderService: OrderService,
     private readonly authService: AuthService,
+    private readonly dateService: DateService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
+    this.cashierId = this.authService.currentUserValue.uid;
     this.providerId = this.authService.currentUserValue.parentId;
-    this.getAllOrdersByDate(new Date());
+
+    this.subscription = this.dateService.currentDateSubject.subscribe(
+      date => {
+        !date
+          ? this.getAllOrdersByDate(new Date())
+          : this.getAllOrdersByDate(date);
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onClickAllOrders() {
@@ -157,5 +178,14 @@ export class HomeCashierWorkspaceComponent implements OnInit {
 
   ApplyFilter(filterValue: String) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  redirectToOrderDetails(orderId) {
+    this.ngZone.run(() => {
+      const url = `cashier-dashboard/workspace/cashiers/${this.cashierId}/providers/${this.providerId}/orders/${orderId}/date/` +
+              `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`;
+
+      this.router.navigate([url]);
+    });
   }
 }

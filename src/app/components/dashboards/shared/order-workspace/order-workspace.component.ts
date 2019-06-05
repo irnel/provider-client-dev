@@ -1,20 +1,21 @@
-import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { Order } from '../../../../models';
 import { Config } from '../../../../infrastructure';
-import { OrderState } from '../../../../helpers';
-import { OrderService, NotificationService, AuthService } from '../../../../services';
+import { OrderState, Roles } from '../../../../helpers';
+import { OrderService, NotificationService, DateService } from '../../../../services';
+
 
 @Component({
   selector: 'app-order-workspace',
   templateUrl: './order-workspace.component.html',
   styleUrls: ['./order-workspace.component.scss']
 })
-export class OrderWorkspaceComponent implements OnInit {
+export class OrderWorkspaceComponent implements OnInit, OnDestroy {
   public columnsToDisplay = ['createdDate', 'pickupTime', 'provider', 'paid', 'status', 'view'];
   public dataSource: MatTableDataSource<Order>;
 
@@ -22,11 +23,14 @@ export class OrderWorkspaceComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('frame') frame: any;
 
+  subscription: Subscription;
   pageSizeOptions = Config.pageSizeOptions;
   orderState = OrderState.Pending;
   userId: string;
   providerId: string;
+  cashierId: string;
   isAdmin: boolean;
+  userRole: string;
   orders: Order [];
   observer$: Observable<any>;
   message: string;
@@ -40,17 +44,30 @@ export class OrderWorkspaceComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly ngZone: NgZone,
-    private readonly authService: AuthService,
     private readonly orderService: OrderService,
+    private readonly dateService: DateService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin;
-    if (this.isAdmin) { this.userId = this.route.snapshot.params['userId']; }
-
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
     this.providerId = this.route.snapshot.params['providerId'];
-    this.getAllOrdersByDate(new Date());
+
+    if (this.userRole === Roles.Admin) {
+      this.userId = this.route.snapshot.params['userId'];
+    }
+
+    this.subscription = this.dateService.currentDateSubject.subscribe(
+      date => {
+        !date
+          ? this.getAllOrdersByDate(new Date())
+          : this.getAllOrdersByDate(date);
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -75,11 +92,14 @@ export class OrderWorkspaceComponent implements OnInit {
 
   redirectToOrderDetails(orderId) {
     this.ngZone.run(() => {
-      const url = this.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders/${orderId}/date/` +
-          `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`
-        : `provider-dashboard/workspace/providers/${this.providerId}/orders/${orderId}/date/` +
-          `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`;
+      let url = '';
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders/${orderId}/date/` +
+              `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`;
+      } else if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/${this.providerId}/orders/${orderId}/date/` +
+              `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`;
+      }
 
       this.router.navigate([url]);
     });

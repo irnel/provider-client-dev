@@ -2,9 +2,9 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { AuthService, NotificationService, OrderService } from '../../../../services';
+import { DateService, NotificationService, OrderService } from '../../../../services';
 import { Order } from '../../../../models';
-
+import { Roles } from '../../../../helpers';
 
 @Component({
   selector: 'app-order-details-workspace',
@@ -14,11 +14,12 @@ import { Order } from '../../../../models';
 export class OrderDetailsWorkspaceComponent implements OnInit {
   userId: string;
   providerId: string;
+  cashierId: string;
   orderId: string;
-  isAdmin: boolean;
+  userRole: string;
   order: Order;
   observer$: Observable<any>;
-  createdDate: Date;
+  date: Date;
   state = 'waiting';
 
   constructor(
@@ -26,13 +27,15 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private readonly orderService: OrderService,
-    private readonly authService: AuthService,
+    private readonly dateService: DateService,
     private readonly notification: NotificationService
   ) { }
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin;
-    if (this.isAdmin) {
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
+
+    // Role Admin
+    if (this.userRole === Roles.Admin) {
       this.userId = this.route.snapshot.params['userId'];
     }
 
@@ -41,13 +44,14 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
     const year = this.route.snapshot.params['year'];
     const month = this.route.snapshot.params['month'];
     const day = this.route.snapshot.params['day'];
-    const date = new Date(year, month, day);
+    this.date = new Date(year, month, day);
+    // send date event
+    this.dateService.sendDate(this.date);
 
-    this.observer$ = this.orderService.getOrderData(this.providerId, this.orderId, date);
+    this.observer$ = this.orderService.getOrderData(this.providerId, this.orderId, this.date);
     this.observer$.subscribe(
       order => {
         this.order = order;
-        console.log();
         this.state = 'finish';
       },
       error => {
@@ -69,6 +73,12 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
     });
   }
 
+  redirectToCashierHome() {
+    this.ngZone.run(() => {
+      this.router.navigate(['cashier-dashboard/workspace/home']);
+    });
+  }
+
   get total() {
     return this.order.products.map(p => p.price).reduce((total, price) => total + price);
   }
@@ -76,5 +86,4 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
   valueToString(value) {
     return String(value);
   }
-
 }
