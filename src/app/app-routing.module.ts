@@ -84,7 +84,7 @@ const routes: Routes = [
         component: OrderWorkspaceComponent
       },
       {
-        path: 'users/:userId/providers/:providerId/orders/:orderId/details',
+        path: 'users/:userId/providers/:providerId/date/:day/:month/:year/details',
         component: OrderDetailsWorkspaceComponent
       },
 
@@ -173,7 +173,11 @@ const routes: Routes = [
     data: {role: 'cashier'},
     children: [
       { path: 'home', component: HomeCashierWorkspaceComponent },
-      { path: '', redirectTo: 'home', pathMatch: 'full' }
+      {
+        path: 'cashiers/:cashierId/providers/:providerId/orders/:orderId/date/:day/:month/:year/details',
+        component: OrderDetailsWorkspaceComponent
+      },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
     ]
   },
 
