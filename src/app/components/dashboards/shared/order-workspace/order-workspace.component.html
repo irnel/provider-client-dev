@@ -78,7 +78,7 @@
             <!-- Column Created Date -->
             <ng-container matColumnDef="createdDate">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date</th>
-              <td mat-cell *matCellDef='let order' (dblclick)="redirectToOrderDetails(order.id)">
+              <td mat-cell *matCellDef='let order' (click)="redirectToOrderDetails(order.id)">
                 {{order.createdDate.toMillis() | date: 'yyyy/MM/dd h:mm:ss a z' }}
               </td>
             </ng-container>
@@ -86,13 +86,13 @@
             <!-- Column Pickup Time -->
             <ng-container matColumnDef="pickupTime">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Pickup Time</th>
-              <td mat-cell *matCellDef='let order' (dblclick)="selectedOrder = order;">{{order.pickupTime}}</td>
+              <td mat-cell *matCellDef='let order' (click)="redirectToOrderDetails(order.id)">{{order.pickupTime}}</td>
             </ng-container>
       
             <!-- Column Provider -->
             <ng-container matColumnDef="provider">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Provider</th>
-              <td mat-cell *matCellDef='let order' (dblclick)="redirectToOrderDetails(order.id)">
+              <td mat-cell *matCellDef='let order' (click)="redirectToOrderDetails(order.id)">
                 {{order.providerName}}
               </td>
             </ng-container>
@@ -100,7 +100,7 @@
             <!-- Column Paid -->
             <ng-container matColumnDef="paid">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Paid</th>
-              <td mat-cell *matCellDef='let order' (dblclick)="redirectToOrderDetails(order.id)">
+              <td mat-cell *matCellDef='let order' (click)="redirectToOrderDetails(order.id)">
                 <h6>
                   <span class="badge badge-pill mr-4"
                       [ngStyle]="{'background-color': order.paid ? '#00C851' : '#ff4444' }">
@@ -114,7 +114,7 @@
             <!-- Column Provider -->
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-              <td mat-cell *matCellDef='let order' (dblclick)="redirectToOrderDetails(order.id)">
+              <td mat-cell *matCellDef='let order' (click)="redirectToOrderDetails(order.id)">
                 {{order.status}}
               </td>
             </ng-container>

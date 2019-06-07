@@ -9,11 +9,12 @@ mdb-card-header h6 i {
   right: 1.4rem;
 }
 
-.font-comments {
-  font-family: Roboto,sans-serif;
-}
-
 img {
   max-width: 80px;
   max-height: 80px;
+}
+
+tr:hover td,
+tr:hover th {
+  background: #dcd8d8;
 }

@@ -30,32 +30,31 @@
       </div>
      
     </h6>
-  </mdb-card>
 
-  <!-- Category content -->
-  <mdb-card>
-    <!-- Content -->
-    <div class="view">
-      <!-- Image -->
-      <img class="card-img-top" src="{{category.url}}" alt="provider image">
-      <div class="mask text-white text-center rgba-black-light py-4 px-3">
-        <!-- Name -->
-        <h3 class="h3-responsive card-title pt-2"><strong>{{category.name}}</strong></h3>
-        <!-- Description -->
-        <p *ngIf="category.description.length > 0">{{category.description}}</p>
-        <!-- Provider -->
-        <h5 class="text-center mt-1 mb-2">
-          <a *ngIf="!isAdmin" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
-            <span class="badge badge-pill indigo mr-2">{{category.providerName}}</span>
-          </a>
+    <hr>
 
-          <a *ngIf="isAdmin" routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">
-            <span class="badge badge-pill indigo mr-2">{{category.providerName}}</span>
-          </a>
-        </h5>
+    <mdb-card-body>
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="view">
+            <img class="d-block w-100 rounded" src="{{category.url}}" alt="provider image">
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <h4 class="h4-responsive font-weight-bold">
+            <strong>{{category.name}}</strong>
+          </h4>
+          <p class="text-muted">{{category.providerName}}</p>
+
+          <p  class="card-text font-comments" *ngIf="category.description.length > 0">
+            {{category.description}}
+          </p>
+        </div>
       </div>
-    </div>
-    
+
+    </mdb-card-body>
+
     <mdb-card-footer>
       <h4 class="text-center">
         <!-- Add Product -->
@@ -71,7 +70,7 @@
     </mdb-card-footer>
 
   </mdb-card>
-
+  
 </div>
 
 <ng-template #progress>

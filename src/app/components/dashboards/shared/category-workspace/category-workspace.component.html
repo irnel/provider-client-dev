@@ -62,7 +62,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Image </th>
             <td mat-cell *matCellDef="let category"
                 style="width: 10%;"
-                (dblclick)="redirectToCategoryDetails(category.id)">
+                (click)="redirectToCategoryDetails(category.id)">
     
               <img src="{{category.url}}" alt="category" class="img-thumbnail mt-2 mb-2 mr-4">
             </td>
@@ -72,7 +72,7 @@
           <!-- Column Name -->
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-            <td mat-cell *matCellDef="let category" (dblclick)="redirectToCategoryDetails(category.id)">
+            <td mat-cell *matCellDef="let category" (click)="redirectToCategoryDetails(category.id)">
               <p class="ml-2">{{category.name}}</p>
             </td>
           </ng-container>
@@ -80,7 +80,7 @@
           <!-- Column Provider -->
           <ng-container matColumnDef="provider">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Provider </th>
-            <td mat-cell *matCellDef="let category" (dblclick)="redirectToCategoryDetails(category.id)">
+            <td mat-cell *matCellDef="let category" (click)="redirectToCategoryDetails(category.id)">
               <p class="ml-2">{{category.providerName}}</p>
             </td>
           </ng-container>
@@ -88,7 +88,7 @@
           <!-- Column Description -->
           <ng-container matColumnDef="description">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
-            <td mat-cell *matCellDef="let category" (dblclick)="redirectToCategoryDetails(category.id)">
+            <td mat-cell *matCellDef="let category">
     
               <p *ngIf="category.description.length <= maxChar" class="ml-2">{{category.description}}</p>
     
@@ -120,7 +120,7 @@
           <!-- Column Operation -->
           <ng-container matColumnDef="operation">
             <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-            <td mat-cell *matCellDef="let category" (dblclick)="redirectToCategoryDetails(category.id)">
+            <td mat-cell *matCellDef="let category">
     
               <!-- Options -->
               <div class="block-options">

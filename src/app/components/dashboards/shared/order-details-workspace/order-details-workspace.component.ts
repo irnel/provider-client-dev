@@ -21,6 +21,7 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
   observer$: Observable<any>;
   date: Date;
   state = 'waiting';
+  panelOpenState = false;
 
   constructor(
     private route: ActivatedRoute,
