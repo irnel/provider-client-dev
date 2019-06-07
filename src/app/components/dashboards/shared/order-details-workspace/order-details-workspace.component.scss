@@ -1,4 +1,4 @@
-mdb-card-header h6 i {
+i, span {
   cursor: pointer;
 }
 
@@ -16,5 +16,5 @@ img {
 
 tr:hover td,
 tr:hover th {
-  background: #dcd8d8;
+  background: none !important;
 }

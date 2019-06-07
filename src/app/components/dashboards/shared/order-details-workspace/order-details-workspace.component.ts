@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { DateService, NotificationService, OrderService } from '../../../../services';
 import { Order } from '../../../../models';
-import { Roles } from '../../../../helpers';
+import { Roles, OrderState } from '../../../../helpers';
 
 @Component({
   selector: 'app-order-details-workspace',
@@ -78,6 +78,17 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
     this.ngZone.run(() => {
       this.router.navigate(['cashier-dashboard/workspace/home']);
     });
+  }
+
+  updateOrderStatus(status) {
+    this.order.status = status;
+
+    // this.orderService.update(this.order, this.date).then(
+    //   () => this.notification.SuccessMessage(
+    //     `Status changed to ${this.order.status}`, '', 2500)
+    // ).catch(error => {
+    //   this.notification.ErrorMessage(error.message, '', 2500);
+    // });
   }
 
   get total() {
