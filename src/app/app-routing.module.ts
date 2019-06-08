@@ -84,7 +84,7 @@ const routes: Routes = [
         component: OrderWorkspaceComponent
       },
       {
-        path: 'users/:userId/providers/:providerId/date/:day/:month/:year/details',
+        path: 'users/:userId/providers/:providerId/orders/:orderId/date/:day/:month/:year/details',
         component: OrderDetailsWorkspaceComponent
       },
 
