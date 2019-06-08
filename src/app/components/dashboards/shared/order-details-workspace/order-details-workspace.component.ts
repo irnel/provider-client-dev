@@ -2,8 +2,8 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { DateService, NotificationService, OrderService } from '../../../../services';
-import { Order } from '../../../../models';
+import { DateService, NotificationService, OrderService, UserService } from '../../../../services';
+import { Order, User } from '../../../../models';
 import { Roles, OrderState, IStatus } from '../../../../helpers';
 
 @Component({
@@ -12,6 +12,7 @@ import { Roles, OrderState, IStatus } from '../../../../helpers';
   styleUrls: ['./order-details-workspace.component.scss']
 })
 export class OrderDetailsWorkspaceComponent implements OnInit, IStatus {
+  user: User;
   userId: string;
   providerId: string;
   cashierId: string;
@@ -22,6 +23,9 @@ export class OrderDetailsWorkspaceComponent implements OnInit, IStatus {
   date: Date;
   state = 'waiting';
   panelOpenState = false;
+  isAdmin = false;
+  isProvider = false;
+  isCashier = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +33,7 @@ export class OrderDetailsWorkspaceComponent implements OnInit, IStatus {
     private ngZone: NgZone,
     private readonly orderService: OrderService,
     private readonly dateService: DateService,
+    private readonly userService: UserService,
     private readonly notification: NotificationService
   ) { }
 
@@ -37,7 +42,13 @@ export class OrderDetailsWorkspaceComponent implements OnInit, IStatus {
 
     // Role Admin
     if (this.userRole === Roles.Admin) {
+      this.isAdmin = true;
       this.userId = this.route.snapshot.params['userId'];
+      this.userService.getUserById(this.userId).subscribe(user => this.user = user);
+    } else if (this.userRole === Roles.Provider) {
+      this.isProvider = true;
+    } else {
+      this.isCashier = true;
     }
 
     this.providerId = this.route.snapshot.params['providerId'];

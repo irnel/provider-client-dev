@@ -2,26 +2,28 @@
 <div *ngIf="observer$ | async; else progress" class="w-responsive h-responsive mr-auto ml-auto mt-3">
   <!-- navigation -->
   <mdb-card>
-    <h6 class="h6-responsive mt-2 text-center">
+    <h6 class="h6-responsive pt-3 text-center">
       <!-- Provider -->
-      <div *ngIf="userRole === 'provider'">
+      <div *ngIf="!isAdmin">
         <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
         <a routerLink="/provider-dashboard/workspace/home">Home</a>
-        <span> / </span>
+        <span>/</span>
         <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
-        <span> / </span>
+        <span>/</span>
         <span>Details</span>
       </div>
 
       <!-- Admin -->
-      <div *ngIf="userRole === 'admin'">
+      <div *ngIf="isAdmin">
         <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
         <a routerLink="/admin-dashboard/workspace/home">Home</a>
-        <span> / </span>
+        <span>/</span>
         <a routerLink="/admin-dashboard/workspace/users">Users</a>
-        <span> / </span>
+        <span>/</span>
+        <a >{{user.displayName}}</a>
+        <span>/</span>
         <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
-        <span> / </span>
+        <span>/</span>
         <span>Details</span>
       </div>
     </h6>
@@ -46,7 +48,7 @@
             <p class="text-muted">{{provider.address.formattedAddress}}</p>
           </div>
 
-          <p  class="card-text font-comments" *ngIf="provider.description.length > 0">
+          <p  class="card-text small-font" *ngIf="provider.description.length > 0">
             {{provider.description}}
           </p>
         </div>

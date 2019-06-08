@@ -3,9 +3,9 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 
 import { Config } from '../../../../infrastructure';
-import { ProviderService, AuthService, NotificationService } from '../../../../services';
+import { ProviderService, NotificationService, UserService } from '../../../../services';
 import { Roles } from '../../../../helpers';
-import { Provider } from '../../../../models';
+import { Provider, User } from '../../../../models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -21,6 +21,7 @@ export class ProviderWorkspaceComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('frame') frame: ElementRef;
 
+  user: User;
   providers: Provider [];
   observer$: Observable<any>;
   maxChar: number = Config.maxChar;
@@ -30,12 +31,13 @@ export class ProviderWorkspaceComponent implements OnInit {
   deleting = false;
   state = 'waiting';
   visibility = false;
+  isAdmin = false;
 
   constructor(
     private ngZone: NgZone,
     private router: Router,
     private route: ActivatedRoute,
-    private readonly authService: AuthService,
+    private readonly userService: UserService,
     private readonly providerService: ProviderService,
     private readonly notification: NotificationService
   ) {}
@@ -45,9 +47,11 @@ export class ProviderWorkspaceComponent implements OnInit {
 
     // Admin role
     if (this.userRole === Roles.Admin) {
+      this.isAdmin = true;
       this.userId = this.route.snapshot.params['userId'];
-    } else {
-      this.userId = this.authService.currentUserValue.uid;
+      this.userService.getUserById(this.userId).subscribe(
+        user => this.user = user
+      );
     }
 
     this.observer$ = this.providerService.getAllProviderByUserId(this.userId);

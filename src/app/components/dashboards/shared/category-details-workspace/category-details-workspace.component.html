@@ -2,38 +2,36 @@
 <div *ngIf="observer$ | async; else progress" class="w-responsive h-responsive mt-3 mb-3 center ml-auto mr-auto">
   <!-- Breadcrumbs navigation -->
   <mdb-card>
-    <h6 class="h6-responsive pt-2 text-center">
+    <h6 class="h6-responsive pt-3 pl-3">
       <!-- Provider -->
-      <div *ngIf="userRole === 'provider'">
+      <div *ngIf="!isAdmin">
         <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
         <a routerLink="/provider-dashboard/workspace/home">Home</a>
-        <span> / </span>
+        <span>/</span>
         <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
-        <span> / </span>
-        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
-          {{category.providerName}}
-        </a>
-        <span> / </span>
+        <span>/</span>
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">{{category.providerName}}</a>
+        <span>/</span>
         <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">Categories</a>
-        <span> / </span>
+        <span>/</span>
         <span>Details</span>
       </div>
 
       <!-- Admin -->
-      <div *ngIf="userRole === 'admin'">
+      <div *ngIf="isAdmin">
         <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
         <a routerLink="/admin-dashboard/workspace/home">Home</a>
-        <span> / </span>
+        <span>/</span>
         <a routerLink="/admin-dashboard/workspace/users">Users</a>
-        <span> / </span>
+        <span>/</span>
+        <a>{{user.displayName}}</a>
+        <span>/</span>
         <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
-        <span> / </span>
-        <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">
-          {{category.providerName}}
-        </a>
-        <span> / </span>
+        <span>/</span>
+        <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">{{category.providerName}}</a>
+        <span>/</span>
         <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories">Categories</a>
-        <span> / </span>
+        <span>/</span>
         <span>Details</span>
       </div>
      
@@ -54,7 +52,7 @@
             <strong>{{category.name}}</strong>
           </h4>
           
-          <p  class="card-text font-comments" *ngIf="category.description.length > 0">
+          <p  class="card-text small-font" *ngIf="category.description.length > 0">
             {{category.description}}
           </p>
         </div>

@@ -9,46 +9,40 @@
           <div class="col">
             <h6 class=" h6-responsive pt-2">
               <!-- Provider -->
-              <div *ngIf="userRole === 'provider'">
+              <div *ngIf="!isAdmin">
                 <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
                 <a routerLink="/provider-dashboard/workspace/home">Home</a>
-                <span> / </span>
+                <span>/</span>
                 <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
-                <span> / </span>
-                <a *ngIf="product" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
-                  {{product.providerName}}
-                </a>
-                <span *ngIf="product"> / </span>
+                <span>/</span>
+                <a *ngIf="product" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">{{product.providerName}}</a>
+                <span>/</span>
                 <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">Categories</a>
-                <span> / </span>
-                <a *ngIf="product" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">
-                  {{product.categoryName}}
-                </a>
-                <span *ngIf="product"> / </span>
+                <span>/</span>
+                <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">{{product.categoryName}}</a>
+                <span>/</span>
                 <span>Products</span>
               </div>
   
               <!-- Admin -->
-              <div *ngIf="userRole === 'admin'">
+              <div *ngIf="isAdmin">
                 <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
                 <a routerLink="/admin-dashboard/workspace/home">Home</a>
-                <span> / </span>
+                <span>/</span>
                 <a routerLink="/admin-dashboard/workspace/users">Users</a>
-                <span> / </span>
+                <span>/</span>
+                <a>{{user.displayName}}</a>
+                <span>/</span>
                 <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
-                <span> / </span>
+                <span>/</span>
                 <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories">Categories</a>
-                <span> / </span>
-                <a *ngIf="product" routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">
-                  {{product.providerName}}
-                </a>
-                <span *ngIf="product"> / </span>
+                <span>/</span>
+                <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">{{product.providerName}}</a>
+                <span>/</span>
                 <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories">Categories</a>
-                <span *ngIf="product"> / </span>
-                <a *ngIf="product" routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories/{{categoryId}}/details">
-                  {{product.categoryName}}
-                </a>
-                <span> / </span>
+                <span>/</span>
+                <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories/{{categoryId}}/details">{{product.categoryName}}</a>
+                <span>/</span>
                 <span>Products</span>
               </div>
               
@@ -56,7 +50,7 @@
           </div>
   
           <!-- Icon Search -->
-          <div *ngIf="!visibility" class="col-2 d-flex justify-content-end animated fadeInRight pt-2">
+          <div *ngIf="!visibility" class="col-1 d-flex justify-content-end animated bounceInLeft pt-2">
             <i class="fa fa-search prefix fa-lg" aria-hidden="true"
               mdbTooltip="Open search" placement="left"
               (click)="setVisibility(true)"></i>
@@ -64,7 +58,7 @@
         </div>
 
         <!-- Filter Data -->
-        <div *ngIf="visibility" class="row d-flex animated fadeInRight">
+        <div *ngIf="visibility" class="row d-flex animated bounceInRight">
           <div class="col-sm-7">
             <div class="md-form form-sm">
               <i class="fa fa-times prefix" aria-hidden="true"

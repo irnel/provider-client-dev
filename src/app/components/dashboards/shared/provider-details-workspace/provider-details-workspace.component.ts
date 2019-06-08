@@ -1,8 +1,8 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Provider } from '../../../../models';
-import { ProviderService, NotificationService } from '../../../../services';
+import { Provider, User } from '../../../../models';
+import { ProviderService, NotificationService, UserService } from '../../../../services';
 import { Roles } from '../../../../helpers';
 import { Observable } from 'rxjs';
 
@@ -12,18 +12,21 @@ import { Observable } from 'rxjs';
   styleUrls: ['./provider-details-workspace.component.scss']
 })
 export class ProviderDetailsWorkspaceComponent implements OnInit {
+  user: User;
   provider: Provider;
   userId: string;
   providerId: string;
   userRole: string;
   observer$: Observable<any>;
   state = 'waiting';
+  isAdmin = false;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private ngZone: NgZone,
     private readonly providerService: ProviderService,
+    private readonly userService: UserService,
     private readonly notification: NotificationService
   ) {}
 
@@ -32,7 +35,11 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
 
     // Admin Role
     if (this.userRole === Roles.Admin) {
+      this.isAdmin = true;
       this.userId = this.route.snapshot.params['userId'];
+      this.userService.getUserById(this.userId).subscribe(
+        user => this.user = user
+      );
     }
 
     this.providerId = this.route.snapshot.params['providerId'];

@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
-import { Product } from '../../../../models';
+import { Product, User } from '../../../../models';
 import { Config } from '../../../../infrastructure';
-import { ProductService, NotificationService, AuthService } from '../../../../services';
+import { ProductService, NotificationService, AuthService, UserService } from '../../../../services';
 import { Roles } from '../../../../helpers';
 import { Observable } from 'rxjs';
 
@@ -24,6 +24,7 @@ export class ProductWorkspaceComponent implements OnInit {
   @ViewChild('frame') frame: ElementRef;
 
   product: Product;
+  user: User;
   products: Product [] = [];
   observer$: Observable<any>;
   maxChar = Config.maxChar;
@@ -35,12 +36,14 @@ export class ProductWorkspaceComponent implements OnInit {
   deleting = false;
   state = 'waiting';
   visibility = false;
+  isAdmin = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ngZone: NgZone,
     private readonly productService: ProductService,
+    private readonly userService: UserService,
     private readonly notification: NotificationService
   ) {}
 
@@ -49,7 +52,11 @@ export class ProductWorkspaceComponent implements OnInit {
 
     // Role Admin
     if (this.userRole === Roles.Admin) {
+      this.isAdmin = true;
       this.userId = this.route.snapshot.params['userId'];
+      this.userService.getUserById(this.userId).subscribe(
+        user => this.user = user
+      );
     }
 
     this.providerId = this.route.snapshot.params['providerId'];

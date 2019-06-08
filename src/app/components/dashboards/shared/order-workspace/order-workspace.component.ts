@@ -4,10 +4,10 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
-import { Order, Provider } from '../../../../models';
+import { Order, Provider, User } from '../../../../models';
 import { Config } from '../../../../infrastructure';
 import { OrderState, Roles, IStatus } from '../../../../helpers';
-import { OrderService, NotificationService, DateService, ProviderService } from '../../../../services';
+import { OrderService, NotificationService, DateService, ProviderService, UserService } from '../../../../services';
 
 @Component({
   selector: 'app-order-workspace',
@@ -29,6 +29,7 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy, IStatus {
   providerId: string;
   cashierId: string;
   provider: Provider;
+  user: User;
   userRole: string;
   orders: Order [];
   observer$: Observable<any>;
@@ -38,6 +39,7 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy, IStatus {
   currentDate: Date;
   date: FormControl;
   currentDateFormat: string;
+  isAdmin = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -45,6 +47,7 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy, IStatus {
     private readonly ngZone: NgZone,
     private readonly orderService: OrderService,
     private readonly providerService: ProviderService,
+    private readonly userService: UserService,
     private readonly dateService: DateService,
     private readonly notification: NotificationService
   ) {}
@@ -58,7 +61,11 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy, IStatus {
     );
 
     if (this.userRole === Roles.Admin) {
+      this.isAdmin = true;
       this.userId = this.route.snapshot.params['userId'];
+      this.userService.getUserById(this.userId).subscribe(
+        user => this.user = user
+      );
     }
 
     this.subscription = this.dateService.currentDateSubject.subscribe(
@@ -98,12 +105,10 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy, IStatus {
     this.ngZone.run(() => {
       let url = '';
       // Admin role
-      if (this.userRole === Roles.Admin) {
+      if (this.isAdmin) {
         url = `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders/${orderId}/date/` +
               `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`;
-      }
-      // Provider role
-      if (this.userRole === Roles.Provider) {
+      } else {
         url = `provider-dashboard/workspace/providers/${this.providerId}/orders/${orderId}/date/` +
               `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`;
       }

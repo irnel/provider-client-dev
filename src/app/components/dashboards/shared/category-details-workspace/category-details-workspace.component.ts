@@ -2,8 +2,8 @@ import { Observable } from 'rxjs';
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Provider, Category } from '../../../../models';
-import { CategoryService, NotificationService } from './../../../../services';
+import { Provider, Category, User } from '../../../../models';
+import { CategoryService, NotificationService, UserService } from './../../../../services';
 import { Roles } from '../../../../helpers';
 
 @Component({
@@ -18,6 +18,7 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
   categoryId: string;
   isAdmin: boolean;
   category: Category;
+  user: User;
   observer$: Observable<any>;
   state = 'waiting';
 
@@ -26,6 +27,7 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private readonly categoryService: CategoryService,
+    private readonly userService: UserService,
     private readonly notification: NotificationService
   ) {}
 
@@ -33,7 +35,11 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
     this.route.parent.data.subscribe(data => this.userRole = data.role);
     // Role Admin
     if (this.userRole === Roles.Admin) {
+      this.isAdmin = true;
       this.userId = this.route.snapshot.params['userId'];
+      this.userService.getUserById(this.userId).subscribe(
+        user => this.user = user
+      );
     }
 
     this.providerId = this.route.snapshot.params['providerId'];

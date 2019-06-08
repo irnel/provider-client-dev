@@ -3,8 +3,8 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 
 import { Config } from '../../../../infrastructure';
-import { Category } from '../../../../models';
-import { CategoryService, NotificationService, AuthService } from '../../../../services';
+import { Category, User } from '../../../../models';
+import { CategoryService, NotificationService, AuthService, UserService } from '../../../../services';
 import { Observable } from 'rxjs';
 import { Roles } from 'src/app/helpers';
 
@@ -22,6 +22,7 @@ export class CategoryWorkspaceComponent implements OnInit {
   @ViewChild('frame') frame: ElementRef;
 
   category: Category;
+  user: User;
   categories: Category [];
   observer$: Observable<any>;
   userId: string;
@@ -33,13 +34,15 @@ export class CategoryWorkspaceComponent implements OnInit {
   deleting = false;
   userRole: string;
   visibility = false;
+  isAdmin = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ngZone: NgZone,
-    private categoryService: CategoryService,
-    private notification: NotificationService
+    private readonly categoryService: CategoryService,
+    private readonly userService: UserService,
+    private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
@@ -47,7 +50,11 @@ export class CategoryWorkspaceComponent implements OnInit {
 
     // Role Admin
     if (this.userRole === Roles.Admin) {
+      this.isAdmin = true;
       this.userId = this.route.snapshot.params['userId'];
+      this.userService.getUserById(this.userId).subscribe(
+        user => this.user = user
+      );
     }
 
     this.providerId = this.route.snapshot.params['providerId'];

@@ -1,8 +1,8 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Product } from '../../../../models';
-import { ProductService, NotificationService } from '../../../../services';
+import { Product, User } from '../../../../models';
+import { ProductService, NotificationService, UserService } from '../../../../services';
 import { Roles } from '../../../../helpers';
 import { Observable } from 'rxjs';
 
@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./product-details-workspace.component.scss']
 })
 export class ProductDetailsWorkspaceComponent implements OnInit {
+  user: User;
   product: Product;
   observer$: Observable<any>;
   userId: string;
@@ -19,12 +20,14 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
   categoryId: string;
   userRole: string;
   state = 'waiting';
+  isAdmin = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ngZone: NgZone,
     private readonly productService: ProductService,
+    private readonly userService: UserService,
     private readonly notification: NotificationService
   ) { }
 
@@ -33,7 +36,11 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
 
     // Admin role
     if (this.userRole === Roles.Admin) {
+      this.isAdmin = true;
       this.userId = this.route.snapshot.params['userId'];
+      this.userService.getUserById(this.userId).subscribe(
+        user => this.user = user
+      );
     }
 
     this.providerId = this.route.snapshot.params['providerId'];
