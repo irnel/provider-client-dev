@@ -5,17 +5,18 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild, NgZone, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
-import { OrderState } from '../../../../../helpers';
+import { OrderState, IStatus } from '../../../../../helpers';
 import { OrderService, AuthService, NotificationService, DateService } from '../../../../../services';
 import { Order } from '../../../../../models';
 import { Config } from '../../../../../infrastructure';
+
 
 @Component({
   selector: 'app-home-cashier-workspace',
   templateUrl: './home-cashier-workspace.component.html',
   styleUrls: ['./home-cashier-workspace.component.scss']
 })
-export class HomeCashierWorkspaceComponent implements OnInit, OnDestroy {
+export class HomeCashierWorkspaceComponent implements OnInit, OnDestroy, IStatus {
   public columnsToDisplay = ['Id', 'createdDate', 'pickupTime', 'provider', 'paid', 'status', 'view'];
   public dataSource: MatTableDataSource<Order>;
 
@@ -187,5 +188,21 @@ export class HomeCashierWorkspaceComponent implements OnInit, OnDestroy {
 
       this.router.navigate([url]);
     });
+  }
+
+  getStatusColor(status: string) {
+    switch (status) {
+      case OrderState.Pending:
+        return '#9933CC';
+
+      case OrderState.Ready:
+          return '#FF8800';
+
+      case OrderState.Completed:
+          return '#00C851';
+
+      case OrderState.Canceled:
+        return '#ff4444';
+    }
   }
 }

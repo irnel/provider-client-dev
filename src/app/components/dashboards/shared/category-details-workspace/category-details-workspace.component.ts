@@ -3,7 +3,8 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Provider, Category } from '../../../../models';
-import { CategoryService, NotificationService, AuthService } from './../../../../services';
+import { CategoryService, NotificationService } from './../../../../services';
+import { Roles } from '../../../../helpers';
 
 @Component({
   selector: 'app-category-details-workspace',
@@ -13,6 +14,7 @@ import { CategoryService, NotificationService, AuthService } from './../../../..
 export class CategoryDetailsWorkspaceComponent implements OnInit {
   userId: string;
   providerId: string;
+  userRole: string;
   categoryId: string;
   isAdmin: boolean;
   category: Category;
@@ -24,13 +26,13 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private readonly categoryService: CategoryService,
-    private readonly authService: AuthService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin;
-    if (this.isAdmin) {
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
+    // Role Admin
+    if (this.userRole === Roles.Admin) {
       this.userId = this.route.snapshot.params['userId'];
     }
 
@@ -63,11 +65,17 @@ export class CategoryDetailsWorkspaceComponent implements OnInit {
 
   redirectToProductWorkspace() {
     this.ngZone.run(() => {
-      const url = this.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/` +
-          `${this.providerId}/categories/${this.categoryId}/products`
-        : `provider-dashboard/workspace/providers/` +
-          `${this.providerId}/categories/${this.categoryId}/products`;
+      let url = '';
+      // Admin role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/` +
+              `${this.providerId}/categories/${this.categoryId}/products`;
+      }
+      // Provider role
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/` +
+              `${this.providerId}/categories/${this.categoryId}/products`;
+      }
 
       this.router.navigate([url]);
     });

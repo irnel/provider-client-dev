@@ -3,20 +3,28 @@
 
   <mdb-card id="header">
     <!-- Card Header -->
-    <mdb-card-header class="text-center">
-      <h3 class="mt-1">
+    <mdb-card-header>
+      <h3 class="h3-responsive text-center">
         <span class="badge badge-primary waves-light ml-2">
           <strong> {{title}} </strong>
         </span>
       </h3>
 
-      <h6 class="pt-1">
+      <h6 class="h6-responsive">
         <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
         <a routerLink="/provider-dashboard/workspace/home">Home</a>
         <span> / </span>
         <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
         <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
+          {{category.providerName}}
+        </a>
+        <span> / </span>
         <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">Categories</a>
+        <span> / </span>
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">
+          {{category.name}}
+        </a>
         <span> / </span>
         <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/products">Products</a>
         <span> / </span>
@@ -29,7 +37,7 @@
 
       <form [formGroup]="editForm">
         <!-- Name -->
-        <div class="md-form form-sm mt-2">
+        <div class="md-form form-sm mt-0">
           <input mdbInputDirective type="text" class="form-control"
             id="formName" formControlName="name"
             [validateSuccess]="false"
@@ -39,7 +47,7 @@
         </div>
 
         <!-- Price -->
-        <div class="md-form form-sm mt-2">
+        <div class="md-form form-sm mt-0">
           <input mdbInputDirective type="number" class="form-control"
             id="formPrice" formControlName="price"
             [errorMessage]="priceError"
@@ -49,7 +57,7 @@
         </div>
 
         <!-- Description -->
-        <div class="md-form form-sm mt-2">
+        <div class="md-form form-sm mt-0">
           <textarea class="md-textarea md-textarea-auto form-control"
               id="formDescription" formControlName="description"
               mdbInputDirective type="text"

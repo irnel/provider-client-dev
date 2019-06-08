@@ -6,6 +6,7 @@ import { Config } from '../../../../infrastructure';
 import { Category } from '../../../../models';
 import { CategoryService, NotificationService, AuthService } from '../../../../services';
 import { Observable } from 'rxjs';
+import { Roles } from 'src/app/helpers';
 
 @Component({
   selector: 'app-category-workspace',
@@ -13,35 +14,39 @@ import { Observable } from 'rxjs';
   styleUrls: ['./category-workspace.component.scss']
 })
 export class CategoryWorkspaceComponent implements OnInit {
-  columnsToDisplay: string[] = ['image', 'name', 'provider', 'description', 'operation'];
+  columnsToDisplay: string[] = ['image', 'name', 'description', 'operation'];
   dataSource: MatTableDataSource<Category>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('frame') frame: ElementRef;
 
+  category: Category;
   categories: Category [];
   observer$: Observable<any>;
   userId: string;
   providerId: string;
-  isAdmin: boolean;
+  providerName: string;
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
   state = 'waiting';
   deleting = false;
+  userRole: string;
+  visibility = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ngZone: NgZone,
     private categoryService: CategoryService,
-    private readonly authService: AuthService,
     private notification: NotificationService
   ) {}
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin;
-    if (this.isAdmin) {
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
+
+    // Role Admin
+    if (this.userRole === Roles.Admin) {
       this.userId = this.route.snapshot.params['userId'];
     }
 
@@ -53,6 +58,8 @@ export class CategoryWorkspaceComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.categories);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        this.category = categories[0];
         this.state = 'finished';
       },
       error => {
@@ -92,9 +99,16 @@ export class CategoryWorkspaceComponent implements OnInit {
 
   redirectToCategoryDetails(catId: number) {
     this.ngZone.run(() => {
-      const url = this.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/categories/${catId}/details`
-        : `provider-dashboard/workspace/providers/${this.providerId}/categories/${catId}/details`;
+      let url = '';
+      // Admin role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/categories/${catId}/details`;
+      }
+
+      // Provider role
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/${this.providerId}/categories/${catId}/details`;
+      }
 
       this.router.navigate([url]);
     });
@@ -110,5 +124,9 @@ export class CategoryWorkspaceComponent implements OnInit {
       this.notification.ErrorMessage(error.message, '', 2500);
       this.deleting = false;
     });
+  }
+
+  setVisibility(value: boolean) {
+    this.visibility = value;
   }
 }

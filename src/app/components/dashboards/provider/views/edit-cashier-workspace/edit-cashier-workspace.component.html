@@ -14,6 +14,10 @@
       <span> / </span>
       <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
       <span> / </span>
+      <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
+        {{provider.name}}
+      </a>
+      <span> / </span>
       <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/cashiers">Cashiers</a>
       <span> / </span>
       <span class="text-capitalize">{{mode}}</span>
@@ -27,7 +31,7 @@
     <form [formGroup]="editForm">
 
       <!-- Name -->
-      <div class="md-form form-sm mt-2">
+      <div class="md-form form-sm mt-1">
         <i class="fa fa-user prefix" aria-hidden="true"></i>
         <input mdbInputDirective type="text" class="form-control"
             id="formName" formControlName="name"
@@ -38,7 +42,7 @@
       </div>
 
       <!-- Email -->
-      <div class="md-form form-sm mt-1">
+      <div class="md-form form-sm mt-0">
         <i class="fa fa-envelope prefix" aria-hidden="true"></i>
         <input mdbInputDirective type="email" class="form-control"
             id="formEmail" formControlName="email"
@@ -109,6 +113,6 @@
 </mdb-card>
 
 <ng-template #progress>
-  <app-circle-progress></app-circle-progress>
+  <app-circle-progress [state]="state"></app-circle-progress>
 </ng-template>
 

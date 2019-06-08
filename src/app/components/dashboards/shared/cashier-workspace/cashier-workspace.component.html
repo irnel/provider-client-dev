@@ -7,19 +7,23 @@
         <div class="row">
           <!-- Breadcrumbs navigation -->
           <div class="col">
-            <h6 class="pt-5">
+            <h6 class="h6-responsive pt-2">
               <!-- Provider -->
-              <div *ngIf="!isAdmin">
+              <div *ngIf="userRole ==='provider'">
                 <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
                 <a routerLink="/provider-dashboard/workspace/home">Home</a>
                 <span> / </span>
                 <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
                 <span> / </span>
+                <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
+                  {{provider.name}}
+                </a>
+                <span> / </span>
                 <span>Cashiers</span>
               </div>
   
               <!-- Admin -->
-              <div *ngIf="isAdmin">
+              <div *ngIf="userRole === 'admin'">
                 <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
                 <a routerLink="/admin-dashboard/workspace/home">Home</a>
                 <span> / </span>
@@ -30,18 +34,30 @@
             </h6>
           </div>
   
-          <!-- Filter data -->
-          <div class="col-sm-5">
+          <!-- Icon Search -->
+          <div *ngIf="!visibility" class="col-2 d-flex justify-content-end animated fadeInRight pt-2">
+            <i class="fa fa-search prefix fa-lg" aria-hidden="true"
+              mdbTooltip="Open search" placement="left"
+              (click)="setVisibility(true)"></i>
+          </div>
+        </div>
+        
+        <!-- Filter Data -->
+        <div *ngIf="visibility" class="row d-flex animated fadeInRight">
+          <div class="col-sm-7">
             <div class="md-form form-sm">
-                <i class="fa fa-search prefix" aria-hidden="true"></i>
-                <input mdbInputDirective
-                    type="text" id="formFilter" class="form-control"
-                    (keyup)="applyFilter($event.target.value)">
+              <i class="fa fa-times prefix" aria-hidden="true"
+                mdbTooltip="Close search" placement="top"
+                (click)="setVisibility(false)"></i>
+              <input mdbInputDirective
+                  type="text" id="formFilter" class="form-control"
+                  (keyup)="applyFilter($event.target.value)">
   
-                <label for="formFilter">Filter</label>
+              <label for="formFilter">Filter</label>
             </div>
           </div>
         </div>
+
       </div>
     </mdb-card-header> 
 

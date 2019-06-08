@@ -91,8 +91,9 @@ export class EditProductWorkspaceComponent implements OnInit {
         this.title = 'Edit Product';
 
         const productId = this.route.snapshot.params['prodId'];
-        // Images value
-        this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(productId);
+        this.categoryService.getCategoryData(this.providerId, this.categoryId).subscribe(
+          category => this.category = category
+        );
 
         this.observer$ = this.productService.getProductData(this.providerId, this.categoryId, productId);
         this.observer$.subscribe(
@@ -106,6 +107,9 @@ export class EditProductWorkspaceComponent implements OnInit {
             this.notification.ErrorMessage(error.message, '', 2500);
           }
         );
+
+        // Images value
+        this.serverFiles$ = this.fileService.getAllFilesInfoByModelId(productId);
       }
     });
 

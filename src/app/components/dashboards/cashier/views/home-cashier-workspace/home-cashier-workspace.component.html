@@ -102,8 +102,8 @@
                 <ng-container matColumnDef="paid">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Paid</th>
                   <td mat-cell *matCellDef='let order' (click)="redirectToOrderDetails(order.id)">
-                    <h6>
-                      <span class="badge badge-pill mr-4"
+                    <h6 class="mt-1">
+                      <span class="badge badge-pill mr-3"
                           [ngStyle]="{'background-color': order.paid ? '#00C851' : '#ff4444' }">
           
                         {{order.paid}}
@@ -116,42 +116,13 @@
                 <ng-container matColumnDef="status">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                   <td mat-cell *matCellDef='let order'>
-                    <!-- State {Pending, Ready} -->
-                    <div *ngIf="orderState === 'pending' || orderState === 'ready'" class="btn-group" mdbDropdown>
-                      <button mdbDropdownToggle mdbBtn color="danger" size="sm" 
-                          class="dropdown-toggle waves-light" 
-                          type="button" mdbWavesEffect>
-                        
-                          {{order.status}}
-                      </button>
-                      <div class="dropdown-menu">
-                        <a *ngIf="orderState === 'pending'" class="dropdown-item"
-                            (click)="updateStatus(order, 'ready')">
-
-                          Ready
-                        </a>
-                        <a *ngIf="orderState === 'ready'" class="dropdown-item"
-                            (click)="updateStatus(order, 'completed')">
-
-                          Completed
-                        </a>
-                        <a *ngIf="orderState === 'ready'" class="dropdown-item"
-                            (click)="updateStatus(order, 'canceled')">
-                            
-                          Canceled
-                        </a>
-                      </div>
-                    </div>
-
-                    <!-- State {All, Completed, Canceled} -->
-                    <div *ngIf="orderState === 'all' || orderState === 'completed' || orderState === 'canceled'">
-                      <button mdbBtn color="danger" size="sm" 
-                        class="waves-light" 
-                        type="button" mdbWavesEffect>
-                      
+                    <h6 class="mt-1">
+                      <span class="badge badge-pill mr-2"
+                          [ngStyle]="{'background-color': getStatusColor(order.status)}">
+          
                         {{order.status}}
-                    </button>
-                    </div>
+                      </span>
+                    </h6>
                   </td>
                 </ng-container>
 

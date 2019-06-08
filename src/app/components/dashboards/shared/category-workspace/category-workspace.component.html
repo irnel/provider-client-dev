@@ -7,19 +7,21 @@
         <div class="row">
           <!-- Breadcrumbs navigation -->
           <div class="col">
-            <h6 class="pt-5">
+            <h6 class="h6-responsive pt-2">
               <!-- Provider -->
-              <div *ngIf="!isAdmin">
+              <div *ngIf="userRole === 'provider'">
                 <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
                 <a routerLink="/provider-dashboard/workspace/home">Home</a>
                 <span> / </span>
                 <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
                 <span> / </span>
+                <a *ngIf="category" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">{{category.providerName}}</a>
+                <span *ngIf="category"> / </span>
                 <span>Categories</span>
               </div>
   
               <!-- Admin -->
-              <div *ngIf="isAdmin">
+              <div *ngIf="userRole === 'admin'">
                 <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
                 <a routerLink="/admin-dashboard/workspace/home">Home</a>
                 <span> / </span>
@@ -27,24 +29,38 @@
                 <span> / </span>
                 <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
                 <span> / </span>
+                <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">{{category.providerName}}</a>
+                <span> / </span>
                 <span>Categories</span>
               </div>
               
             </h6>
           </div>
   
-          <!-- Filter data -->
-          <div class="col-sm-5">
+          <!-- Icon Search -->
+          <div *ngIf="!visibility" class="col-2 d-flex justify-content-end animated fadeInRight pt-2">
+            <i class="fa fa-search prefix fa-lg" aria-hidden="true"
+              mdbTooltip="Open search" placement="left"
+              (click)="setVisibility(true)"></i>
+          </div>
+        </div>
+
+        <!-- Filter Data -->
+        <div *ngIf="visibility" class="row d-flex animated fadeInRight">
+          <div class="col-sm-7">
             <div class="md-form form-sm">
-                <i class="fa fa-search prefix" aria-hidden="true"></i>
-                <input mdbInputDirective
-                    type="text" id="formFilter" class="form-control"
-                    (keyup)="applyFilter($event.target.value)">
+              <i class="fa fa-times prefix" aria-hidden="true"
+                mdbTooltip="Close search" placement="top"
+                (click)="setVisibility(false)"></i>
+              <input mdbInputDirective
+                  type="text" id="formFilter" class="form-control"
+                  (keyup)="applyFilter($event.target.value)">
   
-                <label for="formFilter">Filter</label>
+              <label for="formFilter">Filter</label>
             </div>
           </div>
         </div>
+        
       </div>
     </mdb-card-header>
 
@@ -64,7 +80,7 @@
                 style="width: 10%;"
                 (click)="redirectToCategoryDetails(category.id)">
     
-              <img src="{{category.url}}" alt="category" class="img-thumbnail mt-2 mb-2 mr-4">
+              <img src="{{category.url}}" alt="category" class="img-thumbnail mt-2 mb-2 mr-4 animated fadeIn">
             </td>
     
           </ng-container>
@@ -72,19 +88,13 @@
           <!-- Column Name -->
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-            <td mat-cell *matCellDef="let category" (click)="redirectToCategoryDetails(category.id)">
+            <td mat-cell *matCellDef="let category" style="width: 20%;"
+                (click)="redirectToCategoryDetails(category.id)">
+
               <p class="ml-2">{{category.name}}</p>
             </td>
           </ng-container>
-    
-          <!-- Column Provider -->
-          <ng-container matColumnDef="provider">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Provider </th>
-            <td mat-cell *matCellDef="let category" (click)="redirectToCategoryDetails(category.id)">
-              <p class="ml-2">{{category.providerName}}</p>
-            </td>
-          </ng-container>
-    
+        
           <!-- Column Description -->
           <ng-container matColumnDef="description">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>

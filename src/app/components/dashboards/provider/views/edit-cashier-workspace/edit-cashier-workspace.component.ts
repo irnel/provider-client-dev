@@ -8,6 +8,7 @@ import { Provider, User } from '../../../../../models';
 import { ProviderService, UserService, NotificationService, AuthService } from '../../../../../services';
 import { Roles, FirebaseCode } from '../../../../../helpers';
 import { Observable } from 'rxjs';
+import { error } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-edit-cashier-workspace',
@@ -28,7 +29,9 @@ export class EditCashierWorkspaceComponent implements OnInit {
   provider: Provider;
   userId: string;
   providerId: string; // to navigation
+  userRole: string;
   cashier: User;
+  state = 'waiting';
   waiting = true;
   loading = false;
   mode: string;
@@ -62,23 +65,33 @@ export class EditCashierWorkspaceComponent implements OnInit {
     }, { validator: this.passwordMatchValidator });
 
      // Change Form values
+     this.route.parent.data.subscribe(data => this.userRole = data.role);
+
      this.route.data.subscribe(data => {
       this.providerId = this.route.snapshot.params['providerId'];
       this.mode = data.mode;
 
-      this.authService.isAdmin
-        ? this.userId = this.route.snapshot.params['userId']
-        : this.userId = this.authService.currentUserValue.uid;
+      // Admin role
+      if (this.userRole === Roles.Admin) {
+        this.userId = this.route.snapshot.params['userId'];
+      } else {
+        this.userId = this.authService.currentUserValue.uid;
+      }
 
       if (data.mode === 'edit') {
         this.edit = true;
         this.title = 'Edit Cashier';
+
+        this.providerService.getProviderById(this.providerId).subscribe(
+          provider => this.provider = provider
+        );
 
         // update form if mode is edit
         const cashierId = this.route.snapshot.params['cashierId'];
         this.observer$ = this.userService.getUserById(cashierId).pipe(
           tap(cashier => {
             this.cashier = cashier;
+            this.state = 'finished';
             this.editForm.patchValue({
               name: this.cashier.displayName,
               email: this.cashier.email,
@@ -94,7 +107,11 @@ export class EditCashierWorkspaceComponent implements OnInit {
         this.title = 'Create Cashier';
 
         this.observer$ = this.providerService.getProviderById(this.providerId)
-          .pipe(tap(provider => this.provider = provider)
+          .pipe(
+            tap(provider => {
+              this.provider = provider;
+              this.state = 'finished';
+            })
         );
       }
     });
@@ -167,7 +184,7 @@ export class EditCashierWorkspaceComponent implements OnInit {
 
   editCashier() {
     this.loading = true;
-    let errorMsg: string;
+    let errorMsg = '';
 
     // Mark the control as dirty
     if (this.editForm.invalid) {

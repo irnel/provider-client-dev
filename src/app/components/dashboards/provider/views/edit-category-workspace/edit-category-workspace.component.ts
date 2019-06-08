@@ -15,6 +15,7 @@ import {
 
 import { Provider, Category, FileInfo } from '../../../../../models';
 import { Config } from './../../../../../infrastructure';
+import { Roles } from '../../../../../helpers';
 
 @Component({
   selector: 'app-edit-category-workspace',
@@ -38,6 +39,7 @@ export class EditCategoryWorkspaceComponent implements OnInit {
   provider: Provider;
   userId: string;
   providerId: string;
+  userRole: string;
   mode: string;
   loading = false;
   state = 'waiting';
@@ -64,15 +66,19 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       description: ['',  Validators.nullValidator]
     });
 
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
+    this.providerId = this.route.snapshot.params['providerId'];
+
     // Change Form values
     this.route.data.subscribe(data => {
       // find provider by url params
       this.mode = data.mode;
-      this.authService.isAdmin
-        ? this.userId = this.route.snapshot.params['userId']
-        : this.userId = this.authService.currentUserValue.uid;
-
-      this.providerId = this.route.snapshot.params['providerId'];
+      // Admin role
+      if (this.userRole === Roles.Admin) {
+        this.userId = this.route.snapshot.params['userId'];
+      } else {
+        this.userId = this.authService.currentUserValue.uid;
+      }
 
       if (data.mode === 'create') {
         this.edit = false;
@@ -94,6 +100,10 @@ export class EditCategoryWorkspaceComponent implements OnInit {
       } else {
         this.edit = true;
         this.title = 'Edit Category';
+
+        this.providerService.getProviderById(this.providerId).subscribe(
+          provider => this.provider = provider
+        );
 
         const catId = this.route.snapshot.params['catId'];
         // Images value

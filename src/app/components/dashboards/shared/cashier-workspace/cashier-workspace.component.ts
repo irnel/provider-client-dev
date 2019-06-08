@@ -3,9 +3,10 @@ import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
 import { Config } from '../../../../infrastructure';
-import { User } from '../../../../models';
-import { UserService, NotificationService, AuthService } from '../../../../services';
+import { User, Provider } from '../../../../models';
+import { UserService, NotificationService } from '../../../../services';
 import { Observable } from 'rxjs';
+import { ProviderService } from '../../../../services/provider/provider.service';
 
 @Component({
   selector: 'app-cashier-workspace',
@@ -21,24 +22,30 @@ export class CashierWorkspaceComponent implements OnInit {
 
   pageSizeOptions: number[] = Config.pageSizeOptions;
   observer$: Observable<any>;
+  provider: Provider;
   cashiers: User [];
   providerId: string;
-  isAdmin: boolean;
+  userRole: string;
   deleting = false;
   state = 'waiting';
+  visibility = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ngZone: NgZone,
     private readonly userService: UserService,
-    private readonly authService: AuthService,
+    private readonly providerService: ProviderService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin;
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
     this.providerId = this.route.snapshot.params['providerId'];
+
+    this.providerService.getProviderById(this.providerId).subscribe(
+      provider => this.provider = provider
+    );
 
     this.observer$ = this.userService.getAllUsersByParentId(this.providerId);
     this.observer$.subscribe(
@@ -47,6 +54,7 @@ export class CashierWorkspaceComponent implements OnInit {
         this.dataSource = new MatTableDataSource(cashiers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
         this.state = 'finished';
       },
       error => {
@@ -54,7 +62,6 @@ export class CashierWorkspaceComponent implements OnInit {
         this.notification.ErrorMessage(error.message, '', 2500);
       }
     );
-
   }
 
   applyFilter(filterValue: string) {
@@ -95,5 +102,9 @@ export class CashierWorkspaceComponent implements OnInit {
       this.notification.ErrorMessage(error.message, '', 2500);
       this.deleting = false;
     });
+  }
+
+  setVisibility(value: boolean) {
+    this.visibility = value;
   }
 }
