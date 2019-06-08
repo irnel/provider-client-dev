@@ -4,14 +4,14 @@ import { Observable } from 'rxjs';
 
 import { DateService, NotificationService, OrderService } from '../../../../services';
 import { Order } from '../../../../models';
-import { Roles, OrderState } from '../../../../helpers';
+import { Roles, OrderState, IStatus } from '../../../../helpers';
 
 @Component({
   selector: 'app-order-details-workspace',
   templateUrl: './order-details-workspace.component.html',
   styleUrls: ['./order-details-workspace.component.scss']
 })
-export class OrderDetailsWorkspaceComponent implements OnInit {
+export class OrderDetailsWorkspaceComponent implements OnInit, IStatus {
   userId: string;
   providerId: string;
   cashierId: string;
@@ -80,8 +80,11 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
     });
   }
 
-  updateOrderStatus(status) {
-    this.order.status = status;
+  updateOrderStatus(value) {
+    this.order.status = value;
+
+    this.notification.SuccessMessage(
+      `Status changed to ${this.order.status}`, '', 2500);
 
     // this.orderService.update(this.order, this.date).then(
     //   () => this.notification.SuccessMessage(
@@ -91,11 +94,41 @@ export class OrderDetailsWorkspaceComponent implements OnInit {
     // });
   }
 
+  previousStatus(value) {
+    let status = '';
+    if (value === OrderState.Canceled ||
+        value === OrderState.Completed) {
+
+      status = OrderState.Ready;
+    } else if (value === OrderState.Ready) {
+      status = OrderState.Pending;
+    }
+
+    // Update Status
+    this.updateOrderStatus(status);
+  }
+
   get total() {
     return this.order.products.map(p => p.price).reduce((total, price) => total + price);
   }
 
   valueToString(value) {
     return String(value);
+  }
+
+  getStatusColor(status: string) {
+    switch (status) {
+      case OrderState.Pending:
+        return '#9933CC';
+
+      case OrderState.Ready:
+          return '#FF8800';
+
+      case OrderState.Completed:
+          return '#00C851';
+
+      case OrderState.Canceled:
+        return '#ff4444';
+    }
   }
 }

@@ -4,18 +4,17 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
-import { Order } from '../../../../models';
+import { Order, Provider } from '../../../../models';
 import { Config } from '../../../../infrastructure';
-import { OrderState, Roles } from '../../../../helpers';
-import { OrderService, NotificationService, DateService } from '../../../../services';
-
+import { OrderState, Roles, IStatus } from '../../../../helpers';
+import { OrderService, NotificationService, DateService, ProviderService } from '../../../../services';
 
 @Component({
   selector: 'app-order-workspace',
   templateUrl: './order-workspace.component.html',
   styleUrls: ['./order-workspace.component.scss']
 })
-export class OrderWorkspaceComponent implements OnInit, OnDestroy {
+export class OrderWorkspaceComponent implements OnInit, OnDestroy, IStatus {
   public columnsToDisplay = ['createdDate', 'pickupTime', 'provider', 'paid', 'status', 'view'];
   public dataSource: MatTableDataSource<Order>;
 
@@ -29,7 +28,7 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy {
   userId: string;
   providerId: string;
   cashierId: string;
-  isAdmin: boolean;
+  provider: Provider;
   userRole: string;
   orders: Order [];
   observer$: Observable<any>;
@@ -45,6 +44,7 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly ngZone: NgZone,
     private readonly orderService: OrderService,
+    private readonly providerService: ProviderService,
     private readonly dateService: DateService,
     private readonly notification: NotificationService
   ) {}
@@ -52,6 +52,10 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.parent.data.subscribe(data => this.userRole = data.role);
     this.providerId = this.route.snapshot.params['providerId'];
+
+    this.providerService.getProviderById(this.providerId).subscribe(
+      provider => this.provider = provider
+    );
 
     if (this.userRole === Roles.Admin) {
       this.userId = this.route.snapshot.params['userId'];
@@ -93,10 +97,13 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy {
   redirectToOrderDetails(orderId) {
     this.ngZone.run(() => {
       let url = '';
+      // Admin role
       if (this.userRole === Roles.Admin) {
         url = `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders/${orderId}/date/` +
               `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`;
-      } else if (this.userRole === Roles.Provider) {
+      }
+      // Provider role
+      if (this.userRole === Roles.Provider) {
         url = `provider-dashboard/workspace/providers/${this.providerId}/orders/${orderId}/date/` +
               `${this.currentDate.getDate()}/${this.currentDate.getMonth()}/${this.currentDate.getFullYear()}/details`;
       }
@@ -122,5 +129,21 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy {
         this.notification.ErrorMessage(error.message, '', 2500);
       }
     );
+  }
+
+  getStatusColor(status: string) {
+    switch (status) {
+      case OrderState.Pending:
+        return '#9933CC';
+
+      case OrderState.Ready:
+          return '#FF8800';
+
+      case OrderState.Completed:
+          return '#00C851';
+
+      case OrderState.Canceled:
+        return '#ff4444';
+    }
   }
 }

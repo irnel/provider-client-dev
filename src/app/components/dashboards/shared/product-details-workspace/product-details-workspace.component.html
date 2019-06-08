@@ -5,7 +5,7 @@
     <mdb-card>
       <h6 class="pt-2 text-center">
         <!-- Provider -->
-        <div *ngIf="!isAdmin">
+        <div *ngIf="userRole === 'provider'">
           <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
           <a routerLink="/provider-dashboard/workspace/home">Home</a>
           <span> / </span>
@@ -19,7 +19,7 @@
         </div>
   
         <!-- Admin -->
-        <div *ngIf="isAdmin">
+        <div *ngIf="userRole === 'admin'">
           <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
           <a routerLink="/admin-dashboard/workspace/home">Home</a>
           <span> / </span>
@@ -42,7 +42,7 @@
         <div class="row">
           <div class="col-lg-5">
             <div class="view">
-              <img class="d-block w-100 rounded" src="{{product.url}}" alt="provider image">              
+              <img class="d-block w-100 rounded animated fadeInLeft" src="{{product.url}}" alt="provider image">              
             </div>
           </div>
 

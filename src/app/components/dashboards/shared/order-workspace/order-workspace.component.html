@@ -11,23 +11,31 @@
             <div class="col">
               <h6 class="h6-responsive pt-4">
                 <!-- Provider -->
-                <div *ngIf="!isAdmin">
+                <div *ngIf="userRole === 'provider'">
                   <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
                   <a routerLink="/provider-dashboard/workspace/home">Home</a>
                   <span> / </span>
                   <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
                   <span> / </span>
+                  <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
+                    {{provider.name}}
+                  </a>
+                  <span> / </span>
                   <span>Orders</span>
                 </div>
     
                 <!-- Admin -->
-                <div *ngIf="isAdmin">
+                <div *ngIf="userRole === 'admin'">
                   <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
                   <a routerLink="/admin-dashboard/workspace/home">Home</a>
                   <span> / </span>
                   <a routerLink="/admin-dashboard/workspace/providers">Users</a>
                   <span> / </span>
                   <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
+                  <span> / </span>
+                  <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">
+                    {{provider.name}}
+                  </a>
                   <span> / </span>
                   <span>Orders</span>
                 </div>
@@ -48,7 +56,7 @@
               </div>
             </div> -->
 
-            <div class="col-sm-5">
+            <div class="col-sm-5 d-flex justify-content-end">
               <mat-form-field>
                 <input matInput
                   placeholder="Choose date"
@@ -115,7 +123,13 @@
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
               <td mat-cell *matCellDef='let order' (click)="redirectToOrderDetails(order.id)">
-                {{order.status}}
+                <h6>
+                  <span class="badge badge-pill mr-4"
+                      [ngStyle]="{'background-color': getStatusColor(order.status)}">
+      
+                    {{order.status}}
+                  </span>
+                </h6>
               </td>
             </ng-container>
     

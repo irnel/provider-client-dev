@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, NgZone, Renderer2, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { Product } from '../../../../models';
 import { Config } from '../../../../infrastructure';
 import { ProductService, NotificationService, AuthService } from '../../../../services';
+import { Roles } from '../../../../helpers';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,7 +15,7 @@ import { Observable } from 'rxjs';
 })
 export class ProductWorkspaceComponent implements OnInit {
   displayedColumns: string[] = [
-    'image', 'name', 'provider', 'category', 'price', 'description', 'operation'
+    'image', 'name', 'price', 'description', 'operation'
   ];
 
   dataSource: MatTableDataSource<Product>;
@@ -22,6 +23,7 @@ export class ProductWorkspaceComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('frame') frame: ElementRef;
 
+  product: Product;
   products: Product [] = [];
   observer$: Observable<any>;
   maxChar = Config.maxChar;
@@ -29,22 +31,24 @@ export class ProductWorkspaceComponent implements OnInit {
   userId: string;
   providerId: string;
   categoryId: string;
-  isAdmin: boolean;
+  userRole: string;
   deleting = false;
   state = 'waiting';
+  visibility = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ngZone: NgZone,
     private readonly productService: ProductService,
-    private readonly authService: AuthService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin;
-    if (this.isAdmin) {
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
+
+    // Role Admin
+    if (this.userRole === Roles.Admin) {
       this.userId = this.route.snapshot.params['userId'];
     }
 
@@ -58,6 +62,8 @@ export class ProductWorkspaceComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.products);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        this.product = products[0];
         this.state = 'finished';
       },
       error => {
@@ -98,11 +104,17 @@ export class ProductWorkspaceComponent implements OnInit {
 
   redirectToProductDetails(productId) {
     this.ngZone.run(() => {
-      const url = this.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/` +
-          `${this.providerId}/categories/${this.categoryId}/products/${productId}/details`
-        : `provider-dashboard/workspace/providers/` +
-          `${this.providerId}/categories/${this.categoryId}/products/${productId}/details`;
+      let url = '';
+      // Admin role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/` +
+              `${this.providerId}/categories/${this.categoryId}/products/${productId}/details`;
+      }
+
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/` +
+              `${this.providerId}/categories/${this.categoryId}/products/${productId}/details`;
+      }
 
       this.router.navigate([url]);
     });
@@ -118,5 +130,9 @@ export class ProductWorkspaceComponent implements OnInit {
       this.notification.ErrorMessage(error.message, '', 2500);
       this.deleting = false;
     });
+  }
+
+  setVisibility(value: boolean) {
+    this.visibility = value;
   }
 }

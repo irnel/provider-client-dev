@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core'
 
 import { Config } from '../../../../infrastructure';
 import { ProviderService, AuthService, NotificationService } from '../../../../services';
+import { Roles } from '../../../../helpers';
 import { Provider } from '../../../../models';
 import { Observable } from 'rxjs';
 
@@ -24,10 +25,11 @@ export class ProviderWorkspaceComponent implements OnInit {
   observer$: Observable<any>;
   maxChar: number = Config.maxChar;
   pageSizeOptions: number[] = Config.pageSizeOptions;
-  isAdmin: boolean;
+  userRole: string;
   userId: string;
   deleting = false;
   state = 'waiting';
+  visibility = false;
 
   constructor(
     private ngZone: NgZone,
@@ -39,10 +41,14 @@ export class ProviderWorkspaceComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin;
-    this.isAdmin
-      ? this.userId = this.route.snapshot.params['userId']
-      : this.userId = this.authService.currentUserValue.uid;
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
+
+    // Admin role
+    if (this.userRole === Roles.Admin) {
+      this.userId = this.route.snapshot.params['userId'];
+    } else {
+      this.userId = this.authService.currentUserValue.uid;
+    }
 
     this.observer$ = this.providerService.getAllProviderByUserId(this.userId);
     this.observer$.subscribe(
@@ -83,9 +89,16 @@ export class ProviderWorkspaceComponent implements OnInit {
   // redirect to provider details
   redirectToProviderDetails(providerId: string) {
     this.ngZone.run(() => {
-      const url = this.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/${providerId}/details`
-        : `provider-dashboard/workspace/providers/${providerId}/details`;
+      let url = '';
+      // Admin Role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/${providerId}/details`;
+      }
+
+      // Provider Role
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/${providerId}/details`;
+      }
 
       this.router.navigate([url]);
     });
@@ -110,5 +123,9 @@ export class ProviderWorkspaceComponent implements OnInit {
       this.notification.ErrorMessage(error.message, '', 2500);
       this.deleting = false;
     });
+  }
+
+  setVisibility(value: boolean) {
+    this.visibility = value;
   }
 }

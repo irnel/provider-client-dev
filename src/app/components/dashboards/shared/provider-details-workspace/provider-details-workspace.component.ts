@@ -2,7 +2,8 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Provider } from '../../../../models';
-import { ProviderService, NotificationService, AuthService } from '../../../../services';
+import { ProviderService, NotificationService } from '../../../../services';
+import { Roles } from '../../../../helpers';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,7 +15,7 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
   provider: Provider;
   userId: string;
   providerId: string;
-  isAdmin: boolean;
+  userRole: string;
   observer$: Observable<any>;
   state = 'waiting';
 
@@ -23,15 +24,16 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
     private route: ActivatedRoute,
     private ngZone: NgZone,
     private readonly providerService: ProviderService,
-    private readonly authService: AuthService,
     private readonly notification: NotificationService
   ) {}
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin;
-    this.isAdmin
-      ? this.userId = this.route.snapshot.params['userId']
-      : this.userId = this.authService.currentUserValue.uid;
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
+
+    // Admin Role
+    if (this.userRole === Roles.Admin) {
+      this.userId = this.route.snapshot.params['userId'];
+    }
 
     this.providerId = this.route.snapshot.params['providerId'];
     this.observer$ = this.providerService.getProviderById(this.providerId);
@@ -61,11 +63,18 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
 
   redirectToCategoryWorkspace() {
     this.ngZone.run(() => {
-      const url = this.authService.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/categories`
-        : `provider-dashboard/workspace/providers/${this.providerId}/categories`;
+      let url = '';
+      // Admin Role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/categories`;
+      }
 
-        this.router.navigate([url]);
+      // Provider Role
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/${this.providerId}/categories`;
+      }
+
+      this.router.navigate([url]);
     });
   }
 
@@ -79,9 +88,16 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
 
   redirectToCashierWorkspace() {
     this.ngZone.run(() => {
-      const url = this.authService.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/cashiers`
-        : `provider-dashboard/workspace/providers/${this.providerId}/cashiers`;
+      let url = '';
+      // Admin Role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/cashiers`;
+      }
+
+      // Provider Role
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/${this.providerId}/cashiers`;
+      }
 
       this.router.navigate([url]);
     });
@@ -97,9 +113,16 @@ export class ProviderDetailsWorkspaceComponent implements OnInit {
 
   redirectToOrderWorkspace() {
     this.ngZone.run(() => {
-      const url = this.authService.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders`
-        : `provider-dashboard/workspace/providers/${this.providerId}/orders`;
+      let url = '';
+      // Admin Role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/orders`;
+      }
+
+      // Provider Role
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/${this.providerId}/orders`;
+      }
 
       this.router.navigate([url]);
     });

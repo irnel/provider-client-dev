@@ -2,7 +2,8 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Product } from '../../../../models';
-import { ProductService, NotificationService, AuthService } from '../../../../services';
+import { ProductService, NotificationService } from '../../../../services';
+import { Roles } from '../../../../helpers';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -16,7 +17,7 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
   userId: string;
   providerId: string;
   categoryId: string;
-  isAdmin: boolean;
+  userRole: string;
   state = 'waiting';
 
   constructor(
@@ -24,13 +25,14 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private readonly productService: ProductService,
-    private readonly authService: AuthService,
     private readonly notification: NotificationService
   ) { }
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin;
-    if (this.isAdmin) {
+    this.route.parent.data.subscribe(data => this.userRole = data.role);
+
+    // Admin role
+    if (this.userRole === Roles.Admin) {
       this.userId = this.route.snapshot.params['userId'];
     }
 
@@ -65,9 +67,16 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
 
   redirectToProviderWorkspace() {
     this.ngZone.run(() => {
-      const url = this.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers`
-        : `provider-dashboard/workspace/providers`;
+      let url = '';
+      // Admin role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers`;
+      }
+
+      // Provider role
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers`;
+      }
 
       this.router.navigate([url]);
     });
@@ -75,9 +84,16 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
 
   redirectToCategoryWorkspace() {
     this.ngZone.run(() => {
-      const url = this.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/categories`
-        : `provider-dashboard/workspace/providers/${this.providerId}/categories`;
+      let url = '';
+      // Admin role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/${this.providerId}/categories`;
+      }
+
+      // Provider role
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/${this.providerId}/categories`;
+      }
 
       this.router.navigate([url]);
     });
@@ -85,11 +101,18 @@ export class ProductDetailsWorkspaceComponent implements OnInit {
 
   redirectToProductWorkSpace() {
     this.ngZone.run(() => {
-      const url = this.isAdmin
-        ? `admin-dashboard/workspace/users/${this.userId}/providers/` +
-          `${this.providerId}/categories/${this.categoryId}/products`
-        : `provider-dashboard/workspace/providers/` +
-          `${this.providerId}/categories/${this.categoryId}/products`;
+      let url = '';
+      // Admin role
+      if (this.userRole === Roles.Admin) {
+        url = `admin-dashboard/workspace/users/${this.userId}/providers/` +
+              `${this.providerId}/categories/${this.categoryId}/products`;
+      }
+      // Provider role
+      if (this.userRole === Roles.Provider) {
+        url = `provider-dashboard/workspace/providers/` +
+              `${this.providerId}/categories/${this.categoryId}/products`;
+
+      }
 
       this.router.navigate([url]);
     });
