@@ -24,6 +24,7 @@ export class UsersWorkspaceComponent implements OnInit {
   observer$: Observable<any>;
   pageSizeOptions: number[] = Config.pageSizeOptions;
   state = 'waiting';
+  visibility = false;
 
   constructor(
     private router: Router,
@@ -87,5 +88,9 @@ export class UsersWorkspaceComponent implements OnInit {
     .catch(error => {
       this.notification.ErrorMessage(error.message, '', 2500);
     });
+  }
+
+  setVisibility(value: boolean) {
+    this.visibility = value;
   }
 }
