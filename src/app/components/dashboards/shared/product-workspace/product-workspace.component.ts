@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
-import { Product, User } from '../../../../models';
+import { Product, User, Category } from '../../../../models';
 import { Config } from '../../../../infrastructure';
-import { ProductService, NotificationService, AuthService, UserService } from '../../../../services';
+import { ProductService, NotificationService, AuthService, UserService, CategoryService } from '../../../../services';
 import { Roles } from '../../../../helpers';
 import { Observable } from 'rxjs';
 
@@ -24,6 +24,7 @@ export class ProductWorkspaceComponent implements OnInit {
   @ViewChild('frame') frame: ElementRef;
 
   product: Product;
+  category: Category;
   user: User;
   products: Product [] = [];
   observer$: Observable<any>;
@@ -43,6 +44,7 @@ export class ProductWorkspaceComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private readonly productService: ProductService,
+    private readonly categoryService: CategoryService,
     private readonly userService: UserService,
     private readonly notification: NotificationService
   ) {}
@@ -61,6 +63,9 @@ export class ProductWorkspaceComponent implements OnInit {
 
     this.providerId = this.route.snapshot.params['providerId'];
     this.categoryId = this.route.snapshot.params['catId'];
+    this.categoryService.getCategoryData(this.providerId, this.categoryId).subscribe(
+      category => this.category = category
+    );
 
     this.observer$ = this.productService.getAllProductsData(this.providerId, this.categoryId);
     this.observer$.subscribe(
@@ -70,7 +75,6 @@ export class ProductWorkspaceComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
-        this.product = products[0];
         this.state = 'finished';
       },
       error => {

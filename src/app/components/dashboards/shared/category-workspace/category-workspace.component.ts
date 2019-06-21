@@ -3,8 +3,8 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 
 import { Config } from '../../../../infrastructure';
-import { Category, User } from '../../../../models';
-import { CategoryService, NotificationService, AuthService, UserService } from '../../../../services';
+import { Category, User, Provider } from '../../../../models';
+import { CategoryService, NotificationService, AuthService, UserService, ProviderService } from '../../../../services';
 import { Observable } from 'rxjs';
 import { Roles } from 'src/app/helpers';
 
@@ -22,6 +22,7 @@ export class CategoryWorkspaceComponent implements OnInit {
   @ViewChild('frame') frame: ElementRef;
 
   category: Category;
+  provider: Provider;
   user: User;
   categories: Category [];
   observer$: Observable<any>;
@@ -40,6 +41,7 @@ export class CategoryWorkspaceComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private ngZone: NgZone,
+    private readonly providerService: ProviderService,
     private readonly categoryService: CategoryService,
     private readonly userService: UserService,
     private readonly notification: NotificationService
@@ -58,6 +60,10 @@ export class CategoryWorkspaceComponent implements OnInit {
     }
 
     this.providerId = this.route.snapshot.params['providerId'];
+    this.providerService.getProviderById(this.providerId).subscribe(
+      provider => this.provider = provider
+    );
+
     this.observer$ = this.categoryService.getAllCategoriesByProviderId(this.providerId);
     this.observer$.subscribe(
       categories => {
@@ -66,7 +72,6 @@ export class CategoryWorkspaceComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
-        this.category = categories[0];
         this.state = 'finished';
       },
       error => {

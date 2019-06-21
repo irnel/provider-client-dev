@@ -56,7 +56,8 @@ export class OrderWorkspaceComponent implements OnInit, OnDestroy, IStatus {
     this.route.parent.data.subscribe(data => this.userRole = data.role);
     this.providerId = this.route.snapshot.params['providerId'];
 
-    this.providerService.getProviderById(this.providerId).subscribe(
+    this.observer$ = this.providerService.getProviderById(this.providerId);
+    this.observer$.subscribe(
       provider => this.provider = provider
     );
 

@@ -3,7 +3,7 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 
 import { Config } from '../../../../infrastructure';
-import { ProviderService, NotificationService, UserService } from '../../../../services';
+import { ProviderService, NotificationService, UserService, AuthService } from '../../../../services';
 import { Roles } from '../../../../helpers';
 import { Provider, User } from '../../../../models';
 import { Observable } from 'rxjs';
@@ -37,6 +37,7 @@ export class ProviderWorkspaceComponent implements OnInit {
     private ngZone: NgZone,
     private router: Router,
     private route: ActivatedRoute,
+    private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly providerService: ProviderService,
     private readonly notification: NotificationService
@@ -49,9 +50,15 @@ export class ProviderWorkspaceComponent implements OnInit {
     if (this.userRole === Roles.Admin) {
       this.isAdmin = true;
       this.userId = this.route.snapshot.params['userId'];
+
       this.userService.getUserById(this.userId).subscribe(
         user => this.user = user
       );
+    }
+
+    // Provider Role
+    if (this.userRole === Roles.Provider) {
+      this.userId = this.authService.currentUserValue.uid;
     }
 
     this.observer$ = this.providerService.getAllProviderByUserId(this.userId);

@@ -3,31 +3,25 @@
 
   <mdb-card id="header">
     <!-- Card Header -->
-    <mdb-card-header>
-      <h3 class="h3-responsive text-center">
-        <span class="badge badge-primary waves-light ml-2">
-          <strong> {{title}} </strong>
-        </span>
+    <mdb-card-header class="px-lg-5">
+      <h3 class="h3-responsive">
+        <span class="badge badge-primary waves-light">{{title}}</span>
       </h3>
 
-      <h6 class="h6-responsive">
+      <h6 *ngIf="category" class="h6-responsive">
         <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
         <a routerLink="/provider-dashboard/workspace/home">Home</a>
-        <span> / </span>
+        <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
         <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
-        <span> / </span>
-        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">
-          {{category.providerName}}
-        </a>
-        <span> / </span>
+        <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">{{category.providerName}}</a>
+        <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
         <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">Categories</a>
-        <span> / </span>
-        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">
-          {{category.name}}
-        </a>
-        <span> / </span>
+        <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+        <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">{{category.name}}</a>
+        <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
         <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/products">Products</a>
-        <span> / </span>
+        <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
         <span class="text-capitalize">{{mode}}</span>
       </h6>
     </mdb-card-header>
@@ -80,7 +74,7 @@
     </mdb-card-body>
 
     <mdb-card-footer>
-      <div class="text-center">
+      <div class="pl-4">
         <button mdbBtn
             [disabled]="loading"
             color="primary"

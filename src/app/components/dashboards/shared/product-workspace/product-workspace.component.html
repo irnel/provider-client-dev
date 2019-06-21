@@ -3,76 +3,73 @@
   <mdb-card class="mb-2">
     <!-- Heading -->
     <mdb-card-header>
-      <div class="container">
-        <div class="row">
-          <!-- Breadcrumbs navigation -->
-          <div class="col">
-            <h6 class=" h6-responsive pt-2">
-              <!-- Provider -->
-              <div *ngIf="!isAdmin">
-                <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
-                <a routerLink="/provider-dashboard/workspace/home">Home</a>
-                <span>/</span>
-                <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
-                <span>/</span>
-                <a *ngIf="product" routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">{{product.providerName}}</a>
-                <span>/</span>
-                <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">Categories</a>
-                <span>/</span>
-                <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">{{product.categoryName}}</a>
-                <span>/</span>
-                <span>Products</span>
-              </div>
-  
-              <!-- Admin -->
-              <div *ngIf="isAdmin">
-                <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
-                <a routerLink="/admin-dashboard/workspace/home">Home</a>
-                <span>/</span>
-                <a routerLink="/admin-dashboard/workspace/users">Users</a>
-                <span>/</span>
-                <a>{{user.displayName}}</a>
-                <span>/</span>
-                <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
-                <span>/</span>
-                <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories">Categories</a>
-                <span>/</span>
-                <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">{{product.providerName}}</a>
-                <span>/</span>
-                <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories">Categories</a>
-                <span>/</span>
-                <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories/{{categoryId}}/details">{{product.categoryName}}</a>
-                <span>/</span>
-                <span>Products</span>
-              </div>
-              
-            </h6>
-          </div>
-  
-          <!-- Icon Search -->
-          <div *ngIf="!visibility" class="col-1 d-flex justify-content-end animated bounceInLeft pt-2">
-            <i class="fa fa-search prefix fa-lg" aria-hidden="true"
-              mdbTooltip="Open search" placement="left"
-              (click)="setVisibility(true)"></i>
-          </div>
-        </div>
-
-        <!-- Filter Data -->
-        <div *ngIf="visibility" class="row d-flex animated bounceInRight">
-          <div class="col-sm-7">
-            <div class="md-form form-sm">
-              <i class="fa fa-times prefix" aria-hidden="true"
-                mdbTooltip="Close search" placement="top"
-                (click)="setVisibility(false)"></i>
-              <input mdbInputDirective
-                  type="text" id="formFilter" class="form-control"
-                  (keyup)="applyFilter($event.target.value)">
-  
-              <label for="formFilter">Filter</label>
+      <div class="row">
+        <!-- Breadcrumbs navigation -->
+        <div class="col">
+          <h6 *ngIf="category" class=" h6-responsive pt-2 ml-3 card-text">
+            <!-- Provider -->
+            <div *ngIf="!isAdmin">
+              <i (click)="redirectToProviderHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+              <a routerLink="/provider-dashboard/workspace/home">Home</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/details">{{category.providerName}}</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories">Categories</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/provider-dashboard/workspace/providers/{{providerId}}/categories/{{categoryId}}/details">{{category.name}}</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <span>Products</span>
             </div>
-          </div>
+
+            <!-- Admin -->
+            <div *ngIf="isAdmin">
+              <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+              <a routerLink="/admin-dashboard/workspace/home">Home</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/admin-dashboard/workspace/users">Users</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a>{{user.displayName}}</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers">Providers</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories">Categories</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/details">{{category.providerName}}</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories">Categories</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <a routerLink="/admin-dashboard/workspace/users/{{userId}}/providers/{{providerId}}/categories/{{categoryId}}/details">{{category.name}}</a>
+              <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+              <span>Products</span>
+            </div>
+            
+          </h6>
         </div>
 
+        <!-- Icon Search -->
+        <div *ngIf="!visibility" class="col-1 d-flex justify-content-end animated bounceInLeft pt-2">
+          <i class="fa fa-search prefix fa-lg" aria-hidden="true"
+            mdbTooltip="Open search" placement="left"
+            (click)="setVisibility(true)"></i>
+        </div>
+      </div>
+
+      <!-- Filter Data -->
+      <div *ngIf="visibility" class="row d-flex animated bounceInRight">
+        <div class="col-sm-7">
+          <div class="md-form form-sm">
+            <i class="fa fa-times prefix" aria-hidden="true"
+              mdbTooltip="Close search" placement="top"
+              (click)="setVisibility(false)"></i>
+            <input mdbInputDirective
+                type="text" id="formFilter" class="form-control"
+                (keyup)="applyFilter($event.target.value)">
+
+            <label for="formFilter">Filter</label>
+          </div>
+        </div>
       </div>
     </mdb-card-header>
     
