@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./provider-workspace.component.scss']
 })
 export class ProviderWorkspaceComponent implements OnInit {
-  public columnsToDisplay: string [] = ['image', 'name', 'address', 'description', 'operation'];
+  public columnsToDisplay: string [] = ['image', 'name', 'address', 'phone', 'operation'];
   public dataSource: MatTableDataSource<Provider>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

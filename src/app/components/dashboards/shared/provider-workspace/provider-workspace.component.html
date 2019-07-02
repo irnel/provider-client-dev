@@ -6,7 +6,7 @@
       <div class="row">
         <!-- Breadcrumbs navigation -->
         <div class="col">
-          <h6 class="h6-responsive pt-2 ml-3 card-text">
+          <h6 class="h6-responsive pt-2 ml-3 card-text font-1">
             <!-- Admin -->
             <div *ngIf="isAdmin">
               <i (click)="redirectToAdminHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
@@ -78,7 +78,7 @@
     
           <!-- Column Name -->
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
             <td mat-cell *matCellDef="let provider" (click)="redirectToProviderDetails(provider.id)">
     
               <p class="ml-2">{{provider.name}}</p>
@@ -87,45 +87,20 @@
     
           <!-- Column Address -->
           <ng-container matColumnDef="address">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
             <td mat-cell *matCellDef="let provider" (click)="redirectToProviderDetails(provider.id)">
               <p class="ml-2">{{provider.address.formattedAddress}}</p>
             </td>
           </ng-container>
-    
-          <!-- Column Description -->
-          <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
-            <td mat-cell *matCellDef="let provider">
-    
-              <p *ngIf="provider.description.length <= maxChar" class="ml-2">{{provider.description}}</p>
-    
-              <div *ngIf="provider.description.length > maxChar" class="ml-2">
-                <p *ngIf="detail.isCollapsed">{{provider.description.slice(0, 130)}} ...</p>
-    
-                <div #detail="bs-collapse" class="mt-2" mdbCollapse>
-                  <p *ngIf="!detail.isCollapsed">{{provider.description}}</p>
-                </div>
-    
-                <!-- Read More -->
-                <h6 *ngIf="detail.isCollapsed">
-                  <span (click)="detail.show()" class="badge badge-primary waves-light" mdbWavesEffect>
-                    Read more
-                  </span>
-                </h6>
-    
-                <!-- Read less -->
-                <h6 *ngIf="!detail.isCollapsed">
-                  <span (click)="detail.hide()" class="badge badge-primary waves-light" mdbWavesEffect>
-                    Read less
-                  </span>
-                </h6>
-    
-              </div>
-    
+
+          <!-- Column Phone Number-->
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone Number</th>
+            <td mat-cell *matCellDef="let provider" (click)="redirectToProviderDetails(provider.id)">
+              <p class="ml-2">{{provider.phone}}</p>
             </td>
           </ng-container>
-    
+        
           <!-- Column Operation -->
           <ng-container matColumnDef="operation">
             <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
@@ -241,7 +216,9 @@
   </mdb-card>
   
   <!-- Floating Action Button -->
-  <a *ngIf="!isAdmin" routerLink="create" type="button" mat-fab class="pink mat-elevation-z8">+</a>
+  <a *ngIf="!isAdmin" routerLink="create" type="button" mat-fab class="pink mat-elevation-z8">
+    <i class="material-icons">add</i>
+  </a>
 
 </div>
 <!-- < Workspace Provider /> -->

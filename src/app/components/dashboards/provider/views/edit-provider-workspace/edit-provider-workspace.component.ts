@@ -69,6 +69,8 @@ export class EditProviderWorkspaceComponent implements OnInit {
         Validators.required,
         Validators.pattern(this.regEx)]
       )],
+      phone: ['', Validators.nullValidator],
+      // schedule: ['', Validators.nullValidator],
       description: ['', Validators.nullValidator]
     });
 
@@ -120,6 +122,8 @@ export class EditProviderWorkspaceComponent implements OnInit {
             this.editForm.patchValue({
               name: this.provider.name,
               address: this.provider.address.formattedAddress,
+              phone: this.provider.phone,
+              // schedule: this.provider.schedule,
               description: this.provider.description
             });
           },
@@ -257,6 +261,8 @@ export class EditProviderWorkspaceComponent implements OnInit {
       const data: Provider = {
         name:  this.form.name.value,
         address: this.address,
+        phone: this.form.phone.value,
+        schedule: this.form.schedule.value,
         description: this.form.description.value,
         userId: this.authService.currentUserValue.uid,
         url: ''
@@ -288,6 +294,8 @@ export class EditProviderWorkspaceComponent implements OnInit {
       // updated provider attributes
       this.provider.name = this.form.name.value;
       this.provider.address = this.address;
+      this.provider.phone = this.form.phone.value;
+      // this.provider.schedule = this.form.schedule.value;
       this.provider.description = this.form.description.value;
 
       this.providerService.update(this.provider).then(() => {
