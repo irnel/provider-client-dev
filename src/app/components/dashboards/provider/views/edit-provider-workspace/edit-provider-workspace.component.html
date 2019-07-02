@@ -1,0 +1,124 @@
+<!-- Edit Provider -->
+<mdb-card *ngIf="observer$ | async; else progress" id="header" class="w-responsive mt-3 mb-3 center ml-auto mr-auto">
+  <!-- Card Header -->
+  <mdb-card-header class="px-lg-5">
+    <h3 class="mt-1">
+      <span class="badge badge-primary waves-light">{{title}}</span>
+    </h3>
+
+    <h6 class="pt-1">
+      <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
+      <a routerLink="/provider-dashboard/workspace/home">Home</a>
+      <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+      <a routerLink="/provider-dashboard/workspace/providers">Providers</a>
+      <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
+      <span class="text-capitalize">{{mode}}</span>
+    </h6>
+  </mdb-card-header>
+
+  <!--Card content-->
+  <mdb-card-body class="px-lg-5">
+
+    <form [formGroup]="editForm">
+      <!-- Name -->
+      <div class="md-form form-sm mt-2">
+        <input mdbInputDirective type="text" class="form-control"
+            id="formName" formControlName="name"
+            [errorMessage]="nameError"
+            [validateSuccess]="false">
+
+        <label for="formName">Name</label>
+      </div>
+
+      <!-- Description -->
+      <div class="md-form form-sm mt-5">
+        <textarea class="md-textarea md-textarea-auto form-control"
+            id="formDescription" formControlName="description"
+            type="text" [validateSuccess]="false"
+            data-error="character not allowed" mdbInputDirective></textarea>
+
+        <label for="formDescription">Description</label>
+      </div>
+
+      <!-- Google maps (Location) -->
+      <div class="md-form form-sm mt-5">
+
+        <div class="md-form form-sm">
+          <input #search mdbInputDirective type="text" class="form-control"
+              id="formAddress" formControlName="address"
+              [errorMessage]="addressError"
+              [validateSuccess]="false"
+              placeholder="Introduce your address">
+
+        </div>
+
+        <agm-map #map
+            [zoom]="zoom"
+            [latitude]="address.lat"
+            [longitude]="address.lng"
+            [scrollwheel]="false">
+
+          <agm-marker [latitude]="address.lat" [longitude]="address.lng"></agm-marker>
+
+          <agm-info-window #infoWindow>
+            <div>
+              {{address.lat}}
+              {{address.lng}}
+            </div>
+          </agm-info-window>
+
+        </agm-map>
+      </div>
+
+      <!-- Gallery component -->
+      <app-gallery 
+        (files)="onSelectedFiles($event)"
+        [serverFiles$]="serverFiles$"
+        [model]="provider"
+        [progress$]="allPercentage"
+        [uploading]="loading"
+        [mode]="mode">
+      </app-gallery>
+
+    </form>
+
+  </mdb-card-body>
+
+  <mdb-card-footer>
+    <div class="pl-4">
+      <button mdbBtn
+          [disabled]="loading"
+          color="primary"
+          class="relative waves-light" mdbWavesEffect
+          (click)="editProvider()">
+
+        <!-- Create Mode -->
+        <div *ngIf="!edit" >
+          <i *ngIf="!loading" class="fa fa-plus left mr-2" aria-hidden="true"></i>Create
+          <i *ngIf="loading" class="fa fa-spinner fa-pulse ml-2" aria-hidden="true"></i>
+        </div>
+
+        <!-- Edit Mode -->
+        <div *ngIf="edit">
+          <i *ngIf="!loading" class="fa fa-floppy-o left mr-2" aria-hidden="true"></i>Save
+          <i *ngIf="loading" class="fa fa-spinner fa-pulse ml-2" aria-hidden="true"></i>
+        </div>
+      </button>
+
+      <!-- Button Cancel -->
+      <button mdbBtn
+          outline="true" color="primary"
+          aria-label="Close" mdbWavesEffect
+          (click)="cancel()">
+
+        <i class="fa fa-ban left mr-2" aria-hidden="true"></i>Cancel
+      </button>
+    </div>
+
+  </mdb-card-footer>
+
+</mdb-card>
+
+<ng-template #progress>
+  <app-circle-progress [state]="state"></app-circle-progress>
+</ng-template>

@@ -86,7 +86,6 @@ export class FakeBackendInterceptor implements HttpInterceptor {
               newUser.id = users.length + 1;
               users.push(newUser);
 
-              console.log(users);
               localStorage.setItem('users', JSON.stringify(users));
 
               // respond 200 OK

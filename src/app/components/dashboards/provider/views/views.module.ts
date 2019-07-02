@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MaterialModule } from './../../../material/material.module';
+import { SharedModule } from '../../shared/shared.module';
+import { AgmCoreModule } from '@agm/core';
 
 import {
   StatsCardComponent,
@@ -13,22 +16,29 @@ import {
   ChartsComponent,
   BasicTableComponent,
   HomeWorkspaceComponent,
-  ProviderWorkspaceComponent,
-  ProductWorkspaceComponent,
-  CategoryWorkspaceComponent,
-  CashierWorkspaceComponent,
-  OrderWorkspaceComponent
+  OrderWorkspaceComponent,
+  EditProviderWorkspaceComponent,
+  EditCategoryWorkspaceComponent,
+  EditProductWorkspaceComponent,
+  EditCashierWorkspaceComponent,
+  GalleryComponent
 } from './index';
 
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
     FormsModule,
+    RouterModule,
     BrowserModule,
     BrowserAnimationsModule,
-    MDBBootstrapModule.forRoot()
+    ReactiveFormsModule,
+    SharedModule,
+    MaterialModule,
+    MDBBootstrapModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4'
+    })
   ],
   declarations: [
     StatsCardComponent,
@@ -36,11 +46,12 @@ import {
     ChartsComponent,
     BasicTableComponent,
     HomeWorkspaceComponent,
-    ProviderWorkspaceComponent,
-    ProductWorkspaceComponent,
-    CategoryWorkspaceComponent,
-    CashierWorkspaceComponent,
-    OrderWorkspaceComponent
+    OrderWorkspaceComponent,
+    EditProviderWorkspaceComponent,
+    EditCategoryWorkspaceComponent,
+    EditProductWorkspaceComponent,
+    EditCashierWorkspaceComponent,
+    GalleryComponent
   ],
   exports: [
     StatsCardComponent,
@@ -48,11 +59,11 @@ import {
     ChartsComponent,
     BasicTableComponent,
     HomeWorkspaceComponent,
-    ProviderWorkspaceComponent,
-    ProductWorkspaceComponent,
-    CategoryWorkspaceComponent,
-    CashierWorkspaceComponent,
-    OrderWorkspaceComponent
+    OrderWorkspaceComponent,
+    EditProviderWorkspaceComponent,
+    EditProductWorkspaceComponent,
+    EditCashierWorkspaceComponent,
+    GalleryComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

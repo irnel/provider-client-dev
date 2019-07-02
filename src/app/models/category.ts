@@ -1,10 +1,8 @@
-export class Category {
-
-  constructor(
-    public providerId: string,
-    public name: string,
-    public description: string,
-    public image: string,
-    public id?: string
-  ) {}
+export interface Category {
+  name: string;
+  providerName: string;
+  description?: string;
+  providerId?: string;
+  url?: string;
+  id?: string;
 }
