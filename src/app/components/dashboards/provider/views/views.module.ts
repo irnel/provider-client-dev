@@ -9,6 +9,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MaterialModule } from './../../../material/material.module';
 import { SharedModule } from '../../shared/shared.module';
 import { AgmCoreModule } from '@agm/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import {
   StatsCardComponent,
@@ -35,6 +36,7 @@ import {
     ReactiveFormsModule,
     SharedModule,
     MaterialModule,
+    NgxMaterialTimepickerModule,
     MDBBootstrapModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyD_TkIqjNZTh2o0KmV10tQ7G1tIPCrdEU4'
