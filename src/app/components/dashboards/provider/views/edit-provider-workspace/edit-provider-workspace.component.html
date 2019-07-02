@@ -6,7 +6,7 @@
       <span class="badge badge-primary waves-light">{{title}}</span>
     </h3>
 
-    <h6 class="pt-1">
+    <h6 class="pt-1 font-1">
       <i (click)="redirectToHome()" class="fa fa-home prefix mr-2" aria-hidden="true"></i>
       <a routerLink="/provider-dashboard/workspace/home">Home</a>
       <i class="fa fa-caret-right prefix ml-1 mr-1" aria-hidden="true"></i>
@@ -30,27 +30,13 @@
         <label for="formName">Name</label>
       </div>
 
-      <!-- Description -->
-      <div class="md-form form-sm mt-5">
-        <textarea class="md-textarea md-textarea-auto form-control"
-            id="formDescription" formControlName="description"
-            type="text" [validateSuccess]="false"
-            data-error="character not allowed" mdbInputDirective></textarea>
-
-        <label for="formDescription">Description</label>
-      </div>
-
       <!-- Google maps (Location) -->
-      <div class="md-form form-sm mt-5">
-
-        <div class="md-form form-sm">
-          <input #search mdbInputDirective type="text" class="form-control"
-              id="formAddress" formControlName="address"
-              [errorMessage]="addressError"
-              [validateSuccess]="false"
-              placeholder="Introduce your address">
-
-        </div>
+      <div class="md-form form-sm mt-3">
+        <input #search mdbInputDirective type="text" class="form-control"
+            id="formAddress" formControlName="address"
+            [errorMessage]="addressError"
+            [validateSuccess]="false"
+            placeholder="Introduce your address">
 
         <agm-map #map
             [zoom]="zoom"
@@ -68,6 +54,60 @@
           </agm-info-window>
 
         </agm-map>
+      </div>
+
+      <!-- Available Hours -->
+      <div class="mt-5">
+        <h5 class="h5-responsive">
+          <strong>Available Hours</strong>
+        </h5>
+
+        <table class="table table-responsive-sm table-sm table-hover">
+          <thead class="mdb-color lighten-5">
+            <tr>
+              <th class="font-weight-bold">Day of Week</th>
+              <th class="font-weight-bold">Opening Time</th>
+              <th class="font-weight-bold">Closing Time</th>
+            </tr>
+          </thead>
+
+          <tbody>
+                        
+          </tbody>
+        </table>
+
+        <h6 class="h6-responsive">
+          <p class="font-italic tc-custom">No schedule has been selected</p>
+        </h6>
+
+        <button mdbBtn
+            outline="true" color="primary"
+            aria-label="Close" mdbWavesEffect>
+
+          <i class="fa fa-calendar left mr-2" aria-hidden="true"></i>Select
+        </button>
+
+          <input [ngxTimepicker]="picker">
+          <ngx-material-timepicker #picker></ngx-material-timepicker>
+      </div>
+
+      <!-- Phone -->
+      <div class="md-form form-sm mt-5">
+          <input mdbInputDirective type="text" class="form-control"
+              id="formPhoneNumber" formControlName="phone"
+              [validateSuccess]="false">
+  
+          <label for="formPhoneNumber">Phone number</label>
+        </div>
+
+      <!-- Description -->
+      <div class="md-form form-sm mt-5">
+        <textarea class="md-textarea md-textarea-auto form-control"
+            id="formDescription" formControlName="description"
+            type="text" [validateSuccess]="false"
+            data-error="character not allowed" mdbInputDirective></textarea>
+
+        <label for="formDescription">Description</label>
       </div>
 
       <!-- Gallery component -->

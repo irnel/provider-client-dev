@@ -10,3 +10,4 @@ export * from './product-workspace/product-workspace.component';
 export * from './product-details-workspace/product-details-workspace.component';
 export * from './order-workspace/order-workspace.component';
 export * from './order-details-workspace/order-details-workspace.component';
+
