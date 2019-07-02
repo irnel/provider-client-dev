@@ -72,8 +72,6 @@ import { DefaultComponent } from './components/default/default.component';
 
     { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService,
-
-    fakeBackendProvider
   ],
   bootstrap: [AppComponent]
 })
