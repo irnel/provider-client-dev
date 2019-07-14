@@ -21,7 +21,6 @@ import {
   OrderDetailsWorkspaceComponent
 } from './index';
 
-
 @NgModule({
   imports: [
     CommonModule,

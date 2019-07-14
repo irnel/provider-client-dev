@@ -8,8 +8,9 @@ import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/cor
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MaterialModule } from './../../../material/material.module';
 import { SharedModule } from '../../shared/shared.module';
-import { AgmCoreModule } from '@agm/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { AgmCoreModule } from '@agm/core';
+
 
 import {
   StatsCardComponent,
