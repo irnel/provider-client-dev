@@ -262,7 +262,6 @@ export class EditProviderWorkspaceComponent implements OnInit {
         name:  this.form.name.value,
         address: this.address,
         phone: this.form.phone.value,
-        schedule: this.form.schedule.value,
         description: this.form.description.value,
         userId: this.authService.currentUserValue.uid,
         url: ''
